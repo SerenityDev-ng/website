@@ -5,12 +5,15 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
+import { ChevronDown } from "lucide-react";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+
   const links = [
     {
       id: 1,
@@ -21,6 +24,11 @@ const Navbar = (props: Props) => {
       id: 2,
       name: "Services",
       href: "/services",
+      subLinks: [
+        { name: "Laundry", href: "/services/laundry" },
+        { name: "Cleaning", href: "/services/cleaning" },
+        { name: "Repair", href: "/services/repair" },
+      ],
     },
     {
       id: 3,
@@ -40,6 +48,7 @@ const Navbar = (props: Props) => {
   ];
 
   const pathname = usePathname();
+
   return (
     <main className="bg-secondary relative z-10">
       <header className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto ">
@@ -55,17 +64,59 @@ const Navbar = (props: Props) => {
 
         <nav className="lg:flex items-center gap-10 justify-between hidden">
           {links.map((link) => (
-            <div key={link.id}>
-              <Link href={link.href}>
-                <p
-                  className={cn(
-                    "text-lg  font-league-spartan text-black capitalize",
-                    link.href === pathname ? "font-semibold " : ""
-                  )}
+            <div key={link.id} className="relative">
+              {link.subLinks ? (
+                <div
+                  onMouseEnter={() => setIsServicesOpen(true)}
+                  onMouseLeave={() => setIsServicesOpen(false)}
                 >
-                  {link.name}
-                </p>
-              </Link>
+                  <button
+                    onClick={() => setIsServicesOpen(!isServicesOpen)}
+                    className={cn(
+                      "text-lg font-league-spartan text-black capitalize flex items-center",
+                      pathname.startsWith(link.href) ? "font-semibold" : ""
+                    )}
+                  >
+                    {link.name}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </button>
+                  {isServicesOpen && (
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                      >
+                        {link.subLinks.map((subLink) => (
+                          <Link
+                            key={subLink.name}
+                            href={subLink.href}
+                            className={cn(
+                              "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                              pathname === subLink.href ? "font-semibold" : ""
+                            )}
+                            role="menuitem"
+                          >
+                            {subLink.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link href={link.href}>
+                  <p
+                    className={cn(
+                      "text-lg font-league-spartan text-black capitalize",
+                      link.href === pathname ? "font-semibold" : ""
+                    )}
+                  >
+                    {link.name}
+                  </p>
+                </Link>
+              )}
             </div>
           ))}
         </nav>
