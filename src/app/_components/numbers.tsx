@@ -33,11 +33,11 @@ const Numbers = (props: Props) => {
 
   return (
     <main>
-      <h1 className=" font-league-spartan text-lg lg:text-2xl text-center">
+      <h1 className=" font-league-spartan text-xl lg:text-2xl text-center">
         Our results in numbers
       </h1>
 
-      <div className="flex flex-col md:flex-row md:justify-between mt-[100px]">
+      <div className="flex flex-col md:flex-row md:justify-between mt-5 lg:mt-[100px] md:px-12">
         {NumberFeats.map((feat) => (
           <div
             key={feat.id}

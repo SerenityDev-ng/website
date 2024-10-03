@@ -16,7 +16,7 @@ type Props = {
 
 const Footer = (props: Props) => {
   return (
-    <footer className="  ">
+    <footer className="relative z-20">
       <div>
         <div className="h-[329px] relative flex items-center gap-9 justify-center mx-auto px-5">
           <Image

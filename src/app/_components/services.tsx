@@ -27,7 +27,7 @@ const Services = (props: Props) => {
   ];
   return (
     <main>
-      <h1 className=" font-league-spartan font-medium text-[36px]">
+      <h1 className=" font-league-spartan font-medium text-[36px] text-center lg:text-left">
         Our Services
       </h1>
 

@@ -12,6 +12,12 @@ import hand_phone from "./hand-phone.png";
 import google_button from "./google-button.svg";
 import apple_button from "./apple-button.svg";
 import logo_white from "./logo-white.svg";
+import washing_machine from "./washing-machine.png";
+import laundry_side from "./laundry-side.svg";
+import laundry_fold from "./laundry-fold.png";
+import laundry_iron from "./laundry-iron.png";
+import vaccum_cleaning from "./vaccum-cleaning.png";
+import cleaning_man from "./cleaning-man.png";
 
 export {
   serenity_logo,
@@ -28,4 +34,10 @@ export {
   google_button,
   apple_button,
   logo_white,
+  washing_machine,
+  laundry_side,
+  laundry_fold,
+  laundry_iron,
+  vaccum_cleaning,
+  cleaning_man,
 };

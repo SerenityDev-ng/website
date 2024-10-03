@@ -9,8 +9,8 @@ const HeroSection = (props: Props) => {
   return (
     <main className="flex flex-col lg:flex-row items-center lg:justify-between">
       <aside>
-        <article className=" lg:max-w-[513px] text-center lg:text-left">
-          <h1 className=" font-inter font-semibold text-4xl lg:text-5xl xl:text-[72px]">
+        <article className="md:max-w-[500px] lg:max-w-[513px] text-center lg:text-left">
+          <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
             Your{" "}
             <div className="relative inline-flex">
               <p className=" text-primary">home</p>
@@ -25,7 +25,7 @@ const HeroSection = (props: Props) => {
             <br />
             deserves spa days too!
           </h1>
-          <p className="text-sm lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9">
+          <p className="text-sm md:text-lg lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9">
             Enjoy professional home care service at your convenience ensuring a
             clean and comfortable living space.{" "}
           </p>
@@ -36,7 +36,7 @@ const HeroSection = (props: Props) => {
         </div>
       </aside>
 
-      <aside className="relative -mt-8 lg:mt-0">
+      <aside className="relative -mt-8 md:mt-10 lg:mt-0">
         <Image
           src={side}
           alt="Side"

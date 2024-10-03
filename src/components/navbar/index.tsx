@@ -41,7 +41,7 @@ const Navbar = (props: Props) => {
 
   const pathname = usePathname();
   return (
-    <main className="bg-secondary">
+    <main className="bg-secondary relative z-10">
       <header className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto ">
         <nav>
           <Image

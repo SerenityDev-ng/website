@@ -16,7 +16,7 @@ export default function Home() {
       <div className="mt-20">
         <Services />
       </div>
-      <div className=" mt-[158px]">
+      <div className=" my-[158px] ">
         <AboutUs />
       </div>
     </main>
