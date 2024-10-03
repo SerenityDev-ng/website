@@ -5,14 +5,16 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const navbarRef = useRef<HTMLElement>(null);
 
   const links = [
     {
@@ -49,9 +51,26 @@ const Navbar = (props: Props) => {
 
   const pathname = usePathname();
 
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent) => {
+    if (
+      !dropdownRef.current?.contains(e.relatedTarget as Node) &&
+      !navbarRef.current?.contains(e.relatedTarget as Node)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
   return (
     <main className="bg-secondary relative z-10">
-      <header className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto ">
+      <header
+        ref={navbarRef}
+        className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto"
+        onMouseLeave={handleMouseLeave}
+      >
         <nav>
           <Image
             src={serenity_logo}
@@ -67,11 +86,10 @@ const Navbar = (props: Props) => {
             <div key={link.id} className="relative">
               {link.subLinks ? (
                 <div
-                  onMouseEnter={() => setIsServicesOpen(true)}
-                  onMouseLeave={() => setIsServicesOpen(false)}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                 >
                   <button
-                    onClick={() => setIsServicesOpen(!isServicesOpen)}
                     className={cn(
                       "text-lg font-league-spartan text-black capitalize flex items-center",
                       pathname.startsWith(link.href) ? "font-semibold" : ""
@@ -80,8 +98,13 @@ const Navbar = (props: Props) => {
                     {link.name}
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </button>
-                  {isServicesOpen && (
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  {isDropdownOpen && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <div
                         className="py-1"
                         role="menu"
