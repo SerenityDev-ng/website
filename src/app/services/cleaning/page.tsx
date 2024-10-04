@@ -84,10 +84,10 @@ const CleaningPage = (props: Props) => {
 
       <aside className="flex flex-col items-center lg:flex-row gap-10 lg:gap-4 lg:justify-between lg:items-center relative z-20">
         <div className=" max-w-[658px]">
-          <h1 className=" font-league-spartan font-medium mb-8 text-2xl lg:text-[55px] text-center lg:text-left">
+          <h1 className=" font-league-spartan font-medium mb-8 text-4xl lg:text-[55px] text-center lg:text-left">
             Schedule HouseKeeping
           </h1>
-          <p className=" font-inter text-[#4E4848 lg:text-2xl text-center lg:text-left">
+          <p className=" font-inter text-[#4E4848 text-xl lg:text-2xl text-center lg:text-left">
             We offer thorough housekeeping service that includes sweeping,
             mopping, disinfecting, wiping surfaces, cobweb removal, floor and
             wall cleaning, cabinet care, dishwashing, and garbage
@@ -117,7 +117,7 @@ const CleaningPage = (props: Props) => {
               className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4"
               key={service.id}
             >
-              <div className="min-w-[200px] max-w-[200px] font-league-spartan font-medium text-2xl">
+              <div className="md:min-w-[200px] md:max-w-[200px] font-league-spartan font-medium text-2xl">
                 {service.title}
               </div>
 
@@ -150,7 +150,7 @@ const CleaningPage = (props: Props) => {
             Select Frequency
           </h1>
 
-          <div className="flex gap-2 justify-start pt-6">
+          <div className="flex gap-2 justify-start pt-6 max-w-[calc(100vw-30px)] overflow-x-auto">
             <Button
               onClick={() => setFrequency("Once A Week")}
               className={cn(
