@@ -41,7 +41,7 @@ const Footer = (props: Props) => {
               COMING SOON...
             </h1>
 
-            <div className="flex gap-6 items-center mt-8 ">
+            <div className="flex gap-3 items-center mt-8 ">
               <Image
                 src={google_button}
                 alt=""
