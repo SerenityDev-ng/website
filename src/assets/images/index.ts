@@ -18,6 +18,12 @@ import laundry_fold from "./laundry-fold.png";
 import laundry_iron from "./laundry-iron.png";
 import vaccum_cleaning from "./vaccum-cleaning.png";
 import cleaning_man from "./cleaning-man.png";
+import repair_man from "./repair-man.png";
+import book_electrician from "./book-electrician.png";
+import book_plumber from "./book-plumber.png";
+import book_carpenter from "./book-carpenter.png";
+import book_painter from "./book-painter.png";
+import book_mason from "./book-mason.png";
 
 export {
   serenity_logo,
@@ -40,4 +46,10 @@ export {
   laundry_iron,
   vaccum_cleaning,
   cleaning_man,
+  repair_man,
+  book_electrician,
+  book_plumber,
+  book_carpenter,
+  book_painter,
+  book_mason,
 };
