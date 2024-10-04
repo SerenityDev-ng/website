@@ -182,7 +182,7 @@ const Navbar = (props: Props) => {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Button className="text-lg font-league-spartan font-semibold hidden sm:inline-flex">
+          <Button className="text-lg font-league-spartan font-semibold hidden sm:inline-flex hover:bg-primary">
             Get Started
           </Button>
           <Sheet>
@@ -195,7 +195,7 @@ const Navbar = (props: Props) => {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col mt-6">
                 <NavLinks mobile />
-                <Button className="text-lg font-league-spartan font-semibold mt-4">
+                <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">
                   Get Started
                 </Button>
               </nav>
