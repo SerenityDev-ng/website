@@ -89,7 +89,14 @@ const ClothPrices = (props: Props) => {
                   <div className="min-w-[100px] max-w-[100px]">
                     {laundry.name}
                   </div>
-                  <div>&#8358;{laundry.price}</div>
+                  <div>
+                    &#8358;{laundry.price}
+                    {laundry.quantity > 0 && (
+                      <p className="text-sm text-gray-600 pt-1">
+                        ( &#8358;{`${laundry.price * laundry.quantity}`})
+                      </p>
+                    )}
+                  </div>
                   <div className="flex gap-4 items-center">
                     <Button
                       onClick={() => decrementQuantity(laundry.id)}
@@ -123,7 +130,14 @@ const ClothPrices = (props: Props) => {
                   <div className="min-w-[100px] max-w-[100px]">
                     {laundry.name}
                   </div>
-                  <div>&#8358;{laundry.price}</div>
+                  <div>
+                    &#8358;{laundry.price}
+                    {laundry.quantity > 0 && (
+                      <p className="text-sm text-gray-600 pt-1">
+                        ( &#8358;{`${laundry.price * laundry.quantity}`})
+                      </p>
+                    )}
+                  </div>
                   <div className="flex gap-4 items-center">
                     <Button
                       onClick={() => decrementExtraQuantity(laundry.id)}

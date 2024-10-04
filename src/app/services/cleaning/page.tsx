@@ -141,8 +141,8 @@ const CleaningPage = (props: Props) => {
         </div>
 
         <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-[36px] mt-20">
-          <h1>Total Rooms</h1>
-          <p>&#8358;{total}</p>
+          <h1>Total (monthly)</h1>
+          <p>&#8358;{total * 4}</p>
         </div>
 
         <div className="pt-20">
