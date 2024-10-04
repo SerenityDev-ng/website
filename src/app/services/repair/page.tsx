@@ -67,7 +67,7 @@ const RepairPage = (props: Props) => {
   ];
 
   return (
-    <div>
+    <div className="pt-10 lg:pt-0">
       <main className="flex flex-col lg:flex-row items-center lg:justify-between">
         <aside className="relative z-10">
           <article className="md:max-w-[500px] lg:max-w-[513px] text-center lg:text-left">
@@ -121,7 +121,7 @@ const RepairPage = (props: Props) => {
           Select Repair Service Option
         </h1>
 
-        <div className="flex flex-wrap gap-3 mt-20">
+        <div className="flex flex-wrap gap-3 mt-20 justify-center lg:justify-start">
           {repairServices.map((service, i) => (
             <div
               onClick={() => setSelectedService(service)}
@@ -150,7 +150,7 @@ const RepairPage = (props: Props) => {
         </div>
       </aside>
 
-      <aside className="mt-20">
+      <aside className="mt-20 relative z-20">
         <div className="px-6">
           <div className="border border-[#12121980] flex gap-3 items-center w-fit mx-auto rounded-full p-2 ">
             <div className=" bg-secondary p-1 rounded-full">
