@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={` antialiased !max-w-[100vw]`}>
+    <html lang="en" className="max-w-full">
+      <body className={` antialiased w-full overflow-x-hidden !max-w-[100vw]`}>
         <Navbar />
         <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5">
           {children}

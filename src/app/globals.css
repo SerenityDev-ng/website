@@ -76,9 +76,13 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply bg-background text-foreground;
   }
 
+  body,
+  html {
+    @apply w-[100vw] max-w-[100vw] overflow-x-hidden;
+  }
   .button-grad {
     @apply bg-gradient-to-t from-[#43338F] to-primary font-league-spartan font-semibold text-lg;
   }

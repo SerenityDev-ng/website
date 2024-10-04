@@ -7,7 +7,7 @@ type Props = {};
 
 const HeroSection = (props: Props) => {
   return (
-    <main className="flex flex-col lg:flex-row items-center lg:justify-between">
+    <main className="flex flex-col lg:flex-row items-center lg:justify-between max-w-full overflow-x-hidden">
       <aside>
         <article className="md:max-w-[500px] lg:max-w-[513px] text-center lg:text-left">
           <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">

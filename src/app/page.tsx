@@ -6,7 +6,7 @@ import AboutUs from "./_components/about-us";
 
 export default function Home() {
   return (
-    <main className="pb-5">
+    <main className="pb-5 ">
       <div className="mt-[128px]">
         <HeroSection />
       </div>
