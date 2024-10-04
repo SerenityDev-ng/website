@@ -14,7 +14,7 @@ const HeroSection = (props: Props) => {
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Laundry day? let us handle it!
             </h1>
-            <p className=" text-lg lg:text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] mx-auto">
+            <p className=" text-lg lg:text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto">
               Dirty laundry; picked up, cleaned and delivered in 48 hours or
               less.
             </p>

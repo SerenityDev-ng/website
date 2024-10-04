@@ -39,11 +39,11 @@ const LaundryOptions = (props: Props) => {
       <h1 className=" font-league-spartan font-medium text-[36px] lg:text-5xl text-center lg:text-left">
         Laundry Service Options
       </h1>
-      <p className="lg:text-2xl mt-4 text-center lg:text-left max-w-[320px] lg:max-w-[520px] mx-auto">
+      <p className="lg:text-2xl mt-4 text-center lg:text-left max-w-[320px] lg:max-w-[520px] mx-auto lg:mx-0">
         Select your choice of laundry, how do you want your laundry done?
       </p>
 
-      <div className="mt-[70px] flex flex-wrap justify-center gap-4">
+      <div className="mt-[70px] flex flex-wrap justify-start gap-4">
         {theServices.map((service) => (
           <LaundryCard
             key={service.id}
