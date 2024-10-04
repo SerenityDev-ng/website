@@ -6,8 +6,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState, useRef } from "react";
-import { Button } from "../ui/button";
-import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  ChevronDown,
+  Home,
+  Briefcase,
+  Info,
+  Gift,
+  ShoppingBag,
+  Menu,
+} from "lucide-react";
 
 type Props = {};
 
@@ -21,11 +30,13 @@ const Navbar = (props: Props) => {
       id: 1,
       name: "Home",
       href: "/",
+      icon: <Home className="h-4 w-4 mr-2" />,
     },
     {
       id: 2,
       name: "Services",
       href: "/services",
+      icon: <Briefcase className="h-4 w-4 mr-2" />,
       subLinks: [
         { name: "Laundry", href: "/services/laundry" },
         { name: "Cleaning", href: "/services/cleaning" },
@@ -36,16 +47,19 @@ const Navbar = (props: Props) => {
       id: 3,
       name: "About",
       href: "/about",
+      icon: <Info className="h-4 w-4 mr-2" />,
     },
     {
       id: 4,
       name: "Gifting",
       href: "/gifting",
+      icon: <Gift className="h-4 w-4 mr-2" />,
     },
     {
       id: 5,
       name: "Marketplace",
       href: "/marketplace",
+      icon: <ShoppingBag className="h-4 w-4 mr-2" />,
     },
   ];
 
@@ -64,6 +78,88 @@ const Navbar = (props: Props) => {
     }
   };
 
+  const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
+    <>
+      {links.map((link) => (
+        <div key={link.id} className={cn("relative", mobile && "mb-4")}>
+          {link.subLinks ? (
+            <div
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <button
+                className={cn(
+                  "text-lg font-league-spartan text-black capitalize flex items-center",
+                  pathname.startsWith(link.href)
+                    ? "font-semibold text-primary"
+                    : ""
+                )}
+              >
+                {link.icon}
+                {link.name}
+                <ChevronDown className="ml-1 h-4 w-4" />
+              </button>
+              {isDropdownOpen && !mobile && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div
+                    className="py-1"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    {link.subLinks.map((subLink) => (
+                      <Link
+                        key={subLink.name}
+                        href={subLink.href}
+                        className={cn(
+                          "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                          pathname === subLink.href ? "font-semibold" : ""
+                        )}
+                        role="menuitem"
+                      >
+                        {subLink.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {mobile &&
+                link.subLinks.map((subLink) => (
+                  <Link
+                    key={subLink.name}
+                    href={subLink.href}
+                    className={cn(
+                      "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                      pathname === subLink.href ? "font-semibold" : ""
+                    )}
+                  >
+                    {subLink.name}
+                  </Link>
+                ))}
+            </div>
+          ) : (
+            <Link href={link.href}>
+              <p
+                className={cn(
+                  "text-lg font-league-spartan text-black capitalize flex items-center hover:text-primary duration-300",
+                  link.href === pathname ? "font-semibold text-primary" : ""
+                )}
+              >
+                {link.icon}
+                {link.name}
+              </p>
+            </Link>
+          )}
+        </div>
+      ))}
+    </>
+  );
+
   return (
     <main className="bg-secondary relative z-10">
       <header
@@ -71,7 +167,7 @@ const Navbar = (props: Props) => {
         className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto"
         onMouseLeave={handleMouseLeave}
       >
-        <nav>
+        <nav className="flex items-center">
           <Image
             src={serenity_logo}
             alt="Serenity Logo"
@@ -81,74 +177,31 @@ const Navbar = (props: Props) => {
           />
         </nav>
 
-        <nav className="lg:flex items-center gap-10 justify-between hidden">
-          {links.map((link) => (
-            <div key={link.id} className="relative">
-              {link.subLinks ? (
-                <div
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <button
-                    className={cn(
-                      "text-lg font-league-spartan text-black capitalize flex items-center",
-                      pathname.startsWith(link.href) ? "font-semibold" : ""
-                    )}
-                  >
-                    {link.name}
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </button>
-                  {isDropdownOpen && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
-                    >
-                      <div
-                        className="py-1"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="options-menu"
-                      >
-                        {link.subLinks.map((subLink) => (
-                          <Link
-                            key={subLink.name}
-                            href={subLink.href}
-                            className={cn(
-                              "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                              pathname === subLink.href ? "font-semibold" : ""
-                            )}
-                            role="menuitem"
-                          >
-                            {subLink.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link href={link.href}>
-                  <p
-                    className={cn(
-                      "text-lg font-league-spartan text-black capitalize",
-                      link.href === pathname ? "font-semibold" : ""
-                    )}
-                  >
-                    {link.name}
-                  </p>
-                </Link>
-              )}
-            </div>
-          ))}
+        <nav className="hidden lg:flex items-center gap-10 justify-between">
+          <NavLinks />
         </nav>
 
-        <nav>
-          <Button className="text-lg font-league-spartan font-semibold">
+        <div className="flex items-center gap-4">
+          <Button className="text-lg font-league-spartan font-semibold hidden sm:inline-flex">
             Get Started
           </Button>
-        </nav>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="lg:hidden">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <nav className="flex flex-col mt-6">
+                <NavLinks mobile />
+                <Button className="text-lg font-league-spartan font-semibold mt-4">
+                  Get Started
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </header>
     </main>
   );
