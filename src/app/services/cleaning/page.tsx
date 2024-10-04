@@ -52,7 +52,7 @@ const CleaningPage = (props: Props) => {
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Cleaning...ugh, let&apos;s fix that.
             </h1>
-            <p className=" text-lg lg:text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848]">
+            <p className="text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#2d2929]">
               Because life is too short for boring chores.
             </p>
           </article>
@@ -77,7 +77,7 @@ const CleaningPage = (props: Props) => {
             height={0}
             width={0}
             sizes="100vw"
-            className="w-fit h-[618px]  object-contain fixed -top-16 right-0 z-0"
+            className="w-fit h-[618px]  object-contain fixed -top-16 right-0 z-0  opacity-20 lg:opacity-100"
           />
         </aside>
       </main>
