@@ -74,7 +74,7 @@ const RepairPage = (props: Props) => {
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Repairs you can rely on any day.
             </h1>
-            <p className=" text-lg lg:text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848]">
+            <p className="text-2xl lg:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848]">
               Quality repairs at your finger tip.
             </p>
           </article>
@@ -99,17 +99,17 @@ const RepairPage = (props: Props) => {
             height={0}
             width={0}
             sizes="100vw"
-            className="w-fit h-[618px]  object-contain fixed -top-16 right-0 z-0"
+            className="w-fit h-[618px]  object-contain fixed -top-16 right-0 z-0 opacity-20 lg:opacity-100"
           />
         </aside>
       </main>
 
       <aside className="mt-[120px] relative z-20">
-        <h1 className="font-league-spartan font-medium text-2xl lg:text-[55px]">
+        <h1 className="font-league-spartan font-medium text-4xl lg:text-[55px]">
           Schedule Repair Service
         </h1>
 
-        <p className=" text-[#4E4848] font-inter lg:text-2xl py-3 max-w-[60%]">
+        <p className=" text-[#4E4848] font-inter text-2xl py-3 w-full max-w-[420px]">
           Ready to tackle those home repairs? We understand that your home is
           your sanctuary, that why our dedicated team is here to help—ensuring
           your space is not only functional but a true reflection of your style!
@@ -117,11 +117,11 @@ const RepairPage = (props: Props) => {
       </aside>
 
       <aside className="mt-20 relative z-20">
-        <h1 className=" font-league-spartan font-medium text-center text-2xl lg:text-[55px]">
+        <h1 className=" font-league-spartan font-medium text-center text-4xl lg:text-[55px]">
           Select Repair Service Option
         </h1>
 
-        <div className="flex flex-wrap gap-3 mt-20 justify-center lg:justify-start">
+        <div className="flex flex-wrap gap-5 mt-20 justify-center lg:justify-start">
           {repairServices.map((service, i) => (
             <div
               onClick={() => setSelectedService(service)}

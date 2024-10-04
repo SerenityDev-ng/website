@@ -40,7 +40,7 @@ const HeroSection = (props: Props) => {
             height={0}
             width={0}
             sizes="100vw"
-            className="w-fit h-[618px]  object-contain fixed -top-16 right-0 z-0"
+            className="w-fit h-[618px]  object-contain fixed -top-16 right-0 z-0 opacity-20 lg:opacity-100"
           />
         </aside>
       </main>
