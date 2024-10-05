@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { cleaning } from "@/lib/laundry";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
 
 type Props = {};
 
@@ -58,7 +60,9 @@ const CleaningPage = (props: Props) => {
           </article>
 
           <div className="mt-[35px] w-fit mx-auto lg:mx-0">
-            <Button className=" button-grad">Schedule Cleaning</Button>
+            <Link href={"/services/cleaning#select-rooms"}>
+              <Button className=" button-grad">Schedule Cleaning</Button>
+            </Link>
           </div>
         </aside>
 
@@ -106,7 +110,7 @@ const CleaningPage = (props: Props) => {
         </div>
       </aside>
 
-      <aside className="pt-20 relative z-20">
+      <aside className="pt-20 relative z-20" id="select-rooms">
         <h1 className=" font-league-spartan font-medium text-[36px] text-center my-[35px]">
           Select your home type
         </h1>
@@ -205,8 +209,13 @@ const CleaningPage = (props: Props) => {
           </div>
         </div>
 
-        <div className="my-20 mx-auto w-fit">
-          <Button className=" button-grad">Schedule Cleaning</Button>
+        <div className="my-20 w-full flex justify-center">
+          <Link href="https://calendly.com/serenityvimo/30min" target="__blank">
+            <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
+              Schedule Pickup
+              <FaArrowRight />
+            </Button>
+          </Link>
         </div>
       </aside>
     </div>

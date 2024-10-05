@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { extraLaundryServices, laundryServices } from "@/lib/laundry";
+import Link from "next/link";
 import React, { useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
 
 type Props = {};
 
@@ -164,10 +166,16 @@ const ClothPrices = (props: Props) => {
               <p>&#8358;{totalMale}</p>
             </div>
 
-            <div className="w-fit mx-auto pt-20">
-              <Button className=" button-grad text-white">
-                Schedule Pickup
-              </Button>
+            <div className=" pt-20 w-full flex justify-center">
+              <Link
+                href="https://calendly.com/serenityvimo/30min"
+                target="__blank"
+              >
+                <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
+                  Schedule Pickup
+                  <FaArrowRight />
+                </Button>
+              </Link>
             </div>
           </div>
         </TabsContent>

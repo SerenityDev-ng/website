@@ -12,8 +12,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { BsExclamation } from "react-icons/bs";
+import { FaArrowRight } from "react-icons/fa";
 import { FiArrowRight } from "react-icons/fi";
 
 type Props = {};
@@ -80,7 +82,9 @@ const RepairPage = (props: Props) => {
           </article>
 
           <div className="mt-[35px] w-fit mx-auto lg:mx-0">
-            <Button className=" button-grad">Schedule Repairs</Button>
+            <Link href={"/services/repair#select-service"}>
+              <Button className=" button-grad">Schedule Repairs</Button>
+            </Link>
           </div>
         </aside>
 
@@ -116,7 +120,7 @@ const RepairPage = (props: Props) => {
         </p>
       </aside>
 
-      <aside className="mt-20 relative z-20">
+      <aside className="mt-20 relative z-20" id="select-service">
         <h1 className=" font-league-spartan font-medium text-center text-4xl lg:text-[55px]">
           Select Repair Service Option
         </h1>
@@ -169,11 +173,13 @@ const RepairPage = (props: Props) => {
           <p>&#8358;{selectedService?.price ?? 0}</p>
         </div>
 
-        <div className="mt-24 w-fit mx-auto">
-          <Button className="button-grad hover:bg-primary items-center gap-3">
-            Schedule Call
-            <FiArrowRight />
-          </Button>
+        <div className=" my-24 w-full flex justify-center">
+          <Link href="https://calendly.com/serenityvimo/30min" target="__blank">
+            <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
+              Schedule Pickup
+              <FaArrowRight />
+            </Button>
+          </Link>
         </div>
       </aside>
     </div>

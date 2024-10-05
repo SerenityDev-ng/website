@@ -13,7 +13,7 @@ const page = (props: Props) => {
       <div className="relative z-10">
         <LaundryOptions />
       </div>
-      <div className="pt-[120px] relative z-20">
+      <div className="pt-[120px] relative z-20" id="select-clothes">
         <ClothPrices />
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { laundry_side, washing_machine } from "@/assets/images";
 import { Button } from "@/components/ui/button";
+
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type Props = {};
@@ -21,7 +23,9 @@ const HeroSection = (props: Props) => {
           </article>
 
           <div className="mt-[35px] w-fit mx-auto lg:mx-0">
-            <Button className=" button-grad">Schedule Pickup</Button>
+            <Link href="/services/laundry#select-clothes">
+              <Button className=" button-grad">Schedule Pickup</Button>
+            </Link>
           </div>
         </aside>
 
