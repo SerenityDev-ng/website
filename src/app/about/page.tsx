@@ -108,7 +108,7 @@ const AboutPage = (props: Props) => {
           {professionals.map((professional) => (
             <div
               key={professional.id}
-              className="border rounded-[10px] border-[#C0B8B8] max-w-[391px] h-[392px] overflow-hidden"
+              className="border rounded-[10px] border-[#C0B8B8] max-w-[391px] h-[392px] overflow-hidden backdrop-blur-md dark:bg-secondary"
             >
               <div>
                 <Image
@@ -120,7 +120,7 @@ const AboutPage = (props: Props) => {
                 />
               </div>
               <div className="pt-6">
-                <h2 className="font-league-spartan font-medium text-2xl text-center">
+                <h2 className="font-league-spartan font-medium text-2xl text-center dark:text-black">
                   {professional.name}
                 </h2>
                 <p className="font-inter text-lg text-[#4E4848] text-center">

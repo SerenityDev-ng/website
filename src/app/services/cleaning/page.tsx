@@ -82,7 +82,7 @@ const CleaningPage = (props: Props) => {
         </aside>
       </main>
 
-      <aside className="flex flex-col items-center lg:flex-row gap-10 lg:gap-4 lg:justify-between lg:items-center relative z-20">
+      <aside className="flex flex-col items-center lg:flex-row gap-10 lg:gap-4 lg:justify-between lg:items-center relative z-20 mt-32">
         <div className=" max-w-[658px]">
           <h1 className=" font-league-spartan font-medium mb-8 text-4xl lg:text-[55px] text-center lg:text-left">
             Schedule HouseKeeping
@@ -114,7 +114,7 @@ const CleaningPage = (props: Props) => {
         <div className="space-y-[35px]">
           {services.map((service) => (
             <div
-              className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4"
+              className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] dark:bg-secondary rounded-[10px] p-4 dark:text-black"
               key={service.id}
             >
               <div className="md:min-w-[200px] md:max-w-[200px] font-league-spartan font-medium text-2xl">
@@ -124,7 +124,7 @@ const CleaningPage = (props: Props) => {
               <div className="flex gap-4 items-center">
                 <Button
                   onClick={() => decrementExtraQuantity(service.id)}
-                  className="font-semibold text-xl bg-secondary text-black hover:bg-secondary"
+                  className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
                 >
                   -
                 </Button>

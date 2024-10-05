@@ -25,7 +25,7 @@ const AboutUs = (props: Props) => {
           <h1 className=" font-league-spartan font-medium text-[36px] lg:text-[56px]">
             Your Home&apos;s Best Friend
           </h1>
-          <p className=" font-inter lg:text-xl text-[#4E4848] mt-[26px]">
+          <p className=" font-inter lg:text-xl text-[#4E4848] mt-[26px] dark:text-muted-foreground">
             At Serenity, we understand that life gets busy, and home maintenance
             can feel overwhelming. That&apos;s why we offer everything from
             cleaning to laundry and repair services, making it easy to keep your

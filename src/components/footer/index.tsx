@@ -17,7 +17,7 @@ type Props = {
 const Footer = (props: Props) => {
   return (
     <footer className="relative z-20">
-      <div>
+      <div className="dark:bg-secondary">
         <div className="h-[329px] relative flex items-center gap-9 justify-center mx-auto px-5">
           <Image
             src={yellow}
@@ -48,7 +48,7 @@ const Footer = (props: Props) => {
                 height={0}
                 width={0}
                 sizes="100vw"
-                className="h-full w-[167px] object-contain "
+                className="h-full w-[167px] object-contain dark:shadow-md "
               />
               <Image
                 src={apple_button}
@@ -56,7 +56,7 @@ const Footer = (props: Props) => {
                 height={0}
                 width={0}
                 sizes="100vw"
-                className="h-full w-[167px] object-contain"
+                className="h-full w-[167px] object-contain dark:shadow-md"
               />
             </div>
           </div>

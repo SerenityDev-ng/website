@@ -73,7 +73,7 @@ const ClothPrices = (props: Props) => {
           <TabsTrigger value="women">Women</TabsTrigger>
         </TabsList>
         <TabsContent value="men" className="">
-          <div className=" backdrop-blur-md bg-white/40 rounded-lg ">
+          <div className=" backdrop-blur-md bg-white/40 dark:bg-transparent rounded-lg ">
             <div className=" button-grad flex gap-2 justify-between p-4 rounded-[10px] my-[35px] text-white">
               <div>Wears</div>
               <div>Price</div>
@@ -83,7 +83,7 @@ const ClothPrices = (props: Props) => {
             <div className="space-y-[35px]">
               {services?.map((laundry) => (
                 <div
-                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4"
+                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
                 >
                   <div className="min-w-[100px] max-w-[100px]">
@@ -100,7 +100,7 @@ const ClothPrices = (props: Props) => {
                   <div className="flex gap-4 items-center">
                     <Button
                       onClick={() => decrementQuantity(laundry.id)}
-                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary "
+                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
                     >
                       -
                     </Button>
@@ -124,7 +124,7 @@ const ClothPrices = (props: Props) => {
               </h1>
               {extraService?.map((laundry) => (
                 <div
-                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4"
+                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
                 >
                   <div className="min-w-[100px] max-w-[100px]">
@@ -141,7 +141,7 @@ const ClothPrices = (props: Props) => {
                   <div className="flex gap-4 items-center">
                     <Button
                       onClick={() => decrementExtraQuantity(laundry.id)}
-                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary"
+                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
                     >
                       -
                     </Button>

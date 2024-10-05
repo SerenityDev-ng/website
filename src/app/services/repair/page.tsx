@@ -67,14 +67,14 @@ const RepairPage = (props: Props) => {
   ];
 
   return (
-    <div className="pt-10 lg:pt-0">
+    <div className="py-10 lg:pt-0 ">
       <main className="flex flex-col lg:flex-row items-center lg:justify-between">
         <aside className="relative z-10">
           <article className="md:max-w-[500px] lg:max-w-[513px] text-center lg:text-left">
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Repairs you can rely on any day.
             </h1>
-            <p className="text-2xl lg:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848]">
+            <p className="text-2xl lg:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848] dark:text-muted-foreground">
               Quality repairs at your finger tip.
             </p>
           </article>
@@ -109,7 +109,7 @@ const RepairPage = (props: Props) => {
           Schedule Repair Service
         </h1>
 
-        <p className=" text-[#4E4848] font-inter text-2xl py-3 w-full max-w-[420px]">
+        <p className=" text-[#4E4848] font-inter text-2xl py-3 w-full max-w-[420px] dark:text-muted-foreground">
           Ready to tackle those home repairs? We understand that your home is
           your sanctuary, that why our dedicated team is here to help—ensuring
           your space is not only functional but a true reflection of your style!
@@ -127,11 +127,12 @@ const RepairPage = (props: Props) => {
               onClick={() => setSelectedService(service)}
               key={service.id}
               className={cn(
-                "max-w-[391px] cursor-pointer h-[509px] rounded-[10px] border border-[#C0B8B8] overflow-hidden backdrop-blur-md bg-white/40 duration-300",
+                "max-w-[391px] cursor-pointer h-[509px] rounded-[10px] border border-[#C0B8B8] overflow-hidden backdrop-blur-md bg-white/40 duration-300 dark:!bg-background",
                 selectedService?.title === service.title
                   ? "border-primary border-2"
                   : "",
-                i % 2 === 0 ? "hover:rotate-12" : "hover:-rotate-12"
+                i % 2 === 0 ? "hover:rotate-12" : "hover:-rotate-12",
+                "dark:!bg-secondary"
               )}
             >
               <Image
@@ -141,7 +142,7 @@ const RepairPage = (props: Props) => {
                 width={0}
                 className="w-full h-[262px]"
               />
-              <h1 className=" font-league-spartan font-medium py-3 text-2xl px-2">
+              <h1 className=" font-league-spartan font-medium py-3 text-2xl px-2 dark:text-black">
                 {service.title}
               </h1>
               <p className=" text-[#4E4848] px-2">{service.text}</p>
@@ -152,7 +153,7 @@ const RepairPage = (props: Props) => {
 
       <aside className="mt-20 relative z-20">
         <div className="px-6">
-          <div className="border border-[#12121980] flex gap-3 items-center w-fit mx-auto rounded-full p-2 ">
+          <div className="border border-[#12121980] dark:border-secondary flex gap-3 items-center w-fit mx-auto rounded-full p-2 ">
             <div className=" bg-secondary p-1 rounded-full">
               <BsExclamation className="text-primary" size={43} />
             </div>

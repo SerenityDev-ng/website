@@ -10,7 +10,7 @@ type Props = {
 
 const LaundryCard = ({ image, title, heading }: Props) => {
   return (
-    <main className="border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden  backdrop-blur-md bg-white/40">
+    <main className="border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden  backdrop-blur-md bg-white/40 dark:bg-secondary">
       <Image
         src={image}
         alt={title}

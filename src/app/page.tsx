@@ -10,10 +10,10 @@ export default function Home() {
       <div className="mt-[128px]">
         <HeroSection />
       </div>
-      <div className="mt-12 md:mt-[130px]">
+      {/* <div className="mt-12 md:mt-[130px]">
         <Numbers />
-      </div>
-      <div className="mt-20">
+      </div> */}
+      <div className="mt-40">
         <Services />
       </div>
       <div className=" my-[158px] ">

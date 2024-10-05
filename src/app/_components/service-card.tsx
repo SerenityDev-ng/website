@@ -9,7 +9,7 @@ type Props = {
 
 const ServiceCard = ({ image, title }: Props) => {
   return (
-    <main className="border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden">
+    <main className="border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden dark:bg-secondary">
       <Image
         src={image}
         alt={title}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,12 +16,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="max-w-full">
-      <body className={` antialiased w-full overflow-x-hidden !max-w-[100vw]`}>
-        <Navbar />
-        <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5">
-          {children}
-        </div>
-        <Footer />
+      <body className={` antialiased w-full overflow-x-hidden !max-w-[100vw] `}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white">
+            {children}
+          </div>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

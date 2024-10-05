@@ -17,6 +17,7 @@ import {
   ShoppingBag,
   Menu,
 } from "lucide-react";
+import { ModeToggle } from "../mode-toggle";
 
 type Props = {};
 
@@ -161,7 +162,7 @@ const Navbar = (props: Props) => {
   );
 
   return (
-    <main className="bg-secondary relative z-10">
+    <main className="bg-secondary dark:bg-secondary relative z-10">
       <header
         ref={navbarRef}
         className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto"
@@ -185,6 +186,7 @@ const Navbar = (props: Props) => {
           <Button className="text-lg font-league-spartan font-semibold hidden sm:inline-flex hover:bg-primary">
             Get Started
           </Button>
+
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="lg:hidden">
@@ -201,6 +203,7 @@ const Navbar = (props: Props) => {
               </nav>
             </SheetContent>
           </Sheet>
+          <ModeToggle />
         </div>
       </header>
     </main>
