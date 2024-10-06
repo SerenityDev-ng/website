@@ -82,41 +82,48 @@ export const extraLaundryServices = [
   },
 ];
 
+export interface Cleaning {
+  id: number;
+  title: string;
+  quantity: number;
+  price: number;
+}
+
 export const cleaning = [
   {
     id: 1,
     title: "Living Rooms",
     quantity: 0,
-    price: 2000,
+    price: 0,
   },
   {
     id: 2,
     title: "Bedrooms",
     quantity: 0,
-    price: 2000,
+    price: 0,
   },
   {
     id: 3,
     title: "Bedroom / Toilet",
     quantity: 0,
-    price: 2000,
+    price: 0,
   },
   {
     id: 4,
     title: "Kitchen",
     quantity: 0,
-    price: 2000,
+    price: 0,
   },
   {
     id: 5,
     title: "Store",
     quantity: 0,
-    price: 1000,
+    price: 0,
   },
   {
     id: 6,
     title: "Balcony",
     quantity: 0,
-    price: 1000,
+    price: 0,
   },
 ];

@@ -2,50 +2,164 @@
 
 import { cleaning_man, laundry_side, vaccum_cleaning } from "@/assets/images";
 import { Button } from "@/components/ui/button";
-import { cleaning } from "@/lib/laundry";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Cleaning, cleaning } from "@/lib/laundry";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 type Props = {};
 
-const CleaningPage = (props: Props) => {
-  const [services, setServices] = useState(cleaning);
-  const [frequency, setFrequency] = useState("Once A Week");
+const houseTypes = [
+  {
+    type: "Selfcon",
+    rooms: 1,
+    toilets: 1,
+    livingRooms: 0,
+    monthlyPrice: 25000,
+    oneTimePrice: 10000,
+  },
+  {
+    type: "1 bedroom flat",
+    rooms: 1,
+    toilets: 1,
+    livingRooms: 1,
+    monthlyPrice: 30000,
+    oneTimePrice: 15000,
+  },
+  {
+    type: "2 bedrooms flat",
+    rooms: 2,
+    toilets: 1,
+    livingRooms: 1,
+    monthlyPrice: 35000,
+    oneTimePrice: 20000,
+  },
+  {
+    type: "3 bedrooms flat",
+    rooms: 3,
+    toilets: 1,
+    livingRooms: 1,
+    monthlyPrice: 50000,
+    oneTimePrice: 25000,
+  },
+  {
+    type: "4 bedrooms flat",
+    rooms: 4,
+    toilets: 1,
+    livingRooms: 1,
+    monthlyPrice: 55000,
+    oneTimePrice: 25000,
+  },
+  {
+    type: "5 bedrooms flat",
+    rooms: 5,
+    toilets: 1,
+    livingRooms: 1,
+    monthlyPrice: 70000,
+    oneTimePrice: 30000,
+  },
+  {
+    type: "Mansion or Two floor buildings",
+    rooms: 6,
+    toilets: 2,
+    livingRooms: 2,
+    monthlyPrice: 100000,
+    oneTimePrice: 50000,
+  },
+];
 
-  const incrementExtraQuantity = (id: number) => {
+const CleaningPage = (props: Props) => {
+  const [services, setServices] = useState<Cleaning[]>(cleaning);
+  const [frequency, setFrequency] = useState("Once A Week");
+  const [isOneTime, setIsOneTime] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [selectedTitles, setSelectedTitles] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getHouseType = () => {
+    const rooms = services.find((s) => s.title === "Bedrooms")?.quantity || 0;
+    const totalRooms = rooms;
+    return houseTypes.find((h) => h.rooms === totalRooms) || houseTypes[0];
+  };
+
+  const calculateTotal = () => {
+    const houseType = getHouseType();
+    const basePrice = isOneTime
+      ? houseType.oneTimePrice
+      : houseType.monthlyPrice;
+
+    const frequencyMultiplier =
+      frequency === "Once A Week" ? 1 : frequency === "Twice A Week" ? 2 : 3;
+
+    return basePrice * frequencyMultiplier;
+  };
+
+  const updateServicesAndTotal = (updatedServices: typeof services) => {
+    setServices(updatedServices);
+    const newTotal = calculateTotal();
+    setTotal(newTotal);
+  };
+
+  const incrementExtraQuantity = (id: number, title: string) => {
+    // Check if bedrooms are selected when trying to increment other services
+    if (title !== "Bedrooms" && !selectedTitles.includes("Bedrooms")) {
+      toast.warning("Please select the number of bedrooms first!");
+      return;
+    }
+
     const updatedServices = services.map((service) => {
       if (service.id === id) {
         return { ...service, quantity: service.quantity + 1 };
       }
       return service;
     });
-    setServices(updatedServices);
+
+    // Update selected titles if not already included
+    if (!selectedTitles.includes(title)) {
+      setSelectedTitles([...selectedTitles, title]);
+    }
+
+    updateServicesAndTotal(updatedServices);
   };
 
-  const decrementExtraQuantity = (id: number) => {
+  const decrementExtraQuantity = (id: number, title: string) => {
     const updatedServices = services.map((service) => {
       if (service.id === id && service.quantity > 0) {
+        // If quantity will become 0, remove the title from selectedTitles
+        if (service.quantity === 1) {
+          setSelectedTitles(selectedTitles.filter((t) => t !== title));
+        }
         return { ...service, quantity: service.quantity - 1 };
       }
       return service;
     });
-    setServices(updatedServices);
+
+    updateServicesAndTotal(updatedServices);
   };
 
-  const totalService = services.reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0 || 0
-  );
+  // Update total when frequency, isOneTime, or services change
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    const bedroomsService = services.find((s) => s.title === "Bedrooms");
+    if (bedroomsService && bedroomsService.quantity > 0) {
+      setIsLoading(true);
+      const newTotal = calculateTotal();
+      setTotal(newTotal);
 
-  const total =
-    frequency === "Once A Week"
-      ? totalService
-      : frequency === "Twice A Week"
-      ? totalService * 2
-      : totalService * 3;
+      timeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 1200);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [frequency, isOneTime, services]);
+  // const total = calculateTotal();
+
   return (
     <div className="pt-[123px] lg:pt-0">
       <main className="flex flex-col lg:flex-row items-center lg:justify-between">
@@ -127,14 +241,18 @@ const CleaningPage = (props: Props) => {
 
               <div className="flex gap-4 items-center">
                 <Button
-                  onClick={() => decrementExtraQuantity(service.id)}
+                  onClick={() =>
+                    decrementExtraQuantity(service.id, service.title)
+                  }
                   className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
                 >
                   -
                 </Button>
                 <p className=" font-medium font-inter">{service.quantity}</p>
                 <Button
-                  onClick={() => incrementExtraQuantity(service.id)}
+                  onClick={() =>
+                    incrementExtraQuantity(service.id, service.title)
+                  }
                   className="text-xl font-semibold text-white hover:bg-primary"
                 >
                   +
@@ -144,9 +262,29 @@ const CleaningPage = (props: Props) => {
           ))}
         </div>
 
+        <div className="flex items-center space-x-2 mt-6">
+          <Checkbox
+            id="one-time"
+            checked={isOneTime}
+            onCheckedChange={(checked) => setIsOneTime(checked as boolean)}
+          />
+          <label
+            htmlFor="one-time"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            One-time service (unchecked for monthly subscription)
+          </label>
+        </div>
+
         <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-[36px] mt-20">
-          <h1>Total (monthly)</h1>
-          <p>&#8358;{total * 4}</p>
+          <h1>Total {isOneTime ? "(one-time)" : "(monthly)"}</h1>
+          {isLoading ? (
+            <p>
+              <Loader2 className="animate-spin dark:text-white" />
+            </p>
+          ) : (
+            <p>&#8358;{total}</p>
+          )}
         </div>
 
         <div className="pt-20">
@@ -155,24 +293,6 @@ const CleaningPage = (props: Props) => {
           </h1>
 
           <div className="flex gap-2 justify-start pt-6 max-w-[calc(100vw-30px)] overflow-x-auto">
-            <Button
-              onClick={() => setFrequency("Once A Week")}
-              className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
-                frequency === "Once A Week" ? "border-primary border-2" : ""
-              )}
-            >
-              Once A Week
-            </Button>
-            <Button
-              onClick={() => setFrequency("Twice A Week")}
-              className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
-                frequency === "Twice A Week" ? "border-primary border-2" : ""
-              )}
-            >
-              Twice A Week
-            </Button>
             <Button
               onClick={() => setFrequency("Three Times A Week")}
               className={cn(
@@ -183,6 +303,25 @@ const CleaningPage = (props: Props) => {
               )}
             >
               Three Times A Week
+            </Button>
+
+            <Button
+              onClick={() => setFrequency("Twice A Week")}
+              className={cn(
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
+                frequency === "Twice A Week" ? "border-primary border-2" : ""
+              )}
+            >
+              Twice A Week
+            </Button>
+            <Button
+              onClick={() => setFrequency("Once A Week")}
+              className={cn(
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
+                frequency === "Once A Week" ? "border-primary border-2" : ""
+              )}
+            >
+              Once A Week
             </Button>
           </div>
         </div>

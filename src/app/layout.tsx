@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Serenity",
@@ -29,6 +30,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <Toaster richColors />
         </ThemeProvider>
       </body>
     </html>
