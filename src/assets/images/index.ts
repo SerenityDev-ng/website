@@ -28,6 +28,7 @@ import about_banner from "./about-banner.png";
 import about_one from "./about-one.png";
 import about_two from "./about-two.png";
 import about_three from "./about-three.png";
+import gifting_side from "./gifting-side.png";
 
 export {
   serenity_logo,
@@ -60,4 +61,5 @@ export {
   about_one,
   about_two,
   about_three,
+  gifting_side,
 };

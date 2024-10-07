@@ -1,3 +1,5 @@
+"use client";
+
 import {
   apple_button,
   google_button,
@@ -8,6 +10,7 @@ import {
 } from "@/assets/images";
 import { Instagram, Mail, PhoneCall } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -15,63 +18,68 @@ type Props = {
 };
 
 const Footer = (props: Props) => {
+  const pathname = usePathname();
+
+  const allow = pathname === "/";
   return (
     <footer className="relative z-20">
-      <div className="dark:bg-secondary">
-        <div className="h-[329px] relative flex items-center gap-9 justify-center mx-auto px-5">
-          <Image
-            src={yellow}
-            alt=""
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="object-cover h-[60%] hidden lg:block lg:w-[292px] absolute top-0 left-0 z-20"
-          />
-          <Image
-            src={purple}
-            alt=""
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="object-cover h-[50%] hidden lg:block lg:w-[292px] absolute bottom-0 left-0 z-10"
-          />
-
-          <div className="relative z-30">
-            <h1 className=" font-league-spartan font-medium text-[40px] text-black text-center">
-              COMING SOON...
-            </h1>
-
-            <div className="flex gap-3 items-center mt-8 ">
-              <Image
-                src={google_button}
-                alt=""
-                height={0}
-                width={0}
-                sizes="100vw"
-                className="h-full w-[167px] object-contain dark:shadow-md "
-              />
-              <Image
-                src={apple_button}
-                alt=""
-                height={0}
-                width={0}
-                sizes="100vw"
-                className="h-full w-[167px] object-contain dark:shadow-md"
-              />
-            </div>
-          </div>
-          <div className="hidden lg:block">
+      {allow && (
+        <div className="dark:bg-secondary">
+          <div className="h-[329px] relative flex items-center gap-9 justify-center mx-auto px-5">
             <Image
-              src={hand_phone}
+              src={yellow}
               alt=""
               height={0}
               width={0}
               sizes="100vw"
-              className="h-[320px] w-[385px] object-contain"
+              className="object-cover h-[60%] hidden lg:block lg:w-[292px] absolute top-0 left-0 z-20"
             />
+            <Image
+              src={purple}
+              alt=""
+              height={0}
+              width={0}
+              sizes="100vw"
+              className="object-cover h-[50%] hidden lg:block lg:w-[292px] absolute bottom-0 left-0 z-10"
+            />
+
+            <div className="relative z-30">
+              <h1 className=" font-league-spartan font-medium text-[40px] text-black text-center">
+                COMING SOON...
+              </h1>
+
+              <div className="flex gap-3 items-center mt-8 ">
+                <Image
+                  src={google_button}
+                  alt=""
+                  height={0}
+                  width={0}
+                  sizes="100vw"
+                  className="h-full w-[167px] object-contain dark:shadow-md "
+                />
+                <Image
+                  src={apple_button}
+                  alt=""
+                  height={0}
+                  width={0}
+                  sizes="100vw"
+                  className="h-full w-[167px] object-contain dark:shadow-md"
+                />
+              </div>
+            </div>
+            <div className="hidden lg:block">
+              <Image
+                src={hand_phone}
+                alt=""
+                height={0}
+                width={0}
+                sizes="100vw"
+                className="h-[320px] w-[385px] object-contain"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="bg-primary pb-[107px] pt-[64px] px-5">
         <div className=" bg-primary flex flex-col gap-4 lg:justify-between lg:flex-row lg:items-center max-w-screen-xl mx-auto">
           <aside>
