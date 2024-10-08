@@ -168,7 +168,7 @@ const CleaningPage = (props: Props) => {
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Cleaning...ugh, let&apos;s fix that.
             </h1>
-            <p className="text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#2d2929]">
+            <p className="text-lg lg:text-2xl xl:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#2d2929] dark:text-muted-foreground">
               Because life is too short for boring chores.
             </p>
           </article>
@@ -180,7 +180,7 @@ const CleaningPage = (props: Props) => {
           </div>
         </aside>
 
-        <aside className="relative -mt-16 md:mt-10 lg:mt-0 ">
+        <aside className="relative -mt-5 md:mt-10 lg:mt-0 ">
           <Image
             src={vaccum_cleaning}
             alt="Side"
@@ -205,7 +205,7 @@ const CleaningPage = (props: Props) => {
           <h1 className=" font-league-spartan font-medium mb-8 text-4xl lg:text-[55px] text-center lg:text-left">
             Schedule HouseKeeping
           </h1>
-          <p className=" font-inter text-[#4E4848 text-xl lg:text-2xl text-center lg:text-left">
+          <p className=" font-inter text-[#4E4848 text-lg lg:text-2xl text-center lg:text-left text-muted-foreground">
             We offer thorough housekeeping service that includes sweeping,
             mopping, disinfecting, wiping surfaces, cobweb removal, floor and
             wall cleaning, cabinet care, dishwashing, and garbage
@@ -235,7 +235,7 @@ const CleaningPage = (props: Props) => {
               className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] dark:bg-secondary rounded-[10px] p-4 dark:text-black"
               key={service.id}
             >
-              <div className="md:min-w-[200px] md:max-w-[200px] font-league-spartan font-medium text-2xl">
+              <div className="md:min-w-[200px] md:max-w-[200px] font-league-spartan font-medium text-lg lg:text-2xl ">
                 {service.title}
               </div>
 
@@ -270,7 +270,7 @@ const CleaningPage = (props: Props) => {
           />
           <label
             htmlFor="one-time"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             One-time service (unchecked for monthly subscription)
           </label>
@@ -296,7 +296,7 @@ const CleaningPage = (props: Props) => {
             <Button
               onClick={() => setFrequency("Three Times A Week")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/80",
                 frequency === "Three Times A Week"
                   ? "border-primary border-2"
                   : ""
@@ -308,7 +308,7 @@ const CleaningPage = (props: Props) => {
             <Button
               onClick={() => setFrequency("Twice A Week")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/80",
                 frequency === "Twice A Week" ? "border-primary border-2" : ""
               )}
             >
@@ -317,7 +317,7 @@ const CleaningPage = (props: Props) => {
             <Button
               onClick={() => setFrequency("Once A Week")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]",
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/80",
                 frequency === "Once A Week" ? "border-primary border-2" : ""
               )}
             >
@@ -333,14 +333,14 @@ const CleaningPage = (props: Props) => {
           <div className="flex gap-2 justify-start pt-6">
             <Button
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]"
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/90"
               )}
             >
               8AM - 12PM
             </Button>
             <Button
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848]"
+                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/90"
               )}
             >
               12PM - 4PM

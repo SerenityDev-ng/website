@@ -11,12 +11,12 @@ const page = (props: Props) => {
   return (
     <main className="pb-[115px]">
       <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-5 max-w-full overflow-x-hidden">
-        <aside>
+        <aside className="mt-6 lg:mt-0">
           <article className="md:max-w-[500px] lg:max-w-[820px] text-center lg:text-left">
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Spread love with the perfect gift.
             </h1>
-            <p className="text-sm md:text-lg lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9">
+            <p className="text-lg lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9 dark:text-muted-foreground max-w-[80%] mx-auto lg:mx-0">
               Looking for the ultimate thoughtful gift? Help your loved ones
               relax with a little help from Serenity&apos;s all-in-one cleaning,
               laundry, and repair services.

@@ -35,7 +35,7 @@ const Services = (props: Props) => {
         Our Services
       </h1>
 
-      <div className="mt-[70px] flex flex-wrap justify-center gap-4">
+      <div className="mt-[70px] flex flex-wrap justify-center md:justify-start gap-4 ">
         {theServices.map((service) => (
           <Link href={service.href} key={service.id}>
             <ServiceCard image={service.image} title={service.title} />

@@ -25,7 +25,7 @@ const HeroSection = (props: Props) => {
             <br />
             deserves spa days too!
           </h1>
-          <p className="text-sm md:text-lg lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9">
+          <p className="text-lg lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9 dark:text-muted-foreground max-w-[80%] mx-auto lg:mx-0">
             Enjoy professional home care service at your convenience ensuring a
             clean and comfortable living space.{" "}
           </p>

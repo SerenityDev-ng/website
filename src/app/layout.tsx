@@ -26,7 +26,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white">
+          <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter">
             {children}
           </div>
           <Footer />

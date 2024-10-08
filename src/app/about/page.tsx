@@ -66,11 +66,11 @@ const AboutPage = (props: Props) => {
       </figure>
 
       <div>
-        <h1 className="mt-24 font-league-spartan font-semibold text-5xl xl:text-[72px] text-center">
+        <h1 className="mt-24 font-league-spartan font-semibold text-[36px] lg:text-5xl xl:text-[72px] text-center">
           About Us
         </h1>
 
-        <p className=" font-inter text-2xl py-8">
+        <p className=" font-inter text-lg lg:text-2xl py-8 dark:text-muted-foreground">
           At Serenity, we do more than clean, we are your home&apos;s best
           friend. Our mission is to create a comfortable, well-maintained living
           space that allows you to focus on what matters most. From regular
@@ -81,7 +81,7 @@ const AboutPage = (props: Props) => {
           it all with care and precision.
         </p>
 
-        <p className="font-inter text-2xl ">
+        <p className="font-inter text-lg lg:text-2xl dark:text-muted-foreground ">
           With Serenity, you can trust that your home will always be fresh,
           functional, and well cared for. Our team is dedicated to providing
           consistent, high-quality service with attention to detail, ensuring
@@ -89,7 +89,7 @@ const AboutPage = (props: Props) => {
           deserve.
         </p>
 
-        <p className=" font-inter text-2xl py-8">
+        <p className=" font-inter text-lg lg:text-2xl py-8 dark:text-muted-foreground">
           We understand that life can get busy, and managing your home
           shouldn&apos;t be a hassle. That&apos;s why we make it easy for you to
           relax, knowing your space is in the hands of professionals who care as
@@ -100,11 +100,11 @@ const AboutPage = (props: Props) => {
       </div>
 
       <div>
-        <h1 className=" font-league-spartan font-medium text-5xl text-[77px] text-center mt-32">
+        <h1 className=" font-league-spartan font-medium text-[36px] lg:text-5xl xl:text-[77px] text-center mt-32">
           Meet Our Professionals At Serenity
         </h1>
 
-        <div className="flex flex-wrap gap-3 mt-16  rounded-[10px]">
+        <div className="flex flex-wrap gap-3 mt-16 justify-center lg:justify-start rounded-[10px]">
           {professionals.map((professional) => (
             <div
               key={professional.id}

@@ -23,6 +23,7 @@ type Props = {};
 
 const Navbar = (props: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLElement>(null);
 
@@ -132,6 +133,7 @@ const Navbar = (props: Props) => {
               {mobile &&
                 link.subLinks.map((subLink) => (
                   <Link
+                    onClick={() => setIsMobileMenuOpen(false)}
                     key={subLink.name}
                     href={subLink.href}
                     className={cn(
@@ -144,7 +146,7 @@ const Navbar = (props: Props) => {
                 ))}
             </div>
           ) : (
-            <Link href={link.href}>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href={link.href}>
               <p
                 className={cn(
                   "text-lg font-league-spartan text-black capitalize flex items-center hover:text-primary duration-300",
@@ -187,14 +189,22 @@ const Navbar = (props: Props) => {
             Get Started
           </Button>
 
-          <Sheet>
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="lg:hidden">
+              <Button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                variant="outline"
+                size="icon"
+                className="lg:hidden"
+              >
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent
+              side="right"
+              className="w-[300px] sm:w-[400px] dark:bg-secondary"
+            >
               <nav className="flex flex-col mt-6">
                 <NavLinks mobile />
                 <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">

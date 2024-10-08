@@ -76,7 +76,7 @@ const RepairPage = (props: Props) => {
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Repairs you can rely on any day.
             </h1>
-            <p className="text-2xl lg:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848] dark:text-muted-foreground">
+            <p className="text-lg lg:text-3xl font-league-spartan mt-7 lg:mt-9 max-w-[80%] lg:max-w-none mx-auto text-[#4E4848] dark:text-muted-foreground">
               Quality repairs at your finger tip.
             </p>
           </article>
@@ -113,7 +113,7 @@ const RepairPage = (props: Props) => {
           Schedule Repair Service
         </h1>
 
-        <p className=" text-[#4E4848] font-inter text-2xl py-3 w-full max-w-[420px] dark:text-muted-foreground">
+        <p className=" text-[#4E4848] font-inter text-lg py-3 w-full max-w-[420px] dark:text-muted-foreground">
           Ready to tackle those home repairs? We understand that your home is
           your sanctuary, that why our dedicated team is here to help—ensuring
           your space is not only functional but a true reflection of your style!
