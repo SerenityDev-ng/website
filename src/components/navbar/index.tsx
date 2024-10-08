@@ -1,6 +1,6 @@
 "use client";
 
-import { serenity_logo } from "@/assets/images";
+import { cleaning, laundry_iron, repair, serenity_logo } from "@/assets/images";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,50 +21,48 @@ import { ModeToggle } from "../mode-toggle";
 
 type Props = {};
 
-const Navbar = (props: Props) => {
+const links = [
+  {
+    id: 1,
+    name: "Home",
+    href: "/",
+    icon: <Home className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: 2,
+    name: "Services",
+    href: "/services",
+    icon: <Briefcase className="h-4 w-4 mr-2" />,
+    subLinks: [
+      { name: "Repair", href: "/services/repair" },
+      { name: "Laundry", href: "/services/laundry" },
+      { name: "Cleaning", href: "/services/cleaning" },
+    ],
+  },
+  {
+    id: 3,
+    name: "About",
+    href: "/about",
+    icon: <Info className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: 4,
+    name: "Gifting",
+    href: "/gifting",
+    icon: <Gift className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: 5,
+    name: "Marketplace",
+    href: "/marketplace",
+    icon: <ShoppingBag className="h-4 w-4 mr-2" />,
+  },
+];
+
+const DesktopNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLElement>(null);
-
-  const links = [
-    {
-      id: 1,
-      name: "Home",
-      href: "/",
-      icon: <Home className="h-4 w-4 mr-2" />,
-    },
-    {
-      id: 2,
-      name: "Services",
-      href: "/services",
-      icon: <Briefcase className="h-4 w-4 mr-2" />,
-      subLinks: [
-        { name: "Laundry", href: "/services/laundry" },
-        { name: "Cleaning", href: "/services/cleaning" },
-        { name: "Repair", href: "/services/repair" },
-      ],
-    },
-    {
-      id: 3,
-      name: "About",
-      href: "/about",
-      icon: <Info className="h-4 w-4 mr-2" />,
-    },
-    {
-      id: 4,
-      name: "Gifting",
-      href: "/gifting",
-      icon: <Gift className="h-4 w-4 mr-2" />,
-    },
-    {
-      id: 5,
-      name: "Marketplace",
-      href: "/marketplace",
-      icon: <ShoppingBag className="h-4 w-4 mr-2" />,
-    },
-  ];
-
   const pathname = usePathname();
 
   const handleMouseEnter = () => {
@@ -80,142 +78,245 @@ const Navbar = (props: Props) => {
     }
   };
 
-  const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
-    <>
-      {links.map((link) => (
-        <div key={link.id} className={cn("relative", mobile && "mb-4")}>
-          {link.subLinks ? (
-            <div
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                className={cn(
-                  "text-lg font-league-spartan text-black capitalize flex items-center",
-                  pathname.startsWith(link.href)
-                    ? "font-semibold text-primary"
-                    : ""
-                )}
+  return (
+    <header
+      ref={navbarRef}
+      className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto relative z-20"
+      onMouseLeave={handleMouseLeave}
+    >
+      <nav className="flex items-center">
+        <Image
+          src={serenity_logo}
+          alt="Serenity Logo"
+          height={60}
+          width={199}
+          className="object-contain"
+        />
+      </nav>
+
+      <nav className="flex items-center gap-10 justify-between">
+        {links.map((link) => (
+          <div key={link.id} className="relative">
+            {link.subLinks ? (
+              <div
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
-                {link.icon}
-                {link.name}
-                <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              {isDropdownOpen && !mobile && (
-                <div
-                  ref={dropdownRef}
-                  className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+                <button
+                  className={cn(
+                    "text-lg font-league-spartan text-black capitalize flex items-center",
+                    pathname.startsWith(link.href)
+                      ? "font-semibold text-primary"
+                      : ""
+                  )}
                 >
+                  {link.icon}
+                  {link.name}
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </button>
+                {isDropdownOpen && (
                   <div
-                    className="py-1"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="options-menu"
+                    ref={dropdownRef}
+                    className="fixed left-0 animate-in right-0 mx-auto  mt-4 w-[calc(100vw-2rem)] max-w-7xl bg-white shadow-lg rounded-md ring-1 ring-black ring-opacity-5 !z-50"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    {link.subLinks.map((subLink) => (
-                      <Link
-                        key={subLink.name}
-                        href={subLink.href}
-                        className={cn(
-                          "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                          pathname === subLink.href ? "font-semibold" : ""
-                        )}
-                        role="menuitem"
-                      >
-                        {subLink.name}
-                      </Link>
-                    ))}
+                    <div
+                      className=" py-10 px-6 xl:p-16 xl:py-24 flex items-center justify-between relative z-20 overflow-hidden"
+                      role="menu"
+                      aria-orientation="horizontal"
+                      aria-labelledby="options-menu"
+                    >
+                      <div className="relative z-10 flex flex-col gap-3 text-gray-500 p-10 border-r border-r-gray-300">
+                        {link.subLinks.map((subLink) => (
+                          <Link
+                            key={subLink.name}
+                            href={subLink.href}
+                            className={cn(
+                              " font-league-spartan text-2xl capitalize hover:text-primary",
+                              pathname === subLink.href
+                                ? "font-semibold text-primary"
+                                : ""
+                            )}
+                            role="menuitem"
+                          >
+                            {subLink.name}
+                          </Link>
+                        ))}
+                      </div>
+                      <div className="relative z-10 flex items-center gap-5">
+                        <div>
+                          <Image
+                            src={cleaning}
+                            alt="cleaning"
+                            height={90}
+                            width={250}
+                            className="object-contain rounded-lg"
+                          />
+                          <p className="text-sm text-gray-400 w-[230px] pt-3 font-inter">
+                            Leave the dusting, scrubbing, and vacuuming to us!
+                            Our cleaning pros ensure every corner of your home
+                            is sparkling clean.
+                          </p>
+                        </div>
+                        <div className="hidden xl:block">
+                          <Image
+                            src={laundry_iron}
+                            alt="cleaning"
+                            height={90}
+                            width={250}
+                            className="object-contain rounded-lg"
+                          />
+                          <p className="text-sm text-gray-400 w-[230px] pt-3 font-inter">
+                            Say goodbye to laundry day blues! We offer quick,
+                            efficient laundry and ironing services tailored to
+                            your schedule.
+                          </p>
+                        </div>
+                        <div>
+                          <Image
+                            src={repair}
+                            alt="cleaning"
+                            height={90}
+                            width={250}
+                            className="object-contain rounded-lg"
+                          />
+                          <p className="text-sm text-gray-400 w-[230px] pt-3 font-inter">
+                            Got a leaky faucet or an electrical issue? Our
+                            certified technicians are on call to fix your home
+                            maintenance problems.
+                          </p>
+                        </div>
+                      </div>
+                      <div className=" h-[600px] w-20 bg-secondary opacity-30  absolute !z-[0]"></div>
+                      {/* <div className=" h-[800px] w-[400px] bg-secondary opacity-30 skew-y-12 absolute !z-[0] right-[100px] -rotate-[30deg]"></div> */}
+                    </div>
                   </div>
-                </div>
-              )}
-              {mobile &&
-                link.subLinks.map((subLink) => (
-                  <Link
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    key={subLink.name}
-                    href={subLink.href}
-                    className={cn(
-                      "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                      pathname === subLink.href ? "font-semibold" : ""
-                    )}
-                  >
-                    {subLink.name}
-                  </Link>
-                ))}
-            </div>
-          ) : (
-            <Link onClick={() => setIsMobileMenuOpen(false)} href={link.href}>
-              <p
-                className={cn(
-                  "text-lg font-league-spartan text-black capitalize flex items-center hover:text-primary duration-300",
-                  link.href === pathname ? "font-semibold text-primary" : ""
                 )}
-              >
-                {link.icon}
-                {link.name}
-              </p>
-            </Link>
-          )}
-        </div>
-      ))}
-    </>
+              </div>
+            ) : (
+              <Link href={link.href}>
+                <p
+                  className={cn(
+                    "text-lg font-league-spartan text-black capitalize flex items-center hover:text-primary duration-300",
+                    link.href === pathname ? "font-semibold text-primary" : ""
+                  )}
+                >
+                  {link.icon}
+                  {link.name}
+                </p>
+              </Link>
+            )}
+          </div>
+        ))}
+      </nav>
+
+      <div className="flex items-center gap-4">
+        <Button className="text-lg font-league-spartan font-semibold hover:bg-primary">
+          Get Started
+        </Button>
+        <ModeToggle />
+      </div>
+    </header>
   );
+};
+
+const MobileNavbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <main className="bg-secondary dark:bg-secondary relative z-10">
-      <header
-        ref={navbarRef}
-        className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto"
-        onMouseLeave={handleMouseLeave}
-      >
-        <nav className="flex items-center">
-          <Image
-            src={serenity_logo}
-            alt="Serenity Logo"
-            height={60}
-            width={199}
-            className="object-contain"
-          />
-        </nav>
+    <header className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto">
+      <nav className="flex items-center">
+        <Image
+          src={serenity_logo}
+          alt="Serenity Logo"
+          height={60}
+          width={199}
+          className="object-contain"
+        />
+      </nav>
 
-        <nav className="hidden lg:flex items-center gap-10 justify-between">
-          <NavLinks />
-        </nav>
-
-        <div className="flex items-center gap-4">
-          <Button className="text-lg font-league-spartan font-semibold hidden sm:inline-flex hover:bg-primary">
-            Get Started
-          </Button>
-
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                variant="outline"
-                size="icon"
-                className="lg:hidden"
-              >
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[300px] sm:w-[400px] dark:bg-secondary"
+      <div className="flex items-center gap-4">
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              variant="outline"
+              size="icon"
             >
-              <nav className="flex flex-col mt-6">
-                <NavLinks mobile />
-                <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">
-                  Get Started
-                </Button>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <ModeToggle />
-        </div>
-      </header>
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            className="w-[300px] sm:w-[400px] dark:bg-secondary"
+          >
+            <nav className="flex flex-col mt-6">
+              {links.map((link) => (
+                <div key={link.id} className="mb-4">
+                  {link.subLinks ? (
+                    <>
+                      <p className="text-lg flex items-center font-league-spartan text-black capitalize mb-2">
+                        {link.icon}
+                        {link.name}
+                      </p>
+                      {link.subLinks.map((subLink) => (
+                        <Link
+                          key={subLink.name}
+                          href={subLink.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={cn(
+                            "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                            pathname === subLink.href ? "font-semibold" : ""
+                          )}
+                        >
+                          {subLink.name}
+                        </Link>
+                      ))}
+                    </>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <p
+                        className={cn(
+                          "text-lg font-league-spartan text-black capitalize flex items-center hover:text-primary duration-300",
+                          link.href === pathname
+                            ? "font-semibold text-primary"
+                            : ""
+                        )}
+                      >
+                        {link.icon}
+                        {link.name}
+                      </p>
+                    </Link>
+                  )}
+                </div>
+              ))}
+              <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">
+                Get Started
+              </Button>
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <ModeToggle />
+      </div>
+    </header>
+  );
+};
+
+const Navbar = (props: Props) => {
+  return (
+    <main className="bg-secondary dark:bg-secondary relative z-10">
+      <div className="hidden lg:block">
+        <DesktopNavbar />
+      </div>
+      <div className="lg:hidden">
+        <MobileNavbar />
+      </div>
     </main>
   );
 };

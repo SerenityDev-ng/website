@@ -40,7 +40,7 @@ const SelectService = (props: Props) => {
         Our Services
       </h1>
 
-      <div className="mt-[70px] flex flex-wrap justify-center gap-4">
+      <div className="mt-[70px] flex flex-wrap justify-center lg:justify-start  gap-4">
         {theServices.map((service) => (
           <ServiceCard
             image={service.image}

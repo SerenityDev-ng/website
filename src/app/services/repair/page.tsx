@@ -71,7 +71,7 @@ const RepairPage = (props: Props) => {
   return (
     <div className="py-10 lg:pt-0 ">
       <main className="flex flex-col lg:flex-row items-center lg:justify-between">
-        <aside className="relative z-10">
+        <aside className="relative">
           <article className="md:max-w-[500px] lg:max-w-[513px] text-center lg:text-left">
             <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
               Repairs you can rely on any day.
