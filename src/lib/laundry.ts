@@ -92,13 +92,19 @@ export interface Cleaning {
 export const cleaning = [
   {
     id: 1,
-    title: "Living Rooms",
+    title: "Bedrooms",
     quantity: 0,
     price: 0,
   },
   {
     id: 2,
-    title: "Bedrooms",
+    title: "Living Rooms",
+    quantity: 0,
+    price: 0,
+  },
+  {
+    id: 7,
+    title: "Dining Rooms",
     quantity: 0,
     price: 0,
   },
