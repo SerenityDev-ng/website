@@ -152,7 +152,7 @@ const CleaningPage = (props: Props) => {
     }
     const timeout = setTimeout(() => {
       setIsLoading(false);
-    }, 1200);
+    }, 2580);
 
     return () => clearTimeout(timeout);
   };
