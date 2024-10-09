@@ -101,8 +101,8 @@ const CleaningPage = (props: Props) => {
 
   const updateServicesAndTotal = (updatedServices: typeof services) => {
     setServices(updatedServices);
-    const newTotal = calculateTotal();
-    setTotal(newTotal);
+    // const newTotal = calculateTotal();
+    // setTotal(newTotal);
   };
 
   const incrementExtraQuantity = (id: number, title: string) => {
@@ -143,22 +143,19 @@ const CleaningPage = (props: Props) => {
   };
 
   // Update total when frequency, isOneTime, or services change
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
+  const handleFetch = () => {
+    setIsLoading(true);
     const bedroomsService = services.find((s) => s.title === "Bedrooms");
     if (bedroomsService && bedroomsService.quantity > 0) {
-      setIsLoading(true);
       const newTotal = calculateTotal();
       setTotal(newTotal);
-
-      timeout = setTimeout(() => {
-        setIsLoading(false);
-      }, 1200);
     }
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
 
     return () => clearTimeout(timeout);
-  }, [frequency, isOneTime, services]);
-  // const total = calculateTotal();
+  };
 
   return (
     <div className="pt-[123px] lg:pt-0">
@@ -262,19 +259,27 @@ const CleaningPage = (props: Props) => {
           ))}
         </div>
 
-        <div className="flex items-center space-x-2 mt-6">
-          <Checkbox
-            id="one-time"
-            checked={isOneTime}
-            onCheckedChange={(checked) => setIsOneTime(checked as boolean)}
-          />
-          <label
-            htmlFor="one-time"
-            className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        <aside className="flex items-center justify-between gap-5 mt-5">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="one-time"
+              checked={isOneTime}
+              onCheckedChange={(checked) => setIsOneTime(checked as boolean)}
+            />
+            <label
+              htmlFor="one-time"
+              className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              One-time service (unchecked for monthly subscription)
+            </label>
+          </div>
+          <Button
+            className="hover:bg-primary button-grad"
+            onClick={handleFetch}
           >
-            One-time service (unchecked for monthly subscription)
-          </label>
-        </div>
+            Calculate
+          </Button>
+        </aside>
 
         <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-[36px] mt-20">
           <h1>Total {isOneTime ? "(one-time)" : "(monthly)"}</h1>
