@@ -205,7 +205,7 @@ const CleaningPage = (props: Props) => {
           <p className=" font-inter text-[#4E4848 text-lg lg:text-2xl text-center lg:text-left text-muted-foreground">
             We offer thorough housekeeping service that includes sweeping,
             mopping, disinfecting, wiping surfaces, cobweb removal, floor and
-            wall cleaning, cabinet care, dishwashing, and garbage
+            wall cleaning, cabinet care, dish-washing, and garbage
             disposal—leaving your home spotless
           </p>
         </div>

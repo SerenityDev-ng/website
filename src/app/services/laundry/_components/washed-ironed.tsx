@@ -7,7 +7,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
-const ClothPrices = () => {
+const WashedIroned = () => {
   const [services, setServices] = useState(laundryServices);
   const [extraService, setExtraServices] = useState(extraLaundryServices);
 
@@ -182,4 +182,4 @@ const ClothPrices = () => {
   );
 };
 
-export default ClothPrices;
+export default WashedIroned;

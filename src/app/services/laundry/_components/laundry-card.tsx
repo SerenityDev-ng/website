@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import Image, { StaticImageData } from "next/image";
 import React from "react";
 
@@ -6,11 +9,25 @@ type Props = {
   image: StaticImageData;
   title: string;
   heading: string;
+  setSelectedService: React.Dispatch<React.SetStateAction<string>>;
+  selectedService: string;
 };
 
-const LaundryCard = ({ image, title, heading }: Props) => {
+const LaundryCard = ({
+  image,
+  title,
+  heading,
+  setSelectedService,
+  selectedService,
+}: Props) => {
   return (
-    <main className="border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden  backdrop-blur-md bg-white/40 dark:bg-secondary">
+    <main
+      onClick={() => setSelectedService(heading)}
+      className={cn(
+        "border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden  backdrop-blur-md bg-white/40 dark:bg-secondary hover:border-primary",
+        selectedService === heading && "border-primary border-2"
+      )}
+    >
       <Image
         src={image}
         alt={title}

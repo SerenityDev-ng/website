@@ -86,4 +86,7 @@ body {
   .button-grad {
     @apply bg-gradient-to-t from-[#43338F] to-primary font-league-spartan font-semibold text-lg;
   }
+  .button-tab {
+    @apply bg-gradient-to-t from-[#43338F] to-primary font-inter font-semibold text-lg;
+  }
 }

@@ -8,9 +8,12 @@ import {
 import React from "react";
 import LaundryCard from "./laundry-card";
 
-type Props = {};
+type Props = {
+  setSelectedService: React.Dispatch<React.SetStateAction<string>>;
+  selectedService: string;
+};
 
-const LaundryOptions = (props: Props) => {
+const LaundryOptions = ({ setSelectedService, selectedService }: Props) => {
   const theServices = [
     {
       id: 1,
@@ -50,6 +53,8 @@ const LaundryOptions = (props: Props) => {
             image={service.image}
             heading={service.heading}
             title={service.title}
+            setSelectedService={setSelectedService}
+            selectedService={selectedService}
           />
         ))}
       </div>
