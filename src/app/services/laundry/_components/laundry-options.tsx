@@ -9,8 +9,10 @@ import React from "react";
 import LaundryCard from "./laundry-card";
 
 type Props = {
-  setSelectedService: React.Dispatch<React.SetStateAction<string>>;
-  selectedService: string;
+  setSelectedService: React.Dispatch<
+    React.SetStateAction<{ count: number; title: string }>
+  >;
+  selectedService: { count: number; title: string };
 };
 
 const LaundryOptions = ({ setSelectedService, selectedService }: Props) => {
@@ -47,7 +49,7 @@ const LaundryOptions = ({ setSelectedService, selectedService }: Props) => {
       </p>
 
       <div className="mt-[70px] flex flex-wrap justify-start gap-4">
-        {theServices.map((service) => (
+        {theServices.map((service, i) => (
           <LaundryCard
             key={service.id}
             image={service.image}
@@ -55,6 +57,7 @@ const LaundryOptions = ({ setSelectedService, selectedService }: Props) => {
             title={service.title}
             setSelectedService={setSelectedService}
             selectedService={selectedService}
+            index={i}
           />
         ))}
       </div>

@@ -9,7 +9,10 @@ import ClothContainer from "./_components/cloth-container";
 type Props = {};
 
 const LaundryPage = (props: Props) => {
-  const [selectedService, setSelectedService] = useState("Washed and Folded");
+  const [selectedService, setSelectedService] = useState({
+    count: 0,
+    title: "Washed and Folded",
+  });
   return (
     <div className="pt-[120px] pb-[200px]">
       <HeroSection />
@@ -20,7 +23,7 @@ const LaundryPage = (props: Props) => {
           setSelectedService={setSelectedService}
         />
       </div>
-      <div className="pt-[120px] relative z-20 ">
+      <div className="pt-[120px] relative z-20" id="calculator">
         <ClothContainer
           selectedService={selectedService}
           setSelectedService={setSelectedService}
