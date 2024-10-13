@@ -1,4 +1,9 @@
-import { cleaning, iron_cloth, repair } from "@/assets/images";
+import {
+  cleaning,
+  gifting_cleaning,
+  iron_cloth,
+  repair,
+} from "@/assets/images";
 import React from "react";
 import ServiceCard from "./service-card";
 
@@ -8,7 +13,7 @@ const SelectService = (props: Props) => {
   const theServices = [
     {
       id: 1,
-      image: cleaning,
+      image: gifting_cleaning,
       title:
         "Leave the dusting, scrubbing, and vacuuming to us! Our cleaning pros ensure every corner of your home is sparkling clean.",
       href: "/services/cleaning",
