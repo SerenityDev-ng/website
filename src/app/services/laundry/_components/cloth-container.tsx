@@ -12,6 +12,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   setSelectedService: React.Dispatch<
@@ -23,6 +24,20 @@ type Props = {
 const ClothContainer = ({ setSelectedService, selectedService }: Props) => {
   const [api, setApi] = useState<CarouselApi>();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const titles = [
+    {
+      count: 0,
+      title: "Washed and Folded",
+    },
+    {
+      count: 1,
+      title: "Washed and Ironed",
+    },
+    {
+      count: 2,
+      title: "Iron Only",
+    },
+  ];
 
   useEffect(() => {
     if (!api) {
@@ -76,19 +91,38 @@ const ClothContainer = ({ setSelectedService, selectedService }: Props) => {
     );
 
   return (
-    <Carousel className="w-full" setApi={setApi}>
-      <CarouselContent>
-        <CarouselItem>
-          <ClothPrices />
-        </CarouselItem>
-        <CarouselItem>
-          <WashedIroned />
-        </CarouselItem>
-        <CarouselItem>
-          <IronedOnly />
-        </CarouselItem>
-      </CarouselContent>
-    </Carousel>
+    <main className="">
+      <div className="flex items-center gap-2 my-5">
+        {titles.map((title) => (
+          <Button
+            key={title.count}
+            className={`${
+              selectedService.count === title.count
+                ? "button-tab hover:bg-primary"
+                : "bg-white text-[#4E4848]"
+            }`}
+            onClick={() =>
+              setSelectedService({ count: title.count, title: title.title })
+            }
+          >
+            {title.title}
+          </Button>
+        ))}
+      </div>
+      <Carousel className="w-full" setApi={setApi}>
+        <CarouselContent>
+          <CarouselItem>
+            <ClothPrices />
+          </CarouselItem>
+          <CarouselItem>
+            <WashedIroned />
+          </CarouselItem>
+          <CarouselItem>
+            <IronedOnly />
+          </CarouselItem>
+        </CarouselContent>
+      </Carousel>
+    </main>
   );
 };
 
