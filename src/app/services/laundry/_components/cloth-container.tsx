@@ -63,13 +63,13 @@ const ClothContainer = ({ setSelectedService, selectedService }: Props) => {
           <TabsTrigger value="Washed and Ironed">Washed and Ironed</TabsTrigger>
           <TabsTrigger value="Iron Only">Iron Only</TabsTrigger>
         </TabsList>
-        <TabsContent value="Washed and Folded">
+        <TabsContent value="Washed and Folded" className="mt-10">
           <ClothPrices />
         </TabsContent>
-        <TabsContent value="Washed and Ironed">
+        <TabsContent value="Washed and Ironed" className="mt-10">
           <WashedIroned />
         </TabsContent>
-        <TabsContent value="Iron Only">
+        <TabsContent value="Iron Only" className="mt-10">
           <IronedOnly />
         </TabsContent>
       </Tabs>
