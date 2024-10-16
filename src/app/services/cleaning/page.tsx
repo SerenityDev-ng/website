@@ -281,7 +281,7 @@ const CleaningPage = (props: Props) => {
           </Button>
         </aside>
 
-        <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-[36px] mt-20">
+        <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-2xl md:text-[36px] mt-20">
           <h1>Total {isOneTime ? "(one-time)" : "(monthly)"}</h1>
           {isLoading ? (
             <p>
@@ -293,7 +293,7 @@ const CleaningPage = (props: Props) => {
         </div>
 
         <div className="pt-20">
-          <h1 className="text-[36px] font-league-spartan font-medium">
+          <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
             Select Frequency
           </h1>
 
@@ -301,54 +301,54 @@ const CleaningPage = (props: Props) => {
             <Button
               onClick={() => setFrequency("Three Times A Week")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/80",
+                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
                 frequency === "Three Times A Week"
                   ? "border-primary border-2"
                   : ""
               )}
             >
-              Three Times A Week
+              Three Times a Week
             </Button>
 
             <Button
               onClick={() => setFrequency("Twice A Week")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/80",
+                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
                 frequency === "Twice A Week" ? "border-primary border-2" : ""
               )}
             >
-              Twice A Week
+              Twice a Week
             </Button>
             <Button
               onClick={() => setFrequency("Once A Week")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/80",
+                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
                 frequency === "Once A Week" ? "border-primary border-2" : ""
               )}
             >
-              Once A Week
+              Once a Week
             </Button>
           </div>
         </div>
         <div className="pt-20">
-          <h1 className="text-[36px] font-league-spartan font-medium">
+          <h1 className=" text-2xl md:text-[36px] font-league-spartan font-medium">
             Cleaning Time
           </h1>
 
           <div className="flex gap-2 justify-start pt-6">
             <Button
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/90"
+                "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90"
               )}
             >
-              8AM - 12PM
+              8am - 12pm
             </Button>
             <Button
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-xl bg-white text-[#4E4848] hover:bg-white/90"
+                "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90"
               )}
             >
-              12PM - 4PM
+              12am - 4pm
             </Button>
           </div>
         </div>
@@ -356,7 +356,7 @@ const CleaningPage = (props: Props) => {
         <div className="my-20 w-full flex justify-center">
           <Link href="https://calendly.com/serenityvimo/30min" target="__blank">
             <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
-              Schedule Pickup
+              Schedule Cleaning
               <FaArrowRight />
             </Button>
           </Link>

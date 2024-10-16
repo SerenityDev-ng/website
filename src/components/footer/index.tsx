@@ -135,15 +135,15 @@ const Footer = (props: Props) => {
                 <div className="space-y-4 pt-6">
                   <div className="flex gap-2 items-center text-lg">
                     <Mail />
-                    Serenity.info.com
+                    serenityvimo@gmail.com
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <PhoneCall />
-                    +234 575 660 894
+                    07053964706
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <Instagram />
-                    Instagram
+                    serenity_official
                   </div>
                 </div>
               </div>
