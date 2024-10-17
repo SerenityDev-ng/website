@@ -65,6 +65,7 @@ const links = [
 
 const DesktopNavbar = () => {
   const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLElement>(null);
@@ -215,6 +216,7 @@ const DesktopNavbar = () => {
           </div>
         ))}
       </nav>
+
       <div className="flex items-center gap-4">
         {!user?.user.email ? (
           <Button className="text-lg font-league-spartan font-semibold hover:bg-primary">
@@ -236,6 +238,7 @@ const DesktopNavbar = () => {
               <Button
                 variant={"destructive"}
                 className="w-full bg-transparent text-red-500 hover:text-white"
+                onClick={logout}
               >
                 Logout
               </Button>
@@ -250,6 +253,7 @@ const DesktopNavbar = () => {
 
 const MobileNavbar = () => {
   const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -348,6 +352,7 @@ const MobileNavbar = () => {
               <Button
                 variant={"destructive"}
                 className="w-full bg-transparent text-red-500 hover:text-white"
+                onClick={logout}
               >
                 Logout
               </Button>
