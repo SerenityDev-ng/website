@@ -16,8 +16,12 @@ import {
   Gift,
   ShoppingBag,
   Menu,
+  User,
+  UserRoundIcon,
 } from "lucide-react";
 import { ModeToggle } from "../mode-toggle";
+import { useAuthStore } from "@/hooks/store/user";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 type Props = {};
 
@@ -60,6 +64,7 @@ const links = [
 ];
 
 const DesktopNavbar = () => {
+  const user = useAuthStore((state) => state.user);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLElement>(null);
@@ -210,11 +215,33 @@ const DesktopNavbar = () => {
           </div>
         ))}
       </nav>
-
       <div className="flex items-center gap-4">
-        <Button className="text-lg font-league-spartan font-semibold hover:bg-primary">
-          Get Started
-        </Button>
+        {!user?.user.email ? (
+          <Button className="text-lg font-league-spartan font-semibold hover:bg-primary">
+            Get Started
+          </Button>
+        ) : (
+          <Popover>
+            <PopoverTrigger>
+              <UserRoundIcon className="h-10 w-10 bg-primary p-2 rounded-full text-white" />
+            </PopoverTrigger>
+            <PopoverContent className="space-y-4">
+              <Link href="/profile">
+                <Button className="text-lg font-league-spartan capitalize flex items-center text-primary  hover:text-black duration-300 w-full bg-transparent hover:bg-secondary">
+                  <UserRoundIcon className="h-6 w-6" />
+                  Profile
+                </Button>
+              </Link>
+
+              <Button
+                variant={"destructive"}
+                className="w-full bg-transparent text-red-500 hover:text-white"
+              >
+                Logout
+              </Button>
+            </PopoverContent>
+          </Popover>
+        )}
         <ModeToggle />
       </div>
     </header>
@@ -222,6 +249,7 @@ const DesktopNavbar = () => {
 };
 
 const MobileNavbar = () => {
+  const user = useAuthStore((state) => state.user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -296,12 +324,36 @@ const MobileNavbar = () => {
                   )}
                 </div>
               ))}
-              <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">
-                Get Started
-              </Button>
+              {!user?.user.email && (
+                <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">
+                  Get Started
+                </Button>
+              )}
             </nav>
           </SheetContent>
         </Sheet>
+        {user?.user?.email && (
+          <Popover>
+            <PopoverTrigger>
+              <UserRoundIcon className="h-10 w-10 bg-primary p-2 rounded-full text-white" />
+            </PopoverTrigger>
+            <PopoverContent className="space-y-4">
+              <Link href="/profile">
+                <Button className="text-lg font-league-spartan capitalize flex items-center text-primary  hover:text-black duration-300 w-full bg-transparent hover:bg-secondary">
+                  <UserRoundIcon className="h-6 w-6" />
+                  Profile
+                </Button>
+              </Link>
+
+              <Button
+                variant={"destructive"}
+                className="w-full bg-transparent text-red-500 hover:text-white"
+              >
+                Logout
+              </Button>
+            </PopoverContent>
+          </Popover>
+        )}
         <ModeToggle />
       </div>
     </header>

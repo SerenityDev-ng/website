@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { UserResponse } from "../../../../types";
 import { Loader2 } from "lucide-react";
 import { useAuthStore } from "@/hooks/store/user";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   full_name: z.string().min(2, {
@@ -54,6 +55,7 @@ const formSchema = z.object({
 });
 
 export default function SignInForm() {
+  const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   const { mutate, isPending } = useMutation({
     mutationKey: ["signUp"],
@@ -88,6 +90,7 @@ export default function SignInForm() {
           setUser(data.data);
         }
         toast.success("Welcome to Serenity!");
+        router.push("/");
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
