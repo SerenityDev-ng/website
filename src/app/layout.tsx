@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Serenity | Premium Laundry, Cleaning & Repair Services",
     description:
       "Experience premium laundry, cleaning, and repair services with Serenity. Elevate your lifestyle today!",
-    url: "https://serenity.ng",
+    url: "https://www.serenity.ng",
     siteName: "Serenity",
     images: [
       {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow",
   alternates: {
-    canonical: "https://serenity.ng",
+    canonical: "./",
   },
 };
 
