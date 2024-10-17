@@ -30,6 +30,7 @@ import about_two from "./about-two.png";
 import about_three from "./about-three.png";
 import gifting_side from "./gifting-side.png";
 import gifting_cleaning from "./gifting-cleaning.png";
+import auth_image from "./auth-image.svg";
 
 export {
   serenity_logo,
@@ -64,4 +65,5 @@ export {
   about_three,
   gifting_side,
   gifting_cleaning,
+  auth_image,
 };

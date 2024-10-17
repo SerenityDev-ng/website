@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { serenity_logo } from "@/assets/images";
+import ReactQueryWrapper from "@/hooks/react-query-wrapper";
 
 export const metadata: Metadata = {
   title: "Serenity | Premium Laundry, Cleaning & Repair Services",
@@ -44,6 +45,9 @@ export const metadata: Metadata = {
     images: [serenity_logo], // Replace with your actual image URL
   },
   robots: "index, follow",
+  alternates: {
+    canonical: "https://serenity.ng",
+  },
 };
 
 export default function RootLayout({
@@ -60,14 +64,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <header className="relative z-30">
-            <Navbar />
-          </header>
-          <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter relative z-10">
-            {children}
-          </div>
-          <Footer />
-          <Toaster richColors />
+          <ReactQueryWrapper>
+            <header className="relative z-30">
+              <Navbar />
+            </header>
+            <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter relative z-10">
+              {children}
+            </div>
+            <Footer />
+            <Toaster richColors />
+          </ReactQueryWrapper>
         </ThemeProvider>
       </body>
     </html>
