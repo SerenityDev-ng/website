@@ -56,8 +56,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="max-w-full">
-      <body className={` antialiased w-full overflow-x-hidden !max-w-[100vw] `}>
+    <html lang="en" className="max-w-full overflow-x-hidden w-full">
+      <body className="antialiased ">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -65,14 +65,15 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryWrapper>
-            <header className="relative z-30">
-              <Navbar />
-            </header>
-            <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter relative z-10">
-              {children}
-            </div>
-            <Footer />
-            <Toaster richColors />
+            <Navbar />
+
+            <main className="relative">
+              <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter">
+                {children}
+              </div>
+              <Footer />
+              <Toaster richColors />
+            </main>
           </ReactQueryWrapper>
         </ThemeProvider>
       </body>

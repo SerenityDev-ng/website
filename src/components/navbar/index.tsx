@@ -76,10 +76,26 @@ const DesktopNavbar = () => {
   };
 
   const handleMouseLeave = (e: React.MouseEvent) => {
-    if (
-      !dropdownRef.current?.contains(e.relatedTarget as Node) &&
-      !navbarRef.current?.contains(e.relatedTarget as Node)
-    ) {
+    try {
+      const relatedTarget = e.relatedTarget as Element | null;
+
+      // If there's no relatedTarget or it's not a valid Element, close the dropdown
+      if (!relatedTarget || !(relatedTarget instanceof Node)) {
+        setIsDropdownOpen(false);
+        return;
+      }
+
+      const isInDropdown =
+        dropdownRef.current && dropdownRef.current.contains(relatedTarget);
+      const isInNavbar =
+        navbarRef.current && navbarRef.current.contains(relatedTarget);
+
+      if (!isInDropdown && !isInNavbar) {
+        setIsDropdownOpen(false);
+      }
+    } catch (error) {
+      // Fallback: close dropdown if any error occurs
+      console.error("Error in handleMouseLeave:", error);
       setIsDropdownOpen(false);
     }
   };
@@ -87,7 +103,7 @@ const DesktopNavbar = () => {
   return (
     <header
       ref={navbarRef}
-      className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto relative z-20"
+      className="bg-secondary py-7 px-5 flex items-center justify-between gap-4 max-w-screen-xl mx-auto z-20"
       onMouseLeave={handleMouseLeave}
     >
       <nav className="flex items-center">
@@ -367,14 +383,14 @@ const MobileNavbar = () => {
 
 const Navbar = (props: Props) => {
   return (
-    <main className="bg-secondary dark:bg-secondary relative z-10">
-      <div className="hidden lg:block">
+    <div className="bg-secondary dark:bg-secondary z-50 !sticky top-0">
+      <div className="hidden lg:block z-50">
         <DesktopNavbar />
       </div>
       <div className="lg:hidden">
         <MobileNavbar />
       </div>
-    </main>
+    </div>
   );
 };
 
