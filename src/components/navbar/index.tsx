@@ -107,14 +107,15 @@ const DesktopNavbar = () => {
       onMouseLeave={handleMouseLeave}
     >
       <nav className="flex items-center">
-        <Image
-          src={serenity_logo}
-          alt="Serenity Logo"
-          height={60}
-          width={199}
-          className="object-contain"
-          href= "/"
-        />
+        <Link href="/">
+          <Image
+            src={serenity_logo}
+            alt="Serenity Logo"
+            height={60}
+            width={199}
+            className="object-contain"
+          />
+        </Link>
       </nav>
 
       <nav className="flex items-center gap-10 justify-between">
