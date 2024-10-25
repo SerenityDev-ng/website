@@ -113,6 +113,7 @@ const DesktopNavbar = () => {
           height={60}
           width={199}
           className="object-contain"
+          href= "/"
         />
       </nav>
 
