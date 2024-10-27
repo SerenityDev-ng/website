@@ -18,6 +18,7 @@ import {
   Menu,
   User,
   UserRoundIcon,
+  BookDashed,
 } from "lucide-react";
 import { ModeToggle } from "../mode-toggle";
 import { useAuthStore } from "@/hooks/store/user";
@@ -60,6 +61,12 @@ const links = [
     name: "Marketplace",
     href: "/marketplace",
     icon: <ShoppingBag className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: 6,
+    name: "Blog",
+    href: "/blog",
+    icon: <BookDashed className="h-4 w-4 mr-2" />,
   },
 ];
 
