@@ -170,6 +170,7 @@ const DesktopNavbar = () => {
                                 : ""
                             )}
                             role="menuitem"
+                            onClick={() => setIsDropdownOpen(false)}
                           >
                             {subLink.name}
                           </Link>
