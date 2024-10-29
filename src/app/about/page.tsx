@@ -135,6 +135,10 @@ const AboutPage = (props: Props) => {
           <Button>Become a professional</Button>
         </div>
       </div> */}
+      
+      <div className="mt-20 w-fit mx-auto">
+          <Button>Become a professional</Button>
+        </div>
     </div>
   );
 };
