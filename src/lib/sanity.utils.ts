@@ -1,6 +1,6 @@
 import ImageUrlBuilder from "@sanity/image-url";
 import { createClient, type QueryParams } from "next-sanity";
-import { postQuery } from "./sanity.query";
+import { postQuery, postQueryBySlug } from "./sanity.query";
 import clientConfig from "./sanity.client";
 import { Blog } from "../../types";
 
@@ -42,12 +42,12 @@ export const getPosts = async (page: number = 1, pageSize: number = 9) => {
   };
 };
 
-// export const getPostBySlug = async (slug: string) => {
-//   const data: Blog = await sanityFetch({
-//     query: postQueryBySlug,
-//     qParams: { slug },
-//     tags: ["post", "author", "category"],
-//   });
+export const getPostBySlug = async (slug: string) => {
+  const data: Blog = await sanityFetch({
+    query: postQueryBySlug,
+    qParams: { slug },
+    tags: ["post", "author", "category"],
+  });
 
-//   return data;
-// };
+  return data;
+};
