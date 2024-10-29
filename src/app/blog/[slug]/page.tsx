@@ -2,8 +2,23 @@ import React from "react";
 
 import { getPostBySlug } from "@/lib/sanity.utils";
 import RenderBodyContent from "../_components/render-body";
+import { Blog } from "../../../../types";
+import { Metadata, ResolvingMetadata } from "next";
+import { generateBlogMetadata } from "@/lib/singleblogmetadata";
 
-const SingleBlogPage = async ({ params }: { params: any }) => {
+interface SingleBlogPageProps {
+  params: { slug: string };
+}
+
+export async function generateMetadata(
+  { params }: SingleBlogPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug);
+  return generateBlogMetadata({ params, post }, parent);
+}
+
+const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
   const post = await getPostBySlug(params.slug);
 
   return (
@@ -21,7 +36,7 @@ const SingleBlogPage = async ({ params }: { params: any }) => {
         {/* <p>{post.metadata}</p> */}
       </div>
 
-      <article className="prose lg:prose-xl mt-16">
+      <article className="prose lg:prose-xl mt-16 max-w-screen-md mx-auto">
         <RenderBodyContent post={post} />
       </article>
     </article>

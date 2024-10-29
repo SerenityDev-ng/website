@@ -39,9 +39,9 @@ const components = {
 
 const RenderBodyContent = ({ post }: { post: Blog }) => {
   return (
-    <>
+    <div className=" font-league-spartan">
       <PortableText value={post?.body as any} components={components} />
-    </>
+    </div>
   );
 };
 

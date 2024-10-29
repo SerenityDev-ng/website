@@ -67,7 +67,7 @@ export async function generateBlogMetadata(
       siteName: "Serenity",
       images: [
         {
-          url: "/images/serenity_logo.png", // Make sure this path is correct
+          url: "assets/images/logo.svg", // Make sure this path is correct
           width: 1200,
           height: 630,
           alt: "Serenity Logo",
@@ -81,7 +81,7 @@ export async function generateBlogMetadata(
       card: "summary_large_image",
       title,
       description: pageDescription,
-      images: ["/images/serenity_logo.png"], // Make sure this path is correct
+      images: ["assets/images/logo.svg"], // Make sure this path is correct
     },
     alternates: {
       canonical: canonical.toString(),
