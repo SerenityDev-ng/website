@@ -16,7 +16,7 @@ import { structure } from "./src/sanity/structure";
 const title = "Serenity Blog";
 
 export default defineConfig({
-  basePath: "/studio",
+  basePath: "/src/app/studio",
   projectId,
   dataset,
   title,

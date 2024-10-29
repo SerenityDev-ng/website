@@ -6,7 +6,7 @@ import { Blog } from "../../types";
 
 // import { Blog } from "@/types/blog";
 
-export const client = createClient(clientConfig);
+export const client = clientConfig;
 export function imageBuilder(source: string) {
   return ImageUrlBuilder(clientConfig).image(source);
 }
