@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { extraLaundryServices, laundryServices } from "@/lib/laundry";
+import { extraLaundryServices, menlaundryironedonly } from "@/lib/laundry";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const IronedOnly = () => {
-  const [services, setServices] = useState(laundryServices);
+  const [services, setServices] = useState(menlaundryironedonly);
   const [extraService, setExtraServices] = useState(extraLaundryServices);
 
   const incrementQuantity = (id: number) => {
