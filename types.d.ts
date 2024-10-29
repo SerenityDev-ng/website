@@ -1,3 +1,5 @@
+import { PortableTextBlock } from "sanity";
+
 export interface UserResponse {
   message: string;
   has_error: boolean;
@@ -29,3 +31,47 @@ export interface UserResponse {
     refreshToken: string;
   };
 }
+
+export type Author = {
+  name: string;
+  image: {
+    _type: string;
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  bio?: string;
+  slug: {
+    current: string;
+  };
+  _id?: number | string;
+  _ref?: number | string;
+};
+
+export type Slug = {
+  current: string;
+  _type: string;
+};
+
+export type Categories = {
+  _id: string;
+  title: string;
+};
+
+export type Blog = {
+  _id: number;
+  title: string;
+  slug: Slug;
+  categories: Categories[];
+  body: PortableTextBlock[];
+  mainImage: {
+    _type: string;
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  author: Author;
+  publishedAt: string;
+};
