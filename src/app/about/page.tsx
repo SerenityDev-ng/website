@@ -99,7 +99,7 @@ const AboutPage = (props: Props) => {
         </p>
       </div>
 
-      <div>
+      {/* <div>
         <h1 className=" font-league-spartan font-medium text-[36px] lg:text-5xl xl:text-[77px] text-center mt-32">
           Meet Our Professionals At Serenity
         </h1>
@@ -134,7 +134,7 @@ const AboutPage = (props: Props) => {
         <div className="mt-20 w-fit mx-auto">
           <Button>Become a professional</Button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
