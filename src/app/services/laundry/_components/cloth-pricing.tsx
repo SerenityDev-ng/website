@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { extraLaundryServices, laundryServices } from "@/lib/laundry";
+import { extraLaundryServices, menLaundryWashedIroned} from "@/lib/laundry";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const ClothPrices = () => {
-  const [services, setServices] = useState(laundryServices);
+  const [services, setServices] = useState(menLaundryWashedIroned);
   const [extraService, setExtraServices] = useState(extraLaundryServices);
 
   const incrementQuantity = (id: number) => {
@@ -50,11 +50,12 @@ const ClothPrices = () => {
     setExtraServices(updatedServices);
   };
 
-  const totalService = services.reduce(
+  const totalService = (services || []).reduce(
     (acc, service) => acc + service.price * service.quantity,
     0
   );
-  const totalExtraService = extraService.reduce(
+
+  const totalExtraService = (extraService || []).reduce(
     (acc, service) => acc + service.price * service.quantity,
     0
   );
