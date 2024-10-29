@@ -1,5 +1,4 @@
 import { Metadata, ResolvingMetadata } from "next";
-
 import { headers } from "next/headers";
 import { getPosts } from "./sanity.utils";
 

@@ -4,6 +4,7 @@ import { getImageDimensions } from "@sanity/asset-utils";
 import urlBuilder from "@sanity/image-url";
 import Image from "next/image";
 import { Blog } from "../../../../types";
+import { urlFor } from "@/sanity/lib/image";
 
 // lazy-loaded image component
 const ImageComponent = ({ value, isInline }: any) => {
@@ -11,13 +12,7 @@ const ImageComponent = ({ value, isInline }: any) => {
   return (
     <div className="my-10 overflow-hidden rounded-[15px]">
       <Image
-        src={
-          urlBuilder(config)
-            .image(value)
-            .fit("max")
-            .auto("format")
-            .url() as string
-        }
+        src={urlFor(value)}
         width={width}
         height={height}
         alt={value.alt || "blog image"}

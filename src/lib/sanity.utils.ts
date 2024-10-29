@@ -3,13 +3,7 @@ import { createClient, type QueryParams } from "next-sanity";
 import { postQuery, postQueryBySlug } from "./sanity.query";
 import clientConfig from "./sanity.client";
 import { Blog } from "../../types";
-
-// import { Blog } from "@/types/blog";
-
-export const client = clientConfig;
-export function imageBuilder(source: string) {
-  return ImageUrlBuilder(clientConfig).image(source);
-}
+import { client } from "@/sanity/lib/client";
 
 export async function sanityFetch<QueryResponse>({
   query,

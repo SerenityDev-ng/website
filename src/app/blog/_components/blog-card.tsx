@@ -4,6 +4,7 @@ import React from "react";
 import { Blog } from "../../../../types";
 import urlBuilder from "@sanity/image-url";
 import config from "@/lib/sanity.client";
+import { urlFor } from "@/sanity/lib/image";
 
 type Props = {
   item: Blog | null;
@@ -14,13 +15,7 @@ const BlogCard = ({ item }: Props) => {
     <article className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="relative aspect-video">
         <Image
-          src={
-            urlBuilder(config)
-              .image(item?.mainImage?.asset?._ref as string)
-              .fit("max")
-              .auto("format")
-              .url() as string
-          }
+          src={urlFor(item?.mainImage?.asset?._ref as string)}
           alt={`Featured article ${item?.slug}`}
           layout="fill"
           objectFit="cover"
