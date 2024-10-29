@@ -53,30 +53,16 @@ export default async function Blog({ searchParams }: BlogPageProps) {
             <div>
               <h2 className="text-xl font-semibold mb-4">Latest Article</h2>
               <ul className="space-y-4">
-                <li>
-                  <Link
-                    href="/article/natural-hacks"
-                    className="text-blue-600 hover:underline"
-                  >
-                    6 Natural hacks to free your home from unpleasant odor →
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/article/housekeeping-mistakes"
-                    className="text-blue-600 hover:underline"
-                  >
-                    Common housekeeping mistakes people make →
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/article/deep-cleaning"
-                    className="text-blue-600 hover:underline"
-                  >
-                    Dangers of neglecting deep cleaning in your kitchen →
-                  </Link>
-                </li>
+                {posts.slice(0, 3).map((post) => (
+                  <li key={post._id}>
+                    <Link
+                      href={`/blog/${post.slug.current}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {post.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
