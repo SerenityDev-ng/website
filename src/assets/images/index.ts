@@ -31,6 +31,10 @@ import about_three from "./about-three.png";
 import gifting_side from "./gifting-side.png";
 import gifting_cleaning from "./gifting-cleaning.png";
 import auth_image from "./auth-image.svg";
+import blog_one from "./mum-blog.png";
+import blog_tow from "./electric-blog.png";
+import blog_three from "./repair-blog.png";
+import blog_banner from "./blog-banner.png";
 
 export {
   serenity_logo,
@@ -66,4 +70,8 @@ export {
   gifting_side,
   gifting_cleaning,
   auth_image,
+  blog_one,
+  blog_tow,
+  blog_three,
+  blog_banner,
 };
