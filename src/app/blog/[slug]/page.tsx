@@ -39,7 +39,7 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
         <h1 className="text-2xl lg:text-4xl py-2 text-center capitalize font-league-spartan font-semibold text-primary">
           {post?.title}
         </h1>
-        <div className="flex items-center justify-center mt-8">
+        <div className="flex items-center justify-center mt-8 text-muted-foreground">
           <div className="flex items-center gap-2 px-3">
             <Image
               alt={`Featured article ${post?.slug}`}
