@@ -31,7 +31,9 @@ export async function generateBlogMetadata(
       "repair",
       "Nigeria",
       "house tips",
-      ...categories.map((category) => category.title),
+      categories
+        ? categories?.map((category) => category?.title).join(", ")
+        : "",
     ],
     openGraph: {
       title,

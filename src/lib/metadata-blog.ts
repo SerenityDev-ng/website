@@ -16,14 +16,14 @@ export async function generateBlogMetadata(
   const baseUrl = `${protocol}://${host}`;
 
   // Get the current page from URL params
-  const currentPage = Number(searchParams.page) || 1;
+  const currentPage = Number(searchParams?.page) || 1;
   const pageSize = 9;
 
   // Fetch the data for this page
   const { total, posts } = await getPosts(currentPage, pageSize);
 
   // Get the base metadata from parent
-  const previousImages = (await parent).openGraph?.images || [];
+  const previousImages = (await parent)?.openGraph?.images || [];
 
   // Calculate page information
   const totalPages = Math.ceil(total / pageSize);
@@ -39,8 +39,10 @@ export async function generateBlogMetadata(
 
   // Generate keywords based on current page posts
   const postKeywords = posts
-    .flatMap((post) => post.categories?.map((category) => category.title) || [])
-    .filter((value, index, self) => self.indexOf(value) === index);
+    ?.flatMap(
+      (post) => post.categories?.map((category) => category.title) || []
+    )
+    ?.filter((value, index, self) => self.indexOf(value) === index);
 
   const canonical = new URL("/blog", baseUrl);
   if (currentPage > 1) {
