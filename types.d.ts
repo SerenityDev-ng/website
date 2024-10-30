@@ -57,6 +57,7 @@ export type Slug = {
 export type Categories = {
   _id: string;
   title: string;
+  slug: Slug;
 };
 
 export type Blog = {

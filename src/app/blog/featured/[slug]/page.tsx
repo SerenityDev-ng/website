@@ -1,10 +1,10 @@
 import React from "react";
 
-import { getPostBySlug } from "@/lib/sanity.utils";
-import RenderBodyContent from "../_components/render-body";
-import { Blog } from "../../../../types";
+import { getFeaturedPostBySlug, getPostBySlug } from "@/lib/sanity.utils";
+
 import { Metadata, ResolvingMetadata } from "next";
 import { generateBlogMetadata } from "@/lib/singleblogmetadata";
+import RenderBodyContent from "../../_components/render-body";
 
 interface SingleBlogPageProps {
   params: { slug: string };
@@ -14,12 +14,12 @@ export async function generateMetadata(
   { params }: SingleBlogPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const post = await getFeaturedPostBySlug(params.slug);
   return generateBlogMetadata({ params, post }, parent);
 }
 
 const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
-  const post = await getPostBySlug(params?.slug);
+  const post = await getFeaturedPostBySlug(params?.slug);
 
   return (
     <article className="my-10 container">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 
 interface PaginationProps {
@@ -11,13 +11,24 @@ interface PaginationProps {
 export function Pagination({ currentPage, totalPages }: PaginationProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams();
+    // Create a new URLSearchParams object from the current search params
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Update or remove the page parameter
     if (page > 1) {
       params.set("page", page.toString());
+    } else {
+      params.delete("page"); // Remove page param if it's page 1
     }
-    router.push(`${pathname}?${params.toString()}`);
+
+    // Preserve other existing parameters (like category)
+    const queryString = params.toString();
+    const newPath = queryString ? `${pathname}?${queryString}` : pathname;
+
+    router.push(newPath);
   };
 
   // Generate page numbers to show
@@ -40,6 +51,9 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
     return pages;
   };
 
+  // Don't render pagination if there's only one page
+  if (totalPages <= 1) return null;
+
   return (
     <nav
       className="flex justify-center items-center gap-2 py-8"
@@ -55,12 +69,31 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             ? "text-gray-400 cursor-not-allowed"
             : "text-purple-600 hover:bg-purple-50"
         )}
+        aria-label="Previous page"
       >
         Previous
       </button>
 
       {/* Page numbers */}
       <div className="flex gap-1">
+        {/* First page if not in view */}
+        {getPageNumbers()[0] > 1 && (
+          <>
+            <button
+              onClick={() => handlePageChange(1)}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-gray-700 hover:bg-purple-50"
+            >
+              1
+            </button>
+            {getPageNumbers()[0] > 2 && (
+              <span className="w-8 h-8 flex items-center justify-center text-gray-500">
+                ...
+              </span>
+            )}
+          </>
+        )}
+
+        {/* Visible page numbers */}
         {getPageNumbers().map((page) => (
           <button
             key={page}
@@ -72,10 +105,28 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
                 : "text-gray-700 hover:bg-purple-50"
             )}
             aria-current={currentPage === page ? "page" : undefined}
+            aria-label={`Page ${page}`}
           >
             {page}
           </button>
         ))}
+
+        {/* Last page if not in view */}
+        {getPageNumbers()[getPageNumbers().length - 1] < totalPages && (
+          <>
+            {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && (
+              <span className="w-8 h-8 flex items-center justify-center text-gray-500">
+                ...
+              </span>
+            )}
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-gray-700 hover:bg-purple-50"
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
       </div>
 
       {/* Next page button */}
@@ -88,6 +139,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             ? "text-gray-400 cursor-not-allowed"
             : "text-purple-600 hover:bg-purple-50"
         )}
+        aria-label="Next page"
       >
         Next
       </button>
