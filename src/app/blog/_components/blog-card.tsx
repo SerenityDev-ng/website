@@ -25,7 +25,7 @@ const BlogCard = ({ item }: Props) => {
         <h3 className="text-lg font-semibold mb-2">{item?.title}</h3>
         <Link
           href={`/blog/${item?.slug.current}`}
-          className="inline-block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
+          className="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary transition-colors"
         >
           Read More
         </Link>

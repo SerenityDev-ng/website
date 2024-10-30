@@ -67,7 +67,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
           "px-3 py-1 rounded-md text-sm font-medium",
           currentPage <= 1
             ? "text-gray-400 cursor-not-allowed"
-            : "text-purple-600 hover:bg-purple-50"
+            : "text-primary hover:bg-purple-50"
         )}
         aria-label="Previous page"
       >
@@ -101,7 +101,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             className={clsx(
               "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
               currentPage === page
-                ? "bg-purple-600 text-white"
+                ? "bg-primary text-white"
                 : "text-gray-700 hover:bg-purple-50"
             )}
             aria-current={currentPage === page ? "page" : undefined}
@@ -137,7 +137,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
           "px-3 py-1 rounded-md text-sm font-medium",
           currentPage >= totalPages
             ? "text-gray-400 cursor-not-allowed"
-            : "text-purple-600 hover:bg-purple-50"
+            : "text-primary hover:bg-purple-50"
         )}
         aria-label="Next page"
       >
