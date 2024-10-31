@@ -59,30 +59,32 @@ export default async function Blog({ searchParams }: BlogPageProps) {
               Serenity Blog
             </h1>
 
-            <div className="flex gap-3 p-5 justify-center items-center max-w-full overflow-x-auto scrollbar-none">
-              <Link
-                href="/blog"
-                className={`uppercase duration-300 rounded-lg p-2 shrink-0 ${
-                  !categorySlug
-                    ? "bg-secondary text-primary font-semibold"
-                    : "text-secondary"
-                }`}
-              >
-                All
-              </Link>
-              {categories?.map((category) => (
+            <div className="flex justify-center">
+              <div className="flex gap-3 p-5 items-center max-w-full overflow-x-auto scrollbar-none">
                 <Link
-                  key={category._id}
-                  href={`/blog?category=${category.slug.current}`}
-                  className={` uppercase p-2 rounded-lg duration-300  shrink-0 ${
-                    categorySlug === category.slug.current
-                      ? "font-semibold bg-secondary text-primary"
+                  href="/blog"
+                  className={`uppercase duration-300 rounded-lg p-2 shrink-0 ${
+                    !categorySlug
+                      ? "bg-secondary text-primary font-semibold"
                       : "text-secondary"
                   }`}
                 >
-                  {category.title}
+                  All
                 </Link>
-              ))}
+                {categories?.map((category) => (
+                  <Link
+                    key={category._id}
+                    href={`/blog?category=${category.slug.current}`}
+                    className={` uppercase p-2 rounded-lg duration-300  shrink-0 ${
+                      categorySlug === category.slug.current
+                        ? "font-semibold bg-secondary text-primary"
+                        : "text-secondary"
+                    }`}
+                  >
+                    {category.title}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </aside>
