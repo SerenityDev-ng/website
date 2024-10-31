@@ -5,7 +5,8 @@ export interface UserResponse {
   has_error: boolean;
   data: {
     user: {
-      full_name: string;
+      first_name: string;
+      last_name: string;
       email: string;
       phone_number: string;
       sex: string;
@@ -21,7 +22,11 @@ export interface UserResponse {
       user: string;
       state: string;
       location_area: string;
-      address: string;
+      address: {
+        address: string;
+        longitude: string;
+        latitude: string;
+      };
       _id: string;
       createdAt: string;
       updatedAt: string;
@@ -29,6 +34,7 @@ export interface UserResponse {
     };
     token: string;
     refreshToken: string;
+    tokenExpTime: string;
   };
 }
 

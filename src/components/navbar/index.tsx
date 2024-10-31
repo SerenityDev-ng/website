@@ -4,7 +4,7 @@ import { cleaning, laundry_iron, repair, serenity_logo } from "@/assets/images";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -77,6 +77,7 @@ const DesktopNavbar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleMouseEnter = () => {
     setIsDropdownOpen(true);
@@ -245,7 +246,10 @@ const DesktopNavbar = () => {
 
       <div className="flex items-center gap-4">
         {!user?.user.email ? (
-          <Button className="text-lg font-league-spartan font-semibold hover:bg-primary">
+          <Button
+            onClick={() => router.push("/callback/sign-in")}
+            className="text-lg font-league-spartan font-semibold hover:bg-primary"
+          >
             Get Started
           </Button>
         ) : (

@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import debounce from "lodash/debounce";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,9 +28,14 @@ import naijaStates from "naija-state-local-government";
 import instance from "@/lib/axios-instance";
 import { toast } from "sonner";
 import { UserResponse } from "../../../../types";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "@/hooks/store/user";
 import { useRouter } from "next/navigation";
+import search from "nominatim-browser";
+import { useCallback, useState } from "react";
+import axios from "axios";
+import useDebounce from "@/hooks/debounce";
+import Link from "next/link";
 
 const formSchema = z.object({
   full_name: z.string().min(2, {
@@ -42,6 +48,8 @@ const formSchema = z.object({
   location_area: z.string().min(1, {
     message: "Location area is required.",
   }),
+  latitude: z.number(),
+  longitude: z.number(),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -54,7 +62,16 @@ const formSchema = z.object({
   sex: z.string().min(4, { message: "Please choose a gender" }),
 });
 
+interface LocationResult {
+  display_name: string;
+  lat: string;
+  lon: string;
+}
+
 export default function SignInForm() {
+  const [searchResults, setSearchResults] = useState<LocationResult[]>([]);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   const { mutate, isPending } = useMutation({
@@ -79,9 +96,84 @@ export default function SignInForm() {
       email: "",
       phone_number: "",
       password: "",
+      latitude: 0,
+      longitude: 0,
     },
   });
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handleLocationSearch = async (query: string) => {
+    if (query.length < 3) return;
+
+    setIsSearching(true);
+    try {
+      const results = await axios.get(
+        `https://nominatim.openstreetmap.org/search?q=${form.getValues("location_area")}&format=jsonv2&countrycodes=ng`,
+        {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+          },
+        }
+      );
+      setSearchResults(results.data as LocationResult[]);
+    } catch (error) {
+      console.error("Location search error:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((query: string) => handleLocationSearch(query), 1000),
+    []
+  );
+
+  const getCurrentLocation = () => {
+    setIsGettingLocation(true);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+
+            // Reverse geocode the coordinates
+            const response = await axios.get(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+              {
+                headers: {
+                  "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                },
+              }
+            );
+
+            const result = response.data;
+
+            // Update form with location data
+            form.setValue("latitude", latitude);
+            form.setValue("longitude", longitude);
+            form.setValue("location_area", result.display_name);
+
+            setSearchResults([]);
+          } catch (error) {
+            console.error("Error getting location:", error);
+            toast.error("Failed to get location details");
+          } finally {
+            setIsGettingLocation(false);
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          toast.error("Failed to get your location");
+          setIsGettingLocation(false);
+        }
+      );
+    } else {
+      toast.error("Geolocation is not supported by your browser");
+      setIsGettingLocation(false);
+    }
+  };
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     mutate(values, {
@@ -167,7 +259,23 @@ export default function SignInForm() {
                   <FormItem>
                     <FormLabel className="text-[#4E4848]">Password</FormLabel>
                     <FormControl>
-                      <Input {...field} type="password" />
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          type={showPassword ? "text" : "password"}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -211,8 +319,55 @@ export default function SignInForm() {
                       Location area
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <div>
+                        <Input
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            debouncedSearch(e.target.value);
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={getCurrentLocation}
+                          disabled={isGettingLocation}
+                          className="mt-4"
+                        >
+                          {isGettingLocation ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            "Use Current Location"
+                          )}
+                        </Button>
+                      </div>
                     </FormControl>
+                    {searchResults.length > 0 && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+                        {searchResults.map((result, index) => (
+                          <div
+                            key={index}
+                            className="p-2 cursor-pointer hover:bg-gray-100"
+                            onClick={() => {
+                              field.onChange(result.display_name);
+                              form.setValue("latitude", parseFloat(result.lat));
+                              form.setValue(
+                                "longitude",
+                                parseFloat(result.lon)
+                              );
+                              setSearchResults([]);
+                            }}
+                          >
+                            {result.display_name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {isSearching && (
+                      <div className="absolute right-3 top-9">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      </div>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -269,6 +424,14 @@ export default function SignInForm() {
                     <Loader2 className="w-6 h-6 ml-2 animate-spin" />
                   )}
                 </Button>
+              </div>
+
+              <div className="flex justify-center">
+                <Link href="/callback/sign-in" className="hover:underline">
+                  <p className="text-primary">
+                    Already have an account? Sign In
+                  </p>
+                </Link>
               </div>
             </form>
           </Form>
