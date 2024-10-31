@@ -96,7 +96,10 @@ const CleaningPage = (props: Props) => {
     const frequencyMultiplier =
       frequency === "Once A Week" ? 1 : frequency === "Twice A Week" ? 2 : 3;
 
-    return basePrice * frequencyMultiplier;
+    const livingRooms =
+      services.find((s) => s.title === "Living Rooms")?.quantity || 0;
+    const livingRoomsCost = livingRooms * 1000;
+    return (basePrice + livingRoomsCost) * frequencyMultiplier;
   };
 
   const updateServicesAndTotal = (updatedServices: typeof services) => {
