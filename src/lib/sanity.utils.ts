@@ -23,7 +23,7 @@ export async function sanityFetch<QueryResponse>({
 }): Promise<QueryResponse> {
   return client.fetch<QueryResponse>(query, qParams, {
     cache: "force-cache",
-    next: { tags },
+    next: { tags, revalidate: 60 },
   });
 }
 
