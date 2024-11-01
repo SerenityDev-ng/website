@@ -24,7 +24,7 @@ const FeaturedPostCard = ({ item }: Props) => {
       />
 
       <article className="mt-8 space-y-6 text-muted-foreground">
-        <h1 className=" font-league-spartan font-medium text-xl lg:text-4xl text-black">
+        <h1 className=" font-league-spartan font-medium text-xl lg:text-4xl text-black dark:text-white">
           {item?.title}
         </h1>
         <div className="flex items-center justify-between gap-3 text-sm">

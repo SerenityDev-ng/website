@@ -25,7 +25,7 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
   const post = await getPostBySlug(params?.slug);
 
   return (
-    <article className="my-10 container">
+    <article className="my-10 container mx-auto">
       <Image
         alt={`Featured article ${post?.slug}`}
         src={urlFor(post?.mainImage?.asset?._ref as string)}
@@ -33,7 +33,7 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
         height={0}
         sizes="100vw"
         objectFit="cover"
-        className="w-full max-h-60 object-cover rounded-t-xl"
+        className="w-full max-h-60 object-cover rounded-t-xl mx-auto"
       />
       <div className="my-6 max-w-3xl mx-auto">
         <h1 className="text-2xl lg:text-4xl py-2 text-center capitalize font-league-spartan font-semibold text-primary">
@@ -63,7 +63,7 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
         {/* <p>{post.metadata}</p> */}
       </div>
 
-      <article className="prose lg:prose-xl mt-16 mx-auto">
+      <article className={`prose lg:prose-xl mt-16 mx-auto dark:prose-invert`}>
         <RenderBodyContent post={post} />
       </article>
     </article>
