@@ -38,7 +38,7 @@ interface BlogPageProps {
 export default async function Blog({ searchParams }: BlogPageProps) {
   const currentPage = Number(searchParams.page) || 1;
   const categorySlug = searchParams.category;
-  const pageSize = 2;
+  const pageSize = 9;
 
   // Fetch categories for the filter menu
   const categories = await getCategories();
