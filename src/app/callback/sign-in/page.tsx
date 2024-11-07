@@ -152,7 +152,7 @@ export default function SignInForm() {
               </div>
 
               <div className="flex justify-center">
-                <Link href="/callback/sign-in" className="hover:underline">
+                <Link href="/callback/sign-up" className="hover:underline">
                   <p className="text-primary">
                     Don&apos; have an account? Sign Up
                   </p>
