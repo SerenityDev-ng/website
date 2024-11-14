@@ -178,10 +178,15 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
       }
     }
 
-    const basePrice = priceList.find((p) => p.rooms === rooms)?.price || 0;
+    let basePrice = priceList.find((p) => p.rooms === rooms)?.price || 0;
+    if (rooms > 6) {
+      const priceForSixRooms = priceList.find((p) => p.rooms === 5)?.price || 0;
+      basePrice = priceForSixRooms + (rooms - 5) * 10000;
+    }
+
     const livingRooms =
       services.find((s) => s.title === "Living Rooms")?.quantity || 0;
-    const livingRoomsCost = livingRooms * 1000;
+    const livingRoomsCost = livingRooms > 1 ? livingRooms * 1000 : 0;
 
     return basePrice + livingRoomsCost;
   };
@@ -245,7 +250,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
   };
 
   return (
-    <div className="pt-[123px] lg:pt-0">
+    <div className="pt-[123px] lg:pt-0 relative z-30">
       <aside
         className="pt-20 relative z-20 mx-auto max-w-[885px]"
         id="select-rooms"
@@ -253,14 +258,14 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
         <h1 className=" font-league-spartan font-medium text-[36px] text-center my-[35px]">
           Select your home type
         </h1>
-        <div className="flex gap-4 justify-between pt-6 my-[100px] font-league-spartan text-xl lg:text-[30px]">
+        <div className="flex gap-4 justify-between pt-6 my-20 lg:my-[100px] font-league-spartan text-xl lg:text-[30px]">
           <Button
             onClick={() => setBuildingType("flat")}
             className={cn(
-              "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white p-[40px] px-[60px]",
+              "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white lg:p-[40px] lg:px-[60px]",
               buildingType === "flat"
-                ? "border-primary border-2 bg-[#D4D1FC80] text-black"
-                : "bg-transparent text-[#4E4848]"
+                ? "border-primary border-2 bg-[#D4D1FC80] dark:bg-primary text-primary dark:text-white"
+                : "bg-white dark:bg-[#4E4848] text-[#4E4848]  dark:text-white "
             )}
           >
             Flat / Bungalow
@@ -269,24 +274,24 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
           <Button
             onClick={() => setBuildingType("duplex")}
             className={cn(
-              "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white  p-[40px] px-[60px]",
+              "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white lg:p-[40px] lg:px-[60px]",
               buildingType === "duplex"
-                ? "border-primary border-2 bg-[#D4D1FC80] text-black"
-                : "bg-transparent text-[#4E4848]"
+                ? "border-primary border-2 bg-[#D4D1FC80] dark:bg-primary text-primary dark:text-white"
+                : "bg-white dark:bg-[#4E4848] text-[#4E4848]  dark:text-white "
             )}
           >
             Duplex / Terrace
           </Button>
         </div>
         {cleaningType === "Housekeeping" ? (
-          <div className="flex gap-4 justify-between pt-6 my-[100px] font-league-spartan text-xl lg:text-[30px]">
+          <div className="flex gap-4 justify-between pt-6 my-20 lg:my-[100px] font-league-spartan text-xl lg:text-[30px]">
             <Button
               onClick={() => setCleaningHouse("detailed")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white p-[40px] px-[60px]",
+                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white lg:p-[40px] lg:px-[60px]",
                 cleaningHouse === "detailed"
-                  ? "border-primary border-2 bg-[#D4D1FC80] text-black"
-                  : "bg-transparent text-[#4E4848]"
+                  ? "border-primary border-2 bg-[#D4D1FC80] dark:bg-primary text-primary dark:text-white"
+                  : "bg-white dark:bg-[#4E4848] text-[#4E4848]  dark:text-white "
               )}
             >
               Detailed Cleaning
@@ -295,10 +300,10 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
             <Button
               onClick={() => setCleaningHouse("deep")}
               className={cn(
-                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white  p-[40px] px-[60px]",
+                "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white  lg:p-[40px] lg:px-[60px]",
                 cleaningHouse === "deep"
-                  ? "border-primary border-2 bg-[#D4D1FC80] text-black"
-                  : "bg-transparent text-[#4E4848]"
+                  ? "border-primary border-2 bg-[#D4D1FC80] dark:bg-primary text-primary dark:text-white"
+                  : "bg-white dark:bg-[#4E4848] text-[#4E4848]  dark:text-white "
               )}
             >
               Deep Cleaning
@@ -357,7 +362,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                 />
                 <label
                   htmlFor="one-time"
-                  className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm lg:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   One-time service (unchecked for monthly subscription)
                 </label>
