@@ -11,132 +11,30 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Cleaning, cleaning } from "@/lib/laundry";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import DrawerDialog from "@/app/_components/drawer-dialog";
+import CleaningServiceForm from "@/app/_components/forms/cleaning";
 
 type Props = {
   cleaningType: string;
 };
 
 const PRICING_DATA = {
-  detailed: {
-    flat: {
-      weekly: [
-        { rooms: 1, price: 35000 },
-        { rooms: 2, price: 45000 },
-        { rooms: 3, price: 55000 },
-        { rooms: 4, price: 65000 },
-        { rooms: 5, price: 75000 },
-      ],
-      biweekly: [
-        { rooms: 1, price: 40000 },
-        { rooms: 2, price: 55000 },
-        { rooms: 3, price: 65000 },
-        { rooms: 4, price: 70000 },
-        { rooms: 5, price: 80000 },
-      ],
-      triweekly: [
-        { rooms: 1, price: 50000 },
-        { rooms: 2, price: 60000 },
-        { rooms: 3, price: 70000 },
-        { rooms: 4, price: 85000 },
-        { rooms: 5, price: 95000 },
-      ],
-      oneTime: [
-        { rooms: 1, price: 55000 },
-        { rooms: 2, price: 70000 },
-        { rooms: 3, price: 75000 },
-        { rooms: 4, price: 90000 },
-        { rooms: 5, price: 103000 },
-      ],
-    },
-    duplex: {
-      weekly: [
-        { rooms: 1, price: 55000 },
-        { rooms: 2, price: 55000 },
-        { rooms: 3, price: 80000 },
-        { rooms: 4, price: 85000 },
-        { rooms: 5, price: 95000 },
-      ],
-      biweekly: [
-        { rooms: 1, price: 65000 },
-        { rooms: 2, price: 65000 },
-        { rooms: 3, price: 90000 },
-        { rooms: 4, price: 95000 },
-        { rooms: 5, price: 110000 },
-      ],
-      triweekly: [
-        { rooms: 1, price: 70000 },
-        { rooms: 2, price: 70000 },
-        { rooms: 3, price: 110000 },
-        { rooms: 4, price: 115000 },
-        { rooms: 5, price: 125000 },
-      ],
-      oneTime: [
-        { rooms: 1, price: 80000 },
-        { rooms: 2, price: 80000 },
-        { rooms: 3, price: 120000 },
-        { rooms: 4, price: 125000 },
-        { rooms: 5, price: 140000 },
-      ],
-    },
+  oneTime: {
+    selfcon: 25000,
+    oneBedroomFlat: 35000,
+    twoBedroomFlat: 40000,
+    threeBedroomFlat: 55000,
+    fourBedroomFlat: 65000,
+    fiveBedroomFlat: 75000,
+    mansion: 100000,
   },
   deep: {
     flat: {
-      weekly: [
-        { rooms: 1, price: 35000 },
-        { rooms: 2, price: 45000 },
-        { rooms: 3, price: 55000 },
-        { rooms: 4, price: 70000 },
-        { rooms: 5, price: 80000 },
-      ],
-      biweekly: [
-        { rooms: 1, price: 40000 },
-        { rooms: 2, price: 55000 },
-        { rooms: 3, price: 65000 },
-        { rooms: 4, price: 80000 },
-        { rooms: 5, price: 85000 },
-      ],
-      triweekly: [
-        { rooms: 1, price: 50000 },
-        { rooms: 2, price: 60000 },
-        { rooms: 3, price: 70000 },
-        { rooms: 4, price: 95000 },
-        { rooms: 5, price: 102000 },
-      ],
       oneTime: [
-        { rooms: 1, price: 55000 },
-        { rooms: 2, price: 70000 },
-        { rooms: 3, price: 80000 },
-        { rooms: 4, price: 110000 },
-        { rooms: 5, price: 120000 },
-      ],
-    },
-    duplex: {
-      weekly: [
-        { rooms: 1, price: 55000 },
-        { rooms: 2, price: 55000 },
-        { rooms: 3, price: 80000 },
-        { rooms: 4, price: 85000 },
-        { rooms: 5, price: 95000 },
-      ],
-      biweekly: [
-        { rooms: 1, price: 65000 },
-        { rooms: 2, price: 65000 },
-        { rooms: 3, price: 90000 },
-        { rooms: 4, price: 95000 },
-        { rooms: 5, price: 110000 },
-      ],
-      triweekly: [
-        { rooms: 1, price: 70000 },
+        { rooms: 1, price: 50000 },
         { rooms: 2, price: 70000 },
         { rooms: 3, price: 110000 },
-        { rooms: 4, price: 115000 },
-        { rooms: 5, price: 125000 },
-      ],
-      oneTime: [
-        { rooms: 1, price: 80000 },
-        { rooms: 2, price: 80000 },
-        { rooms: 3, price: 120000 },
-        { rooms: 4, price: 125000 },
+        { rooms: 4, price: 120000 },
         { rooms: 5, price: 140000 },
       ],
     },
@@ -144,6 +42,7 @@ const PRICING_DATA = {
 };
 
 const CleaningCalculator = ({ cleaningType }: Props) => {
+  const [open, setOpen] = useState(false);
   const [services, setServices] = useState<Cleaning[]>(cleaning);
   const [frequency, setFrequency] = useState("Once A Week");
   const [isOneTime, setIsOneTime] = useState(false);
@@ -154,41 +53,47 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
   const [cleaningHouse, setCleaningHouse] = useState<"detailed" | "deep">(
     "detailed"
   );
+  const [time, setTime] = useState("8am - 12pm");
 
   const calculateTotal = () => {
     const rooms = services.find((s) => s.title === "Bedrooms")?.quantity || 0;
     if (rooms === 0) return 0;
 
-    let priceList;
-    if (isOneTime) {
-      priceList = PRICING_DATA[cleaningHouse][buildingType].oneTime;
+    let basePrice = 0;
+
+    // Determine base price based on selected cleaning type
+    if (cleaningType === "deep") {
+      // For deep cleaning, use one-time pricing
+      if (rooms === 1) basePrice = PRICING_DATA.oneTime.selfcon;
+      else if (rooms === 2) basePrice = PRICING_DATA.oneTime.oneBedroomFlat;
+      else if (rooms === 3) basePrice = PRICING_DATA.oneTime.twoBedroomFlat;
+      else if (rooms === 4) basePrice = PRICING_DATA.oneTime.threeBedroomFlat;
+      else if (rooms === 5) basePrice = PRICING_DATA.oneTime.fourBedroomFlat;
+      else if (rooms > 5) basePrice = PRICING_DATA.oneTime.mansion;
     } else {
+      // For detailed cleaning, use the detailed pricing
+      const detailedPrice = PRICING_DATA.deep.flat.oneTime.find(
+        (p) => p.rooms === rooms
+      );
+      basePrice = detailedPrice ? detailedPrice.price : 0;
+    }
+
+    // Apply multipliers for frequency if not deep cleaning
+    if (cleaningType !== "deep") {
       switch (frequency) {
-        case "Once A Week":
-          priceList = PRICING_DATA[cleaningHouse][buildingType].weekly;
-          break;
         case "Twice A Week":
-          priceList = PRICING_DATA[cleaningHouse][buildingType].biweekly;
+          basePrice *= 2; // Multiply by 2
           break;
         case "Three Times A Week":
-          priceList = PRICING_DATA[cleaningHouse][buildingType].triweekly;
+          basePrice *= 3; // Multiply by 3
           break;
         default:
-          priceList = PRICING_DATA[cleaningHouse][buildingType].weekly;
+          // No multiplier for "Once A Week"
+          break;
       }
     }
 
-    let basePrice = priceList.find((p) => p.rooms === rooms)?.price || 0;
-    if (rooms > 6) {
-      const priceForSixRooms = priceList.find((p) => p.rooms === 5)?.price || 0;
-      basePrice = priceForSixRooms + (rooms - 5) * 10000;
-    }
-
-    const livingRooms =
-      services.find((s) => s.title === "Living Rooms")?.quantity || 0;
-    const livingRoomsCost = livingRooms > 1 ? livingRooms * 1000 : 0;
-
-    return basePrice + livingRoomsCost;
+    return basePrice;
   };
 
   const updateServicesAndTotal = (updatedServices: typeof services) => {
@@ -391,40 +296,44 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                 Select Frequency
               </h1>
 
-              <div className="flex gap-2 justify-start pt-6 max-w-[calc(100vw-30px)] overflow-x-auto">
-                <Button
-                  onClick={() => setFrequency("Three Times A Week")}
-                  className={cn(
-                    "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                    frequency === "Three Times A Week"
-                      ? "border-primary border-2"
-                      : ""
-                  )}
-                >
-                  Three Times a Week
-                </Button>
+              {cleaningHouse !== "deep" && (
+                <div className="flex gap-2 justify-start pt-6 max-w-[calc(100vw-30px)] overflow-x-auto">
+                  <Button
+                    onClick={() => setFrequency("Three Times A Week")}
+                    className={cn(
+                      "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
+                      frequency === "Three Times A Week"
+                        ? "border-primary border-2"
+                        : ""
+                    )}
+                  >
+                    Three Times a Week
+                  </Button>
 
-                <Button
-                  onClick={() => setFrequency("Twice A Week")}
-                  className={cn(
-                    "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                    frequency === "Twice A Week"
-                      ? "border-primary border-2"
-                      : ""
-                  )}
-                >
-                  Twice a Week
-                </Button>
-                <Button
-                  onClick={() => setFrequency("Once A Week")}
-                  className={cn(
-                    "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                    frequency === "Once A Week" ? "border-primary border-2" : ""
-                  )}
-                >
-                  Once a Week
-                </Button>
-              </div>
+                  <Button
+                    onClick={() => setFrequency("Twice A Week")}
+                    className={cn(
+                      "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
+                      frequency === "Twice A Week"
+                        ? "border-primary border-2"
+                        : ""
+                    )}
+                  >
+                    Twice a Week
+                  </Button>
+                  <Button
+                    onClick={() => setFrequency("Once A Week")}
+                    className={cn(
+                      "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
+                      frequency === "Once A Week"
+                        ? "border-primary border-2"
+                        : ""
+                    )}
+                  >
+                    Once a Week
+                  </Button>
+                </div>
+              )}
             </div>
             <div className="pt-20">
               <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
@@ -438,15 +347,19 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
               <div className="flex gap-2 justify-start pt-6">
                 <Button
+                  onClick={() => setTime("8am - 12pm")}
                   className={cn(
-                    "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90"
+                    "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90",
+                    time === "8am - 12pm" && "border-primary"
                   )}
                 >
                   8am - 12pm
                 </Button>
                 <Button
+                  onClick={() => setTime("12am - 4pm")}
                   className={cn(
-                    "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90"
+                    "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90",
+                    time === "12pm - 4pm" && "border-primary"
                   )}
                 >
                   12am - 4pm
@@ -464,13 +377,25 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
         )}
 
         <div className="my-20 w-full flex justify-center">
-          <Link href="https://calendly.com/serenityvimo/30min" target="__blank">
-            <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
-              Schedule Cleaning
-              <FaArrowRight />
-            </Button>
-          </Link>
+          <Button
+            onClick={() => setOpen(!open)}
+            className=" button-grad text-white w-full max-w-[350px] gap-4 px-12"
+          >
+            Schedule Cleaning
+            <FaArrowRight />
+          </Button>
         </div>
+        <DrawerDialog open={open} onOpenChange={setOpen}>
+          <div className="mt-6">
+            <CleaningServiceForm
+              frequency={frequency}
+              total={total}
+              buildingType={buildingType}
+              cleaningType={cleaningHouse}
+              time={time}
+            />
+          </div>
+        </DrawerDialog>
       </aside>
     </div>
   );
