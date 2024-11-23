@@ -63,9 +63,9 @@ export default function SignInForm() {
       onSuccess: (data) => {
         if (data) {
           setUser(data.data);
+          toast.success("Welcome to Serenity!");
+          router.push("/");
         }
-        toast.success("Welcome to Serenity!");
-        router.push("/");
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);

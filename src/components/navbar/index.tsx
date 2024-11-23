@@ -359,7 +359,10 @@ const MobileNavbar = () => {
                 </div>
               ))}
               {!user?.user.email && (
-                <Button className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary">
+                <Button
+                  onClick={() => router.push("/callback/sign-in")}
+                  className="text-lg font-league-spartan font-semibold mt-4 hover:bg-primary"
+                >
                   Get Started
                 </Button>
               )}

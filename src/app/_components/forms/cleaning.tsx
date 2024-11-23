@@ -24,6 +24,7 @@ import CleaningServiceEmail from "./cleaning-mail";
 import { render } from "@react-email/render";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useAuthStore } from "@/hooks/store/user";
 
 type CleaningServiceFormProps = {
   frequency: string;
@@ -40,11 +41,12 @@ export default function CleaningServiceForm({
   cleaningType,
   time,
 }: CleaningServiceFormProps) {
+  const user = useAuthStore((store) => store.user);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    name: "",
-    location: "",
+    email: user?.user.email ?? "",
+    name: `${user?.user?.first_name} ${user?.user?.last_name}` ?? "",
+    location: user?.profile?.address?.address ?? "",
     house: buildingType,
     serviceType: "cleaning",
     cleaningType,
@@ -89,6 +91,15 @@ export default function CleaningServiceForm({
       } else {
         console.error("Failed to send email");
       }
+      setFormData({
+        ...formData,
+        name: "",
+        email: "",
+        location: "",
+        serviceType: "",
+        laundryType: "",
+        price: 0,
+      });
     } catch (error) {
       console.error("Error sending email:", error);
       toast.error("Something went wrong, please try again.");

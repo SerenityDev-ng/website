@@ -53,7 +53,7 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  phone_number: z.string().regex(/^\+?[1-9]\d{1,14}$/, {
+  phone_number: z.string({
     message: "Please enter a valid phone number.",
   }),
   password: z
