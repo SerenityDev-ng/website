@@ -252,7 +252,13 @@ export default function SignInForm() {
                       Phone number
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} type="tel" />
+                      <Input
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.toString())
+                        }
+                        type="tel"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
