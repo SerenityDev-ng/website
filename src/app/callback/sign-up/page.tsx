@@ -231,7 +231,13 @@ export default function SignInForm() {
                   <FormItem>
                     <FormLabel className="text-[#4E4848]">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} type="email" />
+                      <Input
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.toLowerCase())
+                        }
+                        type="email"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
