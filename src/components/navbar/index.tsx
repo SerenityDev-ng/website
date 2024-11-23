@@ -283,6 +283,7 @@ const DesktopNavbar = () => {
 
 const MobileNavbar = () => {
   const user = useAuthStore((state) => state.user);
+  const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
