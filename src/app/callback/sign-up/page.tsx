@@ -38,7 +38,10 @@ import useDebounce from "@/hooks/debounce";
 import Link from "next/link";
 
 const formSchema = z.object({
-  full_name: z.string().min(2, {
+  first_name: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
+  last_name: z.string().min(2, {
     message: "First name must be at least 2 characters.",
   }),
   address: z.string().min(2, { message: "Address is required." }),
@@ -88,7 +91,8 @@ export default function SignInForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: "",
+      first_name: "",
+      last_name: "",
       address: "",
       state: "",
       sex: "",
@@ -175,14 +179,14 @@ export default function SignInForm() {
     }
   };
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    // console.log(values);
     mutate(values, {
       onSuccess: (data) => {
         if (data) {
           setUser(data.data);
+          toast.success("Welcome to Serenity!");
+          router.push("/");
         }
-        toast.success("Welcome to Serenity!");
-        router.push("/");
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -213,10 +217,23 @@ export default function SignInForm() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="full_name"
+                name="first_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#4E4848]">Full name</FormLabel>
+                    <FormLabel className="text-[#4E4848]">First name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[#4E4848]">Last name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
