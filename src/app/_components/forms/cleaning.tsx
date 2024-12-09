@@ -45,7 +45,7 @@ export default function CleaningServiceForm({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: user?.user.email ?? "",
-    name: `${user?.user?.first_name} ${user?.user?.last_name}` ?? "",
+    name: `${user?.user?.first_name} ${user?.user?.last_name}`,
     location: user?.profile?.address?.address ?? "",
     house: buildingType,
     serviceType: "cleaning",
