@@ -320,7 +320,6 @@ export const childrenlaundryServices = [
     price: 200,
     quantity: 0,
   },
- 
 ];
 
 export const extraLaundryServices = [
@@ -384,7 +383,7 @@ export const cleaning = [
   },
   {
     id: 3,
-    title: "Bedroom / Toilet",
+    title: "Toilets",
     quantity: 0,
     price: 0,
   },

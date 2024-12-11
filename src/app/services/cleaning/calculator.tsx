@@ -19,24 +19,60 @@ type Props = {
 };
 
 const PRICING_DATA = {
-  oneTime: {
-    selfcon: 25000,
-    oneBedroomFlat: 35000,
-    twoBedroomFlat: 40000,
-    threeBedroomFlat: 55000,
-    fourBedroomFlat: 65000,
-    fiveBedroomFlat: 75000,
-    mansion: 100000,
+  detailed: {
+    flat: {
+      oneTime: {
+        selfcon: 25000,
+        oneBedroomFlat: 35000,
+        twoBedroomFlat: 40000,
+        threeBedroomFlat: 55000,
+        fourBedroomFlat: 65000,
+        fiveBedroomFlat: 70000,
+        mansion: 120000,
+      },
+      frequent: {
+        selfcon: 25000,
+        oneBedroomFlat: 35000,
+        twoBedroomFlat: 40000,
+        threeBedroomFlat: 55000,
+        fourBedroomFlat: 65000,
+        fiveBedroomFlat: 75000,
+        mansion: 100000,
+      },
+    },
+    duplex: {
+      oneTime: {
+        oneBedroomFlat: 50000,
+        twoBedroomFlat: 55000,
+        threeBedroomFlat: 75000,
+        fourBedroomFlat: 110000,
+        fiveBedroomFlat: 135000,
+        mansion: 135000,
+      },
+      frequent: {
+        oneBedroomFlat: 35000,
+        twoBedroomFlat: 55000,
+        threeBedroomFlat: 70000,
+        fourBedroomFlat: 80000,
+        fiveBedroomFlat: 90000,
+        mansion: 100000,
+      },
+    },
   },
   deep: {
     flat: {
-      oneTime: [
-        { rooms: 1, price: 50000 },
-        { rooms: 2, price: 70000 },
-        { rooms: 3, price: 110000 },
-        { rooms: 4, price: 120000 },
-        { rooms: 5, price: 140000 },
-      ],
+      oneBedroomFlat: 55000,
+      twoBedroomFlat: 70000,
+      threeBedroomFlat: 80000,
+      fourBedroomFlat: 110000,
+      fiveBedroomFlat: 120000,
+    },
+    duplex: {
+      oneBedroomFlat: 50000,
+      twoBedroomFlat: 70000,
+      threeBedroomFlat: 120000,
+      fourBedroomFlat: 125000,
+      fiveBedroomFlat: 140000,
     },
   },
 };
@@ -57,42 +93,246 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
   const calculateTotal = () => {
     const rooms = services.find((s) => s.title === "Bedrooms")?.quantity || 0;
+    const toilets = services.find((s) => s.title === "Toilets")?.quantity || 0;
     if (rooms === 0) return 0;
 
+    if (toilets === 0) {
+      toast.warning("Please selects the number of toilets", {
+        position: "top-center",
+      });
+
+      return 0;
+    }
     let basePrice = 0;
 
     // Determine base price based on selected cleaning type
-    if (cleaningType === "deep") {
+    if (cleaningHouse === "deep" && buildingType === "flat") {
+      console.log(true);
       // For deep cleaning, use one-time pricing
-      if (rooms === 1) basePrice = PRICING_DATA.oneTime.selfcon;
-      else if (rooms === 2) basePrice = PRICING_DATA.oneTime.oneBedroomFlat;
-      else if (rooms === 3) basePrice = PRICING_DATA.oneTime.twoBedroomFlat;
-      else if (rooms === 4) basePrice = PRICING_DATA.oneTime.threeBedroomFlat;
-      else if (rooms === 5) basePrice = PRICING_DATA.oneTime.fourBedroomFlat;
-      else if (rooms > 5) basePrice = PRICING_DATA.oneTime.mansion;
-    } else {
-      // For detailed cleaning, use the detailed pricing
-      const detailedPrice = PRICING_DATA.deep.flat.oneTime.find(
-        (p) => p.rooms === rooms
-      );
-      basePrice = detailedPrice ? detailedPrice.price : 0;
-    }
+      if (rooms === 1) {
+        basePrice = PRICING_DATA.deep.flat.oneBedroomFlat;
+      }
+      if (rooms === 2) {
+        basePrice = PRICING_DATA.deep.flat.twoBedroomFlat;
+      }
+      if (rooms === 3) {
+        basePrice = PRICING_DATA.deep.flat.threeBedroomFlat;
+      }
+      if (rooms === 4) {
+        basePrice = PRICING_DATA.deep.flat.fourBedroomFlat;
+      }
+      if (rooms === 5) {
+        basePrice = PRICING_DATA.deep.flat.fiveBedroomFlat;
+      }
+      if (rooms > 5) {
+        basePrice = PRICING_DATA.deep.flat.fiveBedroomFlat;
+      }
+    } else if (cleaningHouse === "deep" && buildingType === "duplex") {
+      // For deep cleaning, use one-time pricing
+      if (rooms === 1) {
+        basePrice = PRICING_DATA.deep.duplex.oneBedroomFlat;
+      }
+      if (rooms === 2) {
+        basePrice = PRICING_DATA.deep.duplex.twoBedroomFlat;
+      }
+      if (rooms === 3) {
+        basePrice = PRICING_DATA.deep.duplex.threeBedroomFlat;
+      }
+      if (rooms === 4) {
+        basePrice = PRICING_DATA.deep.duplex.fourBedroomFlat;
+      }
+      if (rooms === 5) {
+        basePrice = PRICING_DATA.deep.duplex.fiveBedroomFlat;
+      }
+      if (rooms > 5) {
+        basePrice = PRICING_DATA.deep.duplex.fiveBedroomFlat;
+      }
 
-    // Apply multipliers for frequency if not deep cleaning
-    if (cleaningType !== "deep") {
+      // For detailed cleaning, use the detailed pricing
+    } else if (cleaningHouse === "detailed" && buildingType === "flat") {
       switch (frequency) {
-        case "Twice A Week":
-          basePrice *= 2; // Multiply by 2
-          break;
         case "Three Times A Week":
-          basePrice *= 3; // Multiply by 3
+          if (rooms === 1 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.selfcon
+              : PRICING_DATA.detailed.flat.frequent.selfcon * 3;
+          } else if (rooms === 1 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.oneBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.oneBedroomFlat * 3;
+          } else if (rooms === 2 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.twoBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.twoBedroomFlat * 3;
+          } else if (rooms === 3 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.threeBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.threeBedroomFlat * 3;
+          } else if (rooms === 4 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.fourBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.fourBedroomFlat * 3;
+          } else if (rooms === 5 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.fiveBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.fiveBedroomFlat * 3;
+          } else if (rooms > 5 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.mansion
+              : PRICING_DATA.detailed.flat.frequent.mansion * 3;
+          }
+          break;
+        case "Twice A Week":
+          if (rooms === 1 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.selfcon
+              : PRICING_DATA.detailed.flat.frequent.selfcon * 2;
+          } else if (rooms === 1 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.oneBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.oneBedroomFlat * 2;
+          } else if (rooms === 2 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.twoBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.twoBedroomFlat * 2;
+          } else if (rooms === 3 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.threeBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.threeBedroomFlat * 2;
+          } else if (rooms === 4 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.fourBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.fourBedroomFlat * 2;
+          } else if (rooms === 5 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.fiveBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.fiveBedroomFlat * 2;
+          } else if (rooms > 5 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.mansion
+              : PRICING_DATA.detailed.flat.frequent.mansion * 2;
+          }
           break;
         default:
-          // No multiplier for "Once A Week"
+          if (rooms === 1 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.selfcon
+              : PRICING_DATA.detailed.flat.frequent.selfcon;
+          } else if (rooms === 1 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.oneBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.oneBedroomFlat;
+          } else if (rooms === 2 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.twoBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.twoBedroomFlat;
+          } else if (rooms === 3 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.threeBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.threeBedroomFlat;
+          } else if (rooms === 4 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.fourBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.fourBedroomFlat;
+          } else if (rooms === 5 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.fiveBedroomFlat
+              : PRICING_DATA.detailed.flat.frequent.fiveBedroomFlat;
+          } else if (rooms > 5 && toilets >= 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.flat.oneTime.mansion
+              : PRICING_DATA.detailed.flat.frequent.mansion;
+          }
           break;
+      }
+    } else if (cleaningHouse === "detailed" && buildingType === "duplex") {
+      switch (frequency) {
+        case "Three Times A Week":
+          if (rooms === 1 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat * 3;
+          } else if (rooms === 2 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat * 3;
+          } else if (rooms === 3 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat * 3;
+          } else if (rooms === 4 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat * 3;
+          } else if (rooms === 5 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat * 3;
+          } else if (rooms > 5 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.mansion
+              : PRICING_DATA.detailed.duplex.frequent.mansion * 3;
+          }
+          break;
+
+        case "Twice A Week":
+          if (rooms === 1 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat * 2;
+          } else if (rooms === 2 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat * 2;
+          } else if (rooms === 3 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat * 2;
+          } else if (rooms === 4 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat * 2;
+          } else if (rooms === 5 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat * 2;
+          } else if (rooms > 5 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.mansion
+              : PRICING_DATA.detailed.duplex.frequent.mansion * 2;
+          }
+          break;
+
+        default:
+          if (rooms === 1 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat;
+          } else if (rooms === 2 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat;
+          } else if (rooms === 3 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat;
+          } else if (rooms === 4 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat;
+          } else if (rooms === 5 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
+              : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat;
+          } else if (rooms > 5 && toilets === 1) {
+            basePrice = isOneTime
+              ? PRICING_DATA.detailed.duplex.oneTime.mansion
+              : PRICING_DATA.detailed.duplex.frequent.mansion;
+          }
       }
     }
 
+    console.log({ basePrice, rooms, frequency, buildingType, cleaningHouse });
     return basePrice;
   };
 
@@ -104,8 +344,14 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
   const incrementExtraQuantity = (id: number, title: string) => {
     // Check if bedrooms are selected when trying to increment other services
-    if (title !== "Bedrooms" && !selectedTitles.includes("Bedrooms")) {
-      toast.warning("Please select the number of bedrooms first!");
+    if (
+      title !== "Bedrooms" &&
+      !selectedTitles.includes("Bedrooms") &&
+      !selectedTitles.includes("Toilets")
+    ) {
+      toast.warning(
+        "Please select the number of bedrooms first, then toilets."
+      );
       return;
     }
 
@@ -141,11 +387,16 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
   // Update total when frequency, isOneTime, or services change
   const handleFetch = () => {
-    setIsLoading(true);
     const bedroomsService = services.find((s) => s.title === "Bedrooms");
+    const toilets = services.find((s) => s.title === "Toilets")?.quantity || 0;
     if (bedroomsService && bedroomsService.quantity > 0) {
+      if (!toilets)
+        return toast.warning("Please select the number of toilets", {
+          position: "top-center",
+        });
+      setIsLoading(true);
       const newTotal = calculateTotal();
-      setTotal(newTotal);
+      setTotal(Number(newTotal));
     }
     const timeout = setTimeout(() => {
       setIsLoading(false);
@@ -303,7 +554,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
                       frequency === "Three Times A Week"
-                        ? "border-primary border-2"
+                        ? "border-primary border-2 bg-secondary"
                         : ""
                     )}
                   >
@@ -315,7 +566,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
                       frequency === "Twice A Week"
-                        ? "border-primary border-2"
+                        ? "border-primary border-2 bg-secondary"
                         : ""
                     )}
                   >
@@ -326,7 +577,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
                       frequency === "Once A Week"
-                        ? "border-primary border-2"
+                        ? "border-primary border-2 bg-secondary"
                         : ""
                     )}
                   >
@@ -350,7 +601,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                   onClick={() => setTime("8am - 12pm")}
                   className={cn(
                     "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90",
-                    time === "8am - 12pm" && "border-primary"
+                    time === "8am - 12pm" && "border-primary bg-secondary"
                   )}
                 >
                   8am - 12pm
@@ -359,7 +610,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                   onClick={() => setTime("12am - 4pm")}
                   className={cn(
                     "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90",
-                    time === "12pm - 4pm" && "border-primary"
+                    time === "12pm - 4pm" && "border-primary bg-secondary"
                   )}
                 >
                   12am - 4pm
