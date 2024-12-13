@@ -44,9 +44,9 @@ export default function CleaningServiceForm({
   const user = useAuthStore((store) => store.user);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: user?.user.email ?? "",
-    name: `${user?.user?.first_name} ${user?.user?.last_name}`,
-    location: user?.profile?.address?.address ?? "",
+    email: user ? user?.user.email : "",
+    name: user ? `${user?.user?.first_name} ${user?.user?.last_name}` : "",
+    location: user ? user?.profile?.address?.address : "",
     house: buildingType,
     serviceType: "cleaning",
     cleaningType,
@@ -79,7 +79,7 @@ export default function CleaningServiceForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          to: formData.email,
+          to: process.env.NEXT_PUBLIC_MAIL,
           subject: "Cleaning Service Booking Confirmation",
           html: emailHtml,
         }),
