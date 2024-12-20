@@ -332,7 +332,6 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
       }
     }
 
-    console.log({ basePrice, rooms, frequency, buildingType, cleaningHouse });
     return basePrice;
   };
 
@@ -644,6 +643,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
               buildingType={buildingType}
               cleaningType={cleaningHouse}
               time={time}
+              setOpen={setOpen}
             />
           </div>
         </DrawerDialog>

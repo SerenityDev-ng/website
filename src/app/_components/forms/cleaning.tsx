@@ -32,6 +32,7 @@ type CleaningServiceFormProps = {
   buildingType: "flat" | "duplex";
   cleaningType: "detailed" | "deep";
   time: string;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function CleaningServiceForm({
@@ -40,6 +41,7 @@ export default function CleaningServiceForm({
   buildingType,
   cleaningType,
   time,
+  setOpen,
 }: CleaningServiceFormProps) {
   const user = useAuthStore((store) => store.user);
   const [loading, setLoading] = useState(false);
@@ -100,6 +102,7 @@ export default function CleaningServiceForm({
         laundryType: "",
         price: 0,
       });
+      setOpen(false);
     } catch (error) {
       console.error("Error sending email:", error);
       toast.error("Something went wrong, please try again.");
