@@ -70,6 +70,8 @@ export default function CleaningServiceForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.phone || !formData.location)
+      return toast.warning("Please fill out all fields");
     setLoading(true);
 
     const emailHtml = await render(<CleaningServiceEmail {...formData} />);

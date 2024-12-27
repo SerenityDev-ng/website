@@ -5,9 +5,9 @@ export async function POST(req: Request) {
   const { to, subject, html } = await req.json();
 
   const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    port: 465,
+    service: "Zoho",
+    host: "smtppro.zoho.com",
+    port: 587,
     secure: true,
     auth: {
       user: process.env.EMAIL_USER,
@@ -15,14 +15,14 @@ export async function POST(req: Request) {
     },
   });
 
-  console.log(
-    "Email credentials",
-    process.env.EMAIL_USER,
-    process.env.EMAIL_PASS
-  );
+  // console.log(
+  //   "Email credentials",
+  //   process.env.EMAIL_USER,
+  //   process.env.EMAIL_PASS
+  // );
   try {
     await transporter.sendMail({
-      from: "Serenity <noreply@serenity.com>",
+      from: "support@serenity.ng",
       to,
       subject,
       html,
