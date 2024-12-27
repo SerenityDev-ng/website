@@ -15,6 +15,11 @@ export async function POST(req: Request) {
     },
   });
 
+  console.log(
+    "Email credentials",
+    process.env.EMAIL_USER,
+    process.env.EMAIL_PASS
+  );
   try {
     await transporter.sendMail({
       from: "Serenity <noreply@serenity.com>",
