@@ -404,6 +404,10 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
     return () => clearTimeout(timeout);
   };
 
+  useEffect(() => {
+    handleFetch();
+  }, [time, frequency, isOneTime]);
+
   return (
     <div className="pt-[123px] lg:pt-0 relative z-30">
       <aside
@@ -585,11 +589,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                 </div>
               )}
             </div>
-            <div className="pt-20">
-              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
-                Select Building Type
-              </h1>
-            </div>
+
             <div className="pt-20">
               <h1 className=" text-2xl md:text-[36px] font-league-spartan font-medium">
                 Cleaning Time

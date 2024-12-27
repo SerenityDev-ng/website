@@ -178,7 +178,10 @@ const DesktopNavbar = () => {
                         ))}
                       </div>
                       <div className="relative z-10 flex items-center gap-5">
-                        <div>
+                        <div
+                          onClick={() => router.push("/services/cleaning")}
+                          className="cursor-pointer"
+                        >
                           <Image
                             src={cleaning}
                             alt="cleaning"
@@ -192,7 +195,10 @@ const DesktopNavbar = () => {
                             is sparkling clean.
                           </p>
                         </div>
-                        <div className="hidden xl:block">
+                        <div
+                          className="hidden xl:block cursor-pointer"
+                          onClick={() => router.push("/services/laundry")}
+                        >
                           <Image
                             src={laundry_iron}
                             alt="cleaning"
@@ -206,7 +212,10 @@ const DesktopNavbar = () => {
                             your schedule.
                           </p>
                         </div>
-                        <div>
+                        <div
+                          onClick={() => router.push("/services/repair")}
+                          className="cursor-pointer"
+                        >
                           <Image
                             src={repair}
                             alt="cleaning"

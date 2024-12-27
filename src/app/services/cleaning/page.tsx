@@ -7,10 +7,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import CleaningCalculator from "./calculator";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 const CleaningPage = (props: Props) => {
+  const router = useRouter();
   const [cleaningType, setCleaningType] = useState<string>("Housekeeping");
   const cleaningServices = [
     {
@@ -18,24 +20,28 @@ const CleaningPage = (props: Props) => {
       description:
         "We offer thorough housekeeping service that includes sweeping, mopping, disinfecting, cobweb removal, floor and wall cleaning, dishwashing, and garbage disposal—leaving your home spotless.",
       image: "/first.png",
+      link: "#cleaning-calculator",
     },
     {
       title: "Post-construction cleaning",
       description:
         "Get every deep cleaning features, every surface dusted and polished, detailed fixture cleaning window and glass cleaning, paint spill removal and more, leaving no corner untouched!",
       image: "/second.png",
+      link: "#",
     },
     {
       title: "Janitorial cleaning",
       description:
         "It's the little things that keep a space looking great. Our janitorial team goes above and beyond to make sure your space is spotless and ready for a new day",
       image: "/third.png",
+      link: "#",
     },
     {
       title: "Fumigation",
       description:
         "Say goodbye to pests for good. Our fumigation service tackles unwanted guests at the source, creating a safe, pest-free environment for your home or business.",
       image: "/fourth.png",
+      link: "#",
     },
   ];
 
@@ -91,7 +97,10 @@ const CleaningPage = (props: Props) => {
                 "bg-white rounded-lg shadow-md max-w-[400px]",
                 cleaningType === service.title && "border-primary border-2"
               )}
-              onClick={() => setCleaningType(service.title)}
+              onClick={() => {
+                setCleaningType(service.title);
+                router.push(service.link);
+              }}
             >
               <Image
                 src={service.image}
@@ -111,7 +120,7 @@ const CleaningPage = (props: Props) => {
           ))}
         </div>
 
-        <div>
+        <div id="cleaning-calculator">
           <CleaningCalculator cleaningType={cleaningType} />
         </div>
       </div>
