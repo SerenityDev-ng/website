@@ -91,7 +91,9 @@ export default function CleaningServiceForm({
 
       if (response.ok) {
         console.log("Email sent successfully");
-        toast.success("Your service has been booked");
+        toast.success("Your service has been booked", {
+          position: "top-center",
+        });
       } else {
         console.error("Failed to send email");
       }
