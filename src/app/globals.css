@@ -76,7 +76,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-[#fffcfc] text-foreground;
+    @apply bg-[#fffcfc] dark:bg-background text-foreground;
   }
 
   .button-grad {
