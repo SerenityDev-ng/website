@@ -51,7 +51,7 @@ const PRICING_DATA = {
       },
       frequent: {
         oneBedroomFlat: 35000,
-        twoBedroomFlat: 55000,
+        twoBedroomFlat: 35000,
         threeBedroomFlat: 70000,
         fourBedroomFlat: 80000,
         fiveBedroomFlat: 90000,
@@ -94,7 +94,13 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
   const calculateTotal = () => {
     const rooms = services.find((s) => s.title === "Bedrooms")?.quantity || 0;
     const toilets = services.find((s) => s.title === "Toilets")?.quantity || 0;
-    if (rooms === 0) return 0;
+    if (rooms === 0) {
+      toast.warning("Please selects the number of Bedrooms", {
+        position: "top-center",
+      });
+
+      return 0;
+    }
 
     if (toilets === 0) {
       toast.warning("Please selects the number of toilets", {
@@ -252,23 +258,23 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat * 3;
-          } else if (rooms === 2 && toilets === 1) {
+          } else if (rooms === 2 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat * 3;
-          } else if (rooms === 3 && toilets === 1) {
+          } else if (rooms === 3 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat * 3;
-          } else if (rooms === 4 && toilets === 1) {
+          } else if (rooms === 4 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat * 3;
-          } else if (rooms === 5 && toilets === 1) {
+          } else if (rooms === 5 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat * 3;
-          } else if (rooms > 5 && toilets === 1) {
+          } else if (rooms > 5 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.mansion
               : PRICING_DATA.detailed.duplex.frequent.mansion * 3;
@@ -280,23 +286,23 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat * 2;
-          } else if (rooms === 2 && toilets === 1) {
+          } else if (rooms === 2 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat * 2;
-          } else if (rooms === 3 && toilets === 1) {
+          } else if (rooms === 3 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat * 2;
-          } else if (rooms === 4 && toilets === 1) {
+          } else if (rooms === 4 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat * 2;
-          } else if (rooms === 5 && toilets === 1) {
+          } else if (rooms === 5 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat * 2;
-          } else if (rooms > 5 && toilets === 1) {
+          } else if (rooms > 5 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.mansion
               : PRICING_DATA.detailed.duplex.frequent.mansion * 2;
@@ -308,23 +314,23 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat;
-          } else if (rooms === 2 && toilets === 1) {
+          } else if (rooms === 2 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat;
-          } else if (rooms === 3 && toilets === 1) {
+          } else if (rooms === 3 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat;
-          } else if (rooms === 4 && toilets === 1) {
+          } else if (rooms === 4 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat;
-          } else if (rooms === 5 && toilets === 1) {
+          } else if (rooms === 5 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
               : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat;
-          } else if (rooms > 5 && toilets === 1) {
+          } else if (rooms > 5 && toilets >= 1) {
             basePrice = isOneTime
               ? PRICING_DATA.detailed.duplex.oneTime.mansion
               : PRICING_DATA.detailed.duplex.frequent.mansion;
@@ -406,7 +412,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
   useEffect(() => {
     handleFetch();
-  }, [time, frequency, isOneTime]);
+  }, [time, frequency, isOneTime, cleaningHouse, buildingType]);
 
   return (
     <div className="pt-[123px] lg:pt-0 relative z-30">
