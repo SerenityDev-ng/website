@@ -141,7 +141,7 @@ const Footer = (props: Props) => {
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <PhoneCall />
-                    <a href="https://wa.me/+2348135518126?text=Hello%2C%20I%27m%20contacting%20you%20from%20your%20website%serenity.ng">0813 551 8126</a>
+                    <a href="https://wa.me/+2348135518126?text=Hello%2C%20I%27m%20contacting%20you%20from%20your%20website serenity.ng">0813 551 8126</a>
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <Instagram />
