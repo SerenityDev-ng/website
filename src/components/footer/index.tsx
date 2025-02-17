@@ -135,7 +135,9 @@ const Footer = (props: Props) => {
                 <div className="space-y-4 pt-6">
                   <div className="flex gap-2 items-center text-lg">
                     <Mail />
-                    mail@serenity.ng
+                    <a href="mailto:mail@serenity.ng"> mail@serenity.ng</a>
+
+                   
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <PhoneCall />
