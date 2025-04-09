@@ -135,17 +135,20 @@ const Footer = (props: Props) => {
                 <div className="space-y-4 pt-6">
                   <div className="flex gap-2 items-center text-lg">
                     <Mail />
-                    mail@serenity.ng
+                    <a href="mailto:mail@serenity.ng"> mail@serenity.ng</a>
+
+                   
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <PhoneCall />
-                    07053964706
+                    <a href="https://wa.me/2348135518126?text=Hello,%20I'm%20contacting%20you%20from%20your%20website%20serenity.ng">0813 551 8126</a>
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <Instagram />
-                    serenity_official
+                    <a href="https://www.instagram.com/serenity.ng_official"> serenity.ng_official</a>
+                  
                   </div>
-                </div>
+                </div>   
               </div>
             </div>
           </aside>
