@@ -25,12 +25,14 @@ import { render } from "@react-email/render";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useAuthStore } from "@/hooks/store/user";
+import { VideoUpload } from "@/components/global/video-upload";
 
 type CleaningServiceFormProps = {
   frequency: string;
   total: number;
   buildingType: "flat" | "duplex";
-  cleaningType: "detailed" | "deep";
+  cleaningHouse: "detailed" | "deep";
+  cleaningType: string;
   time: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -40,24 +42,41 @@ export default function CleaningServiceForm({
   total,
   buildingType,
   cleaningType,
+  cleaningHouse,
   time,
   setOpen,
 }: CleaningServiceFormProps) {
   const user = useAuthStore((store) => store.user);
   const [loading, setLoading] = useState(false);
+  const [videoUrls, setVideoUrls] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     email: user ? user?.user.email : "",
     name: user ? `${user?.user?.first_name} ${user?.user?.last_name}` : "",
     location: user ? user?.profile?.address?.address : "",
     house: buildingType,
     serviceType: "cleaning",
-    cleaningType,
+    cleaningType:
+      cleaningType === "Housekeeping" ||
+      cleaningType === "Pool Cleaning" ||
+      cleaningType === "Deep Cleaning"
+        ? cleaningHouse === "detailed"
+          ? "Detailed cleaning"
+          : "Deep cleaning"
+        : cleaningType,
+    cleaningHouse,
     laundryType: "",
     price: total,
     frequency,
     time,
     phone: "",
+    videoUrls,
   });
+
+  const handleUploadComplete = (urls: string[]) => {
+    console.log({ urls });
+    setVideoUrls(urls);
+    setFormData((prev) => ({ ...prev, videoUrls: urls }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,6 +92,9 @@ export default function CleaningServiceForm({
     if (!formData.phone || !formData.location)
       return toast.warning("Please fill out all fields");
     setLoading(true);
+
+    // console.log({ formData });
+    // return;
 
     const emailHtml = await render(<CleaningServiceEmail {...formData} />);
 
@@ -90,7 +112,6 @@ export default function CleaningServiceForm({
       });
 
       if (response.ok) {
-        console.log("Email sent successfully");
         toast.success("Your service has been booked", {
           position: "top-center",
         });
@@ -198,18 +219,24 @@ export default function CleaningServiceForm({
               <Select
                 onValueChange={handleSelectChange("cleaningType")}
                 value={formData.cleaningType}
+                defaultValue={formData.cleaningType}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select cleaning type" />
+                  <SelectValue
+                    placeholder="Select cleaning type"
+                    defaultValue={formData.cleaningType}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="detailed">Detailed cleaning</SelectItem>
-                  <SelectItem value="deep">Deep cleaning</SelectItem>
-                  <SelectItem value="post-construction">
+                  <SelectItem value="Detailed cleaning">
+                    Detailed cleaning
+                  </SelectItem>
+                  <SelectItem value="Deep cleaning">Deep cleaning</SelectItem>
+                  <SelectItem value="Post-construction cleaning">
                     Post-construction cleaning
                   </SelectItem>
-                  <SelectItem value="janitorial">Janitorial</SelectItem>
-                  <SelectItem value="fumigation">Fumigation</SelectItem>
+                  <SelectItem value="Janitorial">Janitorial</SelectItem>
+                  <SelectItem value="Fumigation">Fumigation</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -287,6 +314,25 @@ export default function CleaningServiceForm({
               />
             </div>
           </div>
+
+          <VideoUpload
+            onUploadComplete={handleUploadComplete}
+            folder="course-videos"
+            maxVideos={4}
+          />
+
+          {videoUrls.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-sm font-medium mb-2">Video URLs:</h3>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                {videoUrls.map((url, index) => (
+                  <li key={index} className="truncate">
+                    {url}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </form>
       </CardContent>
       <CardFooter>

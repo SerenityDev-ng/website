@@ -23,25 +23,39 @@ const CleaningPage = (props: Props) => {
       link: "#cleaning-calculator",
     },
     {
+      title: "Deep Cleaning",
+      description:
+        "Get every deep cleaning features, every surface dusted and polished, detailed fixture cleaning window and glass cleaning, paint spill removal and more, leaving no corner untouched!",
+      image: "/second.png",
+      link: "#cleaning-calculator",
+    },
+    {
+      title: "Pool Cleaning",
+      description:
+        "Keep your pool clean and sparkling with our professional pool cleaning service. We remove debris, sanitize the water, and ensure your pool is ready for a refreshing swim.",
+      image: "/pool.jpg",
+      link: "#cleaning-calculator",
+    },
+    {
       title: "Post-construction cleaning",
       description:
         "Get every deep cleaning features, every surface dusted and polished, detailed fixture cleaning window and glass cleaning, paint spill removal and more, leaving no corner untouched!",
       image: "/second.png",
-      link: "#",
+      link: "#cleaning-calculator",
     },
     {
       title: "Janitorial cleaning",
       description:
         "It's the little things that keep a space looking great. Our janitorial team goes above and beyond to make sure your space is spotless and ready for a new day",
       image: "/third.png",
-      link: "#",
+      link: "#cleaning-calculator",
     },
     {
       title: "Fumigation",
       description:
         "Say goodbye to pests for good. Our fumigation service tackles unwanted guests at the source, creating a safe, pest-free environment for your home or business.",
       image: "/fourth.png",
-      link: "#",
+      link: "#cleaning-calculator",
     },
   ];
 

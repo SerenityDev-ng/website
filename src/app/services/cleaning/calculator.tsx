@@ -647,7 +647,8 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
               frequency={frequency}
               total={total}
               buildingType={buildingType}
-              cleaningType={cleaningHouse}
+              cleaningType={cleaningType}
+              cleaningHouse={cleaningHouse}
               time={time}
               setOpen={setOpen}
             />

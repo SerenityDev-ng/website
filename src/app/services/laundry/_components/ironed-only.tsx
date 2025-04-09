@@ -2,33 +2,78 @@
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { extraLaundryServices, menlaundryironedonly } from "@/lib/laundry";
+import {
+  childrenIronedOnlyServices,
+  extraLaundryWashedOnly,
+  menlaundryironedonly,
+  womenIronedOnly,
+} from "@/lib/laundry";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const IronedOnly = () => {
   const [services, setServices] = useState(menlaundryironedonly);
-  const [extraService, setExtraServices] = useState(extraLaundryServices);
+  const [extraService, setExtraServices] = useState(extraLaundryWashedOnly);
+  const [womenServices, setWomenServices] = useState(womenIronedOnly);
+  const [childrenServices, setChildrenServices] = useState(
+    childrenIronedOnlyServices
+  );
 
-  const incrementQuantity = (id: number) => {
-    const updatedServices = services.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-    setServices(updatedServices);
+  const incrementQuantity = (id: number, type: string) => {
+    if (type === "men") {
+      const updatedServices = services.map((service) => {
+        if (service.id === id) {
+          return { ...service, quantity: service.quantity + 1 };
+        }
+        return service;
+      });
+      setServices(updatedServices);
+    } else if (type === "women") {
+      const updatedServices = womenServices.map((service) => {
+        if (service.id === id) {
+          return { ...service, quantity: service.quantity + 1 };
+        }
+        return service;
+      });
+      setWomenServices(updatedServices);
+    } else if (type === "children") {
+      const updatedServices = childrenServices.map((service) => {
+        if (service.id === id) {
+          return { ...service, quantity: service.quantity + 1 };
+        }
+        return service;
+      });
+      setChildrenServices(updatedServices);
+    }
   };
 
-  const decrementQuantity = (id: number) => {
-    const updatedServices = services.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-    setServices(updatedServices);
+  const decrementQuantity = (id: number, type: string) => {
+    if (type === "men") {
+      const updatedServices = services.map((service) => {
+        if (service.id === id && service.quantity > 0) {
+          return { ...service, quantity: service.quantity - 1 };
+        }
+        return service;
+      });
+      setServices(updatedServices);
+    } else if (type === "women") {
+      const updatedServices = womenServices.map((service) => {
+        if (service.id === id && service.quantity > 0) {
+          return { ...service, quantity: service.quantity - 1 };
+        }
+        return service;
+      });
+      setWomenServices(updatedServices);
+    } else if (type === "children") {
+      const updatedServices = childrenServices.map((service) => {
+        if (service.id === id && service.quantity > 0) {
+          return { ...service, quantity: service.quantity - 1 };
+        }
+        return service;
+      });
+      setChildrenServices(updatedServices);
+    }
   };
   const incrementExtraQuantity = (id: number) => {
     const updatedServices = extraService.map((service) => {
@@ -59,8 +104,20 @@ const IronedOnly = () => {
     0
   );
 
-  const totalMale = totalService + totalExtraService;
+  const totalWomenService = womenServices.reduce(
+    (acc, service) => acc + service.price * service.quantity,
+    0
+  );
 
+  const totalChildrenService = childrenServices.reduce(
+    (acc, service) => acc + service.price * service.quantity,
+    0
+  );
+
+  const totalMale = totalService + totalExtraService;
+  const totalFemale = totalWomenService + totalExtraService;
+  const totalChildren = totalChildrenService + totalExtraService;
+  const total = totalMale + totalFemale + totalChildren;
   return (
     <div>
       <h1 className=" font-league-spartan font-medium text-[36px]">
@@ -71,6 +128,7 @@ const IronedOnly = () => {
         <TabsList>
           <TabsTrigger value="men">Men</TabsTrigger>
           <TabsTrigger value="women">Women</TabsTrigger>
+          <TabsTrigger value="children">Children</TabsTrigger>
         </TabsList>
         <TabsContent value="men" className="">
           <div className=" backdrop-blur-md bg-white/40 dark:bg-transparent rounded-lg ">
@@ -99,7 +157,7 @@ const IronedOnly = () => {
                   </div>
                   <div className="flex gap-4 items-center">
                     <Button
-                      onClick={() => decrementQuantity(laundry.id)}
+                      onClick={() => decrementQuantity(laundry.id, "men")}
                       className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
                     >
                       -
@@ -108,7 +166,7 @@ const IronedOnly = () => {
                       {laundry.quantity}
                     </p>
                     <Button
-                      onClick={() => incrementQuantity(laundry.id)}
+                      onClick={() => incrementQuantity(laundry.id, "men")}
                       className="text-xl font-semibold text-white hover:bg-primary"
                     >
                       +
@@ -161,7 +219,217 @@ const IronedOnly = () => {
 
             <div className="mt-[120px] flex items-center justify-between font-medium font-league-spartan text-[36px] px-4">
               <h1>Total Order</h1>
-              <p>&#8358;{totalMale}</p>
+              <p>&#8358;{total}</p>
+            </div>
+
+            <div className=" pt-20 w-full flex justify-center">
+              <Link
+                href="https://calendly.com/serenityvimo/30min"
+                target="__blank"
+              >
+                <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
+                  Schedule Pickup
+                  <FaArrowRight />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="women" className="">
+          <div className=" backdrop-blur-md bg-white/40 dark:bg-transparent rounded-lg ">
+            <div className=" button-grad flex gap-2 justify-between p-4 rounded-[10px] my-[35px] text-white">
+              <div>Wears</div>
+              <div>Price</div>
+              <div className="opacity-0">.</div>
+            </div>
+
+            <div className="space-y-[35px]">
+              {womenServices?.map((laundry) => (
+                <div
+                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
+                  key={laundry.id}
+                >
+                  <div className="min-w-[100px] max-w-[100px]">
+                    {laundry.name}
+                  </div>
+                  <div>
+                    &#8358;{laundry.price}
+                    {laundry.quantity > 0 && (
+                      <p className="text-sm text-gray-600 pt-1">
+                        ( &#8358;{`${laundry.price * laundry.quantity}`})
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    <Button
+                      onClick={() => decrementQuantity(laundry.id, "women")}
+                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
+                    >
+                      -
+                    </Button>
+                    <p className=" font-medium font-inter">
+                      {laundry.quantity}
+                    </p>
+                    <Button
+                      onClick={() => incrementQuantity(laundry.id, "women")}
+                      className="text-xl font-semibold text-white hover:bg-primary"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-[35px] pt-[35px]">
+              <h1 className=" font-league-spartan font-medium text-[36px]">
+                Extra Items
+              </h1>
+              {extraService?.map((laundry) => (
+                <div
+                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
+                  key={laundry.id}
+                >
+                  <div className="min-w-[100px] max-w-[100px]">
+                    {laundry.name}
+                  </div>
+                  <div>
+                    &#8358;{laundry.price}
+                    {laundry.quantity > 0 && (
+                      <p className="text-sm text-gray-600 pt-1">
+                        ( &#8358;{`${laundry.price * laundry.quantity}`})
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    <Button
+                      onClick={() => decrementExtraQuantity(laundry.id)}
+                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
+                    >
+                      -
+                    </Button>
+                    <p className=" font-medium font-inter">
+                      {laundry.quantity}
+                    </p>
+                    <Button
+                      onClick={() => incrementExtraQuantity(laundry.id)}
+                      className="text-xl font-semibold text-white hover:bg-primary"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-[120px] flex items-center justify-between font-medium font-league-spartan text-[36px] px-4">
+              <h1>Total Order</h1>
+              <p>&#8358;{total}</p>
+            </div>
+
+            <div className=" pt-20 w-full flex justify-center">
+              <Link
+                href="https://calendly.com/serenityvimo/30min"
+                target="__blank"
+              >
+                <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
+                  Schedule Pickup
+                  <FaArrowRight />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="children" className="">
+          <div className=" backdrop-blur-md bg-white/40 dark:bg-transparent rounded-lg ">
+            <div className=" button-grad flex gap-2 justify-between p-4 rounded-[10px] my-[35px] text-white">
+              <div>Wears</div>
+              <div>Price</div>
+              <div className="opacity-0">.</div>
+            </div>
+
+            <div className="space-y-[35px]">
+              {childrenServices?.map((laundry) => (
+                <div
+                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
+                  key={laundry.id}
+                >
+                  <div className="min-w-[100px] max-w-[100px]">
+                    {laundry.name}
+                  </div>
+                  <div>
+                    &#8358;{laundry.price}
+                    {laundry.quantity > 0 && (
+                      <p className="text-sm text-gray-600 pt-1">
+                        ( &#8358;{`${laundry.price * laundry.quantity}`})
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    <Button
+                      onClick={() => decrementQuantity(laundry.id, "children")}
+                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
+                    >
+                      -
+                    </Button>
+                    <p className=" font-medium font-inter">
+                      {laundry.quantity}
+                    </p>
+                    <Button
+                      onClick={() => incrementQuantity(laundry.id, "children")}
+                      className="text-xl font-semibold text-white hover:bg-primary"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-[35px] pt-[35px]">
+              <h1 className=" font-league-spartan font-medium text-[36px]">
+                Extra Items
+              </h1>
+              {extraService?.map((laundry) => (
+                <div
+                  className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
+                  key={laundry.id}
+                >
+                  <div className="min-w-[100px] max-w-[100px]">
+                    {laundry.name}
+                  </div>
+                  <div>
+                    &#8358;{laundry.price}
+                    {laundry.quantity > 0 && (
+                      <p className="text-sm text-gray-600 pt-1">
+                        ( &#8358;{`${laundry.price * laundry.quantity}`})
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    <Button
+                      onClick={() => decrementExtraQuantity(laundry.id)}
+                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
+                    >
+                      -
+                    </Button>
+                    <p className=" font-medium font-inter">
+                      {laundry.quantity}
+                    </p>
+                    <Button
+                      onClick={() => incrementExtraQuantity(laundry.id)}
+                      className="text-xl font-semibold text-white hover:bg-primary"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-[120px] flex items-center justify-between font-medium font-league-spartan text-[36px] px-4">
+              <h1>Total Order</h1>
+              <p>&#8358;{total}</p>
             </div>
 
             <div className=" pt-20 w-full flex justify-center">

@@ -23,6 +23,7 @@ interface CleaningServiceEmailProps {
   frequency: string;
   time: string;
   phone: string;
+  videoUrls: string[];
 }
 
 export const CleaningServiceEmail = ({
@@ -37,7 +38,9 @@ export const CleaningServiceEmail = ({
   frequency,
   time,
   phone,
+  videoUrls,
 }: CleaningServiceEmailProps) => {
+  console.log({ videoUrls });
   return (
     <Html>
       <Head />
@@ -85,6 +88,11 @@ export const CleaningServiceEmail = ({
               <Text className="text-sm">
                 <strong>Time:</strong> {time}
               </Text>
+              {videoUrls.length > 0 && (
+                <Text className="text-sm">
+                  <strong>Videos:</strong> {videoUrls.join(", ")}
+                </Text>
+              )}
             </Section>
             <Hr className="border-gray-300 my-4" />
             <Text className="text-sm text-center text-gray-600">

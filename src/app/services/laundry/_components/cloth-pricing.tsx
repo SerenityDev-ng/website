@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  childrenlaundryServices,
+  childrenWashedIroned,
   extraLaundryServices,
+  extraLaundryWashedOnly,
   menLaundryWashedIroned,
-  womenlaundryServices,
+  womenWashedIroned,
 } from "@/lib/laundry";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -14,11 +15,10 @@ import { FaArrowRight } from "react-icons/fa";
 
 const ClothPrices = () => {
   const [services, setServices] = useState(menLaundryWashedIroned);
-  const [womenServices, setWomenServices] = useState(womenlaundryServices);
-  const [childrenServices, setChildrenServices] = useState(
-    childrenlaundryServices
-  );
-  const [extraService, setExtraServices] = useState(extraLaundryServices);
+  const [womenServices, setWomenServices] = useState(womenWashedIroned);
+  const [childrenServices, setChildrenServices] =
+    useState(childrenWashedIroned);
+  const [extraService, setExtraServices] = useState(extraLaundryWashedOnly);
 
   const incrementQuantity = (id: number) => {
     const updatedServices = services.map((service) => {
