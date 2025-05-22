@@ -56,12 +56,12 @@ const links = [
     href: "/gifting",
     icon: <Gift className="h-4 w-4 mr-2" />,
   },
-  {
-    id: 5,
-    name: "Marketplace",
-    href: "/marketplace",
-    icon: <ShoppingBag className="h-4 w-4 mr-2" />,
-  },
+  // {
+  //   id: 5,
+  //   name: "Marketplace",
+  //   href: "/marketplace",
+  //   icon: <ShoppingBag className="h-4 w-4 mr-2" />,
+  // },
   {
     id: 6,
     name: "Blog",
