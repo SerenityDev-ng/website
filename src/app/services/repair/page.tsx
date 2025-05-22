@@ -49,14 +49,14 @@ const RepairPage = (props: Props) => {
       id: 3,
       image: book_carpenter,
       title: "Book Carpenter",
-      text: "From repairs to renovations, we’ve got the tools",
+      text: "From repairs to renovations, we've got the tools",
       price: 6000,
     },
     {
       id: 4,
       image: book_painter,
       title: "Book Painter",
-      text: "Let’s add some color to your world! Schedule a painter for expert finishing",
+      text: "Let's add some color to your world! Schedule a painter for expert finishing",
       price: 9000,
     },
     {
