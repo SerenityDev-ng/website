@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { serenity_logo } from "@/assets/images";
 import ReactQueryWrapper from "@/hooks/react-query-wrapper";
+import { PaystackScript } from "@/components/payment/paystack-script";
 
 export const metadata: Metadata = {
   title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
@@ -66,6 +67,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryWrapper>
+            <PaystackScript />
             <Navbar />
 
             <main className="relative">
