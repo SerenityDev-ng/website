@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
+    title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
     description:
       "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
     images: [serenity_logo], // Replace with your actual image URL
