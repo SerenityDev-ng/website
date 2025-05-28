@@ -9,7 +9,7 @@ import ReactQueryWrapper from "@/hooks/react-query-wrapper";
 import { PaystackScript } from "@/components/payment/paystack-script";
 
 export const metadata: Metadata = {
-  title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
+  title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
   description:
     "Serenity offers professional cleaning services in Nigeria: carpet cleaning, office cleaning, house cleaning, laundry, gutter cleaning, air duct cleaning, and more. Book trusted cleaners near you for residential, commercial, and specialty cleaning needs.",
   keywords: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "what is dry cleaning", "how does dry cleaning work", "how to start a cleaning business", "is duct cleaning a waste of money", "how long does dry cleaning take", "what licenses are needed to start a cleaning business", "how much does dry cleaning cost", "what is commercial cleaning", "what is the best homemade window cleaning solution", "how much is dry cleaning", "what is cleaning", "how much does gutter cleaning cost", "how to start cleaning business", "what is the best homemade carpet cleaning solution for machines", "what is the difference between cleaning and sanitizing", "how much does duct cleaning cost", "how to start your own cleaning business", "how does self cleaning oven work", "how much does carpet cleaning cost", "how much does air duct cleaning cost"
   ],
   openGraph: {
-    title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
+    title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
     description:
       "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
     url: "https://www.serenity.ng/",
