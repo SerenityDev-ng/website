@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
+    title: "Serenity |ome Cleaning in Nigeria",
     description:
       "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
     images: [serenity_logo], // Replace with your actual image URL
@@ -59,6 +60,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="max-w-full overflow-x-hidden w-full">
+      <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-T37ZZQB2BN"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T37ZZQB2BN');
+          `,
+        }} />
+      </head>
       <body className="antialiased ">
         <ThemeProvider
           attribute="class"
@@ -71,7 +84,7 @@ export default function RootLayout({
             <Navbar />
 
             <main className="relative">
-              <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter">
+              <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dar Cleaning Services, Laundry Services, Office & Hk:text-white font-inter">
                 {children}
               </div>
               <Footer />
