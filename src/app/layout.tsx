@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { serenity_logo } from "@/assets/images";
 import ReactQueryWrapper from "@/hooks/react-query-wrapper";
-import { PaystackScript } from "@/components/payment/paystack-script";
+// import { PaystackScript } from "@/components/payment/paystack-script";
 
 export const metadata: Metadata = {
   title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="max-w-full overflow-x-hidden w-full">
       <head>
-        {/* Google tag (gtag.js) */}
+        Google tag (gtag.js)
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-T37ZZQB2BN"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -80,7 +80,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryWrapper>
-            <PaystackScript />
+            {/* <PaystackScript /> */}
             <Navbar />
 
             <main className="relative">
