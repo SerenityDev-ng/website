@@ -10,6 +10,7 @@ import {
 } from "@/assets/images";
 import { Instagram, Mail, PhoneCall } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
@@ -111,20 +112,22 @@ const Footer = (props: Props) => {
                     Services
                   </div>
                   <div className="flex gap-2 items-center text-lg">
-                    Terms Of Use
+                    <Link href="/terms-conditions">Terms Of Use</Link>
                   </div>
                   <div className="flex gap-2 items-center text-lg">
-                    Privacy Policy
+                    <Link href="/privacy-policy">Privacy Policy</Link>
                   </div>
                 </div>
               </div>
               <div>
                 <h1>EXPLORE</h1>
                 <div className="space-y-4 pt-6">
-                  <div className="flex gap-2 items-center text-lg">Career</div>
                   <div className="flex gap-2 items-center text-lg">
-                    Marketplace
+                    <Link href="/career">Career</Link>
                   </div>
+                  {/* <div className="flex gap-2 items-center text-lg">
+                    <Link href="/marketplace">Marketplace</Link>
+                  </div> */}
                   <div className="flex gap-2 items-center text-lg">
                     Gift A Service
                   </div>
@@ -136,19 +139,21 @@ const Footer = (props: Props) => {
                   <div className="flex gap-2 items-center text-lg">
                     <Mail />
                     <a href="mailto:mail@serenity.ng"> mail@serenity.ng</a>
-
-                   
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <PhoneCall />
-                    <a href="https://wa.me/2348135518126?text=Hello,%20I'm%20contacting%20you%20from%20your%20website%20serenity.ng">0813 551 8126</a>
+                    <a href="https://wa.me/2348135518126?text=Hello,%20I'm%20contacting%20you%20from%20your%20website%20serenity.ng">
+                      0813 551 8126
+                    </a>
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     <Instagram />
-                    <a href="https://www.instagram.com/serenity.ng_official"> serenity.ng_official</a>
-                  
+                    <a href="https://www.instagram.com/serenity.ng_official">
+                      {" "}
+                      serenity.ng_official
+                    </a>
                   </div>
-                </div>   
+                </div>
               </div>
             </div>
           </aside>
