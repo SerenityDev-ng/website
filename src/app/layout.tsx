@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
@@ -6,10 +7,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { serenity_logo } from "@/assets/images";
 import ReactQueryWrapper from "@/hooks/react-query-wrapper";
-import { PaystackScript } from "@/components/payment/paystack-script";
+// import { PaystackScript } from "@/components/payment/paystack-script";
 
 export const metadata: Metadata = {
-  title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
+  title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
   description:
     "Serenity offers professional cleaning services in Nigeria: carpet cleaning, office cleaning, house cleaning, laundry, gutter cleaning, air duct cleaning, and more. Book trusted cleaners near you for residential, commercial, and specialty cleaning needs.",
   keywords: [
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     "what is dry cleaning", "how does dry cleaning work", "how to start a cleaning business", "is duct cleaning a waste of money", "how long does dry cleaning take", "what licenses are needed to start a cleaning business", "how much does dry cleaning cost", "what is commercial cleaning", "what is the best homemade window cleaning solution", "how much is dry cleaning", "what is cleaning", "how much does gutter cleaning cost", "how to start cleaning business", "what is the best homemade carpet cleaning solution for machines", "what is the difference between cleaning and sanitizing", "how much does duct cleaning cost", "how to start your own cleaning business", "how does self cleaning oven work", "how much does carpet cleaning cost", "how much does air duct cleaning cost"
   ],
   openGraph: {
-    title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
+    title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
     description:
       "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
     url: "https://www.serenity.ng/",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cleaning Services, Carpet Cleaning, Office & Home Cleaning in Nigeria | Serenity",
+    title: "Serenity |ome Cleaning in Nigeria",
     description:
       "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
     images: [serenity_logo], // Replace with your actual image URL
@@ -59,6 +60,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="max-w-full overflow-x-hidden w-full">
+      <head>
+        Google tag (gtag.js)
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-T37ZZQB2BN"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T37ZZQB2BN');
+          `,
+        }} />
+      </head>
       <body className="antialiased ">
         <ThemeProvider
           attribute="class"
@@ -67,11 +80,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryWrapper>
-            <PaystackScript />
+            {/* <PaystackScript /> */}
             <Navbar />
 
             <main className="relative">
-              <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dark:text-white font-inter">
+              <div className="max-w-screen-xl mx-auto px-5 md:px-8 xl:px-5 dar Cleaning Services, Laundry Services, Office & Hk:text-white font-inter">
                 {children}
               </div>
               <Footer />
