@@ -17,9 +17,7 @@ import axios from "axios";
 import { toast } from "sonner";
 
 export default function PaystackCallback() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  // Use toast directly from sonner
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
