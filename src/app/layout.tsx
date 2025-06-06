@@ -61,8 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="max-w-full overflow-x-hidden w-full">
       <head>
-        Google tag (gtag.js)
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-T37ZZQB2BN"></script>
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-T37ZZQB2BN"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
