@@ -123,7 +123,7 @@ const Footer = (props: Props) => {
                 <h1>EXPLORE</h1>
                 <div className="space-y-4 pt-6">
                   <div className="flex gap-2 items-center text-lg">
-                    <Link href="/career">Career</Link>
+                    <Link href="/employment">Career</Link>
                   </div>
                   {/* <div className="flex gap-2 items-center text-lg">
                     <Link href="/marketplace">Marketplace</Link>

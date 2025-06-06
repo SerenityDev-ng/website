@@ -261,10 +261,10 @@ export default function PrivacyPolicy() {
             <p className="mt-2 dark:text-gray-200">
               To exercise any of these rights, please contact us at{" "}
               <a
-                href="mailto:privacy@serenity.ng"
+                href="mailto:info@serenity.ng"
                 className="text-primary hover:underline"
               >
-                privacy@serenity.ng
+                info@serenity.ng
               </a>
               .
             </p>
