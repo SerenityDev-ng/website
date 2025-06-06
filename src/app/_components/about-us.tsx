@@ -2,6 +2,7 @@ import { team } from "@/assets/images";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type Props = {};
@@ -33,7 +34,7 @@ const AboutUs = (props: Props) => {
           </p>
 
           <Button className=" button-grad text-lg font-medium mt-[50px] gap-2">
-            Become A Professional
+            <Link href={"/employment"}>Become A Professional</Link>
             <ArrowRight />
           </Button>
         </aside>

@@ -8,6 +8,7 @@ import {
 } from "@/assets/images";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type Props = {};
@@ -135,10 +136,12 @@ const AboutPage = (props: Props) => {
           <Button>Become a professional</Button>
         </div>
       </div> */}
-      
+
       <div className="mt-20 w-fit mx-auto">
-          <Button>Become a professional</Button>
-        </div>
+        <Button>
+          <Link href={"/employment"}>Become a professional</Link>
+        </Button>
+      </div>
     </div>
   );
 };

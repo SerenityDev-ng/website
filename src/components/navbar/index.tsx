@@ -194,6 +194,12 @@ const DesktopNavbar = () => {
                             Our cleaning pros ensure every corner of your home
                             is sparkling clean.
                           </p>
+                          <Link
+                            href="/services/cleaning"
+                            className="text-primary font-semibold m2"
+                          >
+                            Learn More
+                          </Link>
                         </div>
                         <div
                           className="hidden xl:block cursor-pointer"
@@ -211,6 +217,12 @@ const DesktopNavbar = () => {
                             efficient laundry and ironing services tailored to
                             your schedule.
                           </p>
+                          <Link
+                            href="/services/laundry"
+                            className="text-primary font-semibold m2"
+                          >
+                            Learn More
+                          </Link>
                         </div>
                         <div
                           onClick={() => router.push("/services/repair")}
@@ -228,6 +240,12 @@ const DesktopNavbar = () => {
                             certified technicians are on call to fix your home
                             maintenance problems.
                           </p>
+                          <Link
+                            href="/services/repair"
+                            className="text-primary font-semibold m2"
+                          >
+                            Learn More
+                          </Link>
                         </div>
                       </div>
                       <div className=" h-[600px] w-20 bg-secondary opacity-30  absolute !z-[0]"></div>
