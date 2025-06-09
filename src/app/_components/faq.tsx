@@ -8,7 +8,7 @@ export default function FAQ() {
         <AccordionItem value="item-1">
           <AccordionTrigger>What cleaning services does Serenity offer in Abuja?</AccordionTrigger>
           <AccordionContent>
-            Serenity provides full-service cleaning services in Abuja, including home cleaning, office cleaning, deep cleaning, carpet cleaning, pool cleaning, laundry, and minor handyman services. We're your trusted local partner for clean, functional, and serene spaces.
+            Serenity provides full-service cleaning services in Abuja, including home cleaning, office cleaning, deep cleaning, carpet cleaning, pool cleaning, laundry, and minor handyman services. We&apos;re your trusted local partner for clean, functional, and serene spaces.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
@@ -18,13 +18,13 @@ export default function FAQ() {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">
-          <AccordionTrigger>How do I book Serenity's cleaning services?</AccordionTrigger>
+          <AccordionTrigger>How do I book Serenity&apos;s cleaning services?</AccordionTrigger>
           <AccordionContent>
             You can easily book your cleaning in Abuja by visiting <a href="https://www.serenity.ng" target="_blank" rel="noopener noreferrer" className="text-primary underline">www.serenity.ng</a>, choosing your service, and selecting a time that works for you. Alternatively, contact us via WhatsApp at <a href="https://wa.me/2348135518126" className="text-primary underline">0813 551 8126</a> or email <a href="mailto:mail@serenity.ng" className="text-primary underline">mail@serenity.ng</a> to schedule your service.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-4">
-          <AccordionTrigger>What's included in Serenity's home cleaning services in Abuja?</AccordionTrigger>
+          <AccordionTrigger>What&apos;s included in Serenity&apos;s home cleaning services in Abuja?</AccordionTrigger>
           <AccordionContent>
             Our residential cleaning in Abuja includes dusting, vacuuming, mopping, bathroom sanitization, kitchen cleaning, trash disposal, and more. You can also add extras like laundry services, carpet shampooing, or deep cleaning for a full refresh.
           </AccordionContent>
@@ -38,7 +38,7 @@ export default function FAQ() {
         <AccordionItem value="item-6">
           <AccordionTrigger>What office cleaning services do you provide in Abuja?</AccordionTrigger>
           <AccordionContent>
-            We provide reliable office cleaning services in Abuja, including floor care, dusting, trash removal, restroom cleaning, and general sanitization. Whether you run a small office or a corporate space, we'll keep it clean and professional.
+            We provide reliable office cleaning services in Abuja, including floor care, dusting, trash removal, restroom cleaning, and general sanitization. Whether you run a small office or a corporate space, we&apos;ll keep it clean and professional.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-7">
@@ -56,7 +56,7 @@ export default function FAQ() {
         <AccordionItem value="item-9">
           <AccordionTrigger>Do you offer maid services near me in Abuja?</AccordionTrigger>
           <AccordionContent>
-            Yes! If you're searching for "maid services near me" or "house cleaning services near me" in Abuja, Serenity is your go-to provider. Our trained, background-checked cleaners are available in multiple districts within Abuja city.
+            Yes! If you&apos;re searching for &quot;maid services near me&quot; or &quot;house cleaning services near me&quot; in Abuja, Serenity is your go-to provider. Our trained, background-checked cleaners are available in multiple districts within Abuja city.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-10">
