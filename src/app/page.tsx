@@ -3,6 +3,7 @@ import HeroSection from "./_components/hero-section";
 import Numbers from "./_components/numbers";
 import Services from "./_components/services";
 import AboutUs from "./_components/about-us";
+import FAQ from "./_components/faq";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       <div className=" my-[158px] ">
         <AboutUs />
       </div>
+      <FAQ />
     </main>
   );
 }
