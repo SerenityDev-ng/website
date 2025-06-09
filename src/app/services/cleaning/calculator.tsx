@@ -459,7 +459,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                   : "bg-white dark:bg-[#4E4848] text-[#4E4848]  dark:text-white "
               )}
             >
-              Detailed Cleaning
+              Surface Cleaning
             </Button>
 
             <Button
