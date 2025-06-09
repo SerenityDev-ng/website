@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Head from "next/head";
 
 type Props = {};
 
@@ -55,6 +56,20 @@ const AboutPage = (props: Props) => {
 
   return (
     <div className="py-20 ">
+      <Head>
+        <title>About Serenity | Trusted Cleaning, Laundry & Home Services in Nigeria</title>
+        <meta name="description" content="Learn about Serenity, Nigeria's trusted provider of cleaning, laundry, and home repair services. Discover our mission, values, and commitment to quality home care." />
+        <meta name="keywords" content="about Serenity, about cleaning company, trusted cleaning services, about home cleaning, about laundry services, about repair services, cleaning company Nigeria, professional cleaners, Serenity team, Serenity mission, Serenity values, why choose Serenity, best cleaning company Nigeria" />
+        <meta property="og:title" content="About Serenity | Trusted Cleaning, Laundry & Home Services in Nigeria" />
+        <meta property="og:description" content="Learn about Serenity, Nigeria's trusted provider of cleaning, laundry, and home repair services. Discover our mission, values, and commitment to quality home care." />
+        <meta property="og:url" content="https://www.serenity.ng/about" />
+        <meta property="og:site_name" content="Serenity" />
+        <meta property="og:image" content="https://www.serenity.ng/og-image.jpg" />
+        <meta property="og:locale" content="en_NG" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://www.serenity.ng/about" />
+      </Head>
       <figure>
         <Image
           src={about_banner}
