@@ -1,29 +1,35 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home Repair Services Nigeria | Plumbing, Electrical, Handyman | Serenity",
-  description: "Book professional home repair, plumbing, electrical, and handyman services in Nigeria with Serenity. Reliable repairs for your home and office.",
+  title: "Home Repair Services in Nigeria | Serenity",
+  description: "Reliable home repair services in Nigeria. Serenity offers electricians, plumbers, carpenters, painters, and masons for all your home maintenance needs.",
   keywords: [
-    "repair services", "home repair", "plumbing services", "electrical services", "handyman services", "professional repair", "repair company Nigeria", "fix home", "fix office", "Serenity repair", "book plumber", "book electrician", "book carpenter", "book painter", "book mason"
+    "home repair Nigeria", "electrician Nigeria", "plumber Nigeria", "carpenter Nigeria", "painter Nigeria", "masonry services"
   ],
   openGraph: {
-    title: "Home Repair Services Nigeria | Plumbing, Electrical, Handyman | Serenity",
-    description: "Book professional home repair, plumbing, electrical, and handyman services in Nigeria with Serenity. Reliable repairs for your home and office.",
+    title: "Home Repair Services in Nigeria | Serenity",
+    description: "Reliable home repair services in Nigeria. Serenity offers electricians, plumbers, carpenters, painters, and masons for all your home maintenance needs.",
     url: "https://www.serenity.ng/services/repair",
     siteName: "Serenity",
     images: [
       {
-        url: "https://www.serenity.ng/og-image.jpg",
+        url: "https://www.serenity.ng/og-image-repair.jpg", // Assuming a specific OG image for repair
         width: 1200,
         height: 630,
-        alt: "Home Repair Services Nigeria",
+        alt: "Home Repair Services in Nigeria",
       },
     ],
     locale: "en_NG",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Home Repair Services in Nigeria | Serenity",
+    description: "Reliable home repair services in Nigeria. Serenity offers electricians, plumbers, carpenters, painters, and masons for all your home maintenance needs.",
+    images: ["https://www.serenity.ng/twitter-image-repair.jpg"], // Assuming a specific Twitter image for repair
+  },
   robots: "index, follow",
   alternates: {
     canonical: "https://www.serenity.ng/services/repair",
   },
-}; 
+};

@@ -1,29 +1,35 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cleaning Services Nigeria | Deep Cleaning, Janitorial, Housekeeping | Serenity",
-  description: "Book professional cleaning, deep cleaning, janitorial, and housekeeping services in Nigeria with Serenity. Trusted cleaners for homes and offices.",
+  title: "Professional Cleaning Services in Nigeria | Serenity",
+  description: "Book top-rated home and office cleaning services in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
   keywords: [
-    "cleaning services", "deep cleaning", "janitorial services", "housekeeping", "professional cleaners", "cleaning company Nigeria", "home cleaning", "office cleaning", "maid service", "post construction cleaning", "pool cleaning", "fumigation", "Serenity cleaning"
+    "cleaning services Nigeria", "home cleaning", "office cleaning", "deep cleaning", "housekeeping", "janitorial services", "fumigation Nigeria"
   ],
   openGraph: {
-    title: "Cleaning Services Nigeria | Deep Cleaning, Janitorial, Housekeeping | Serenity",
-    description: "Book professional cleaning, deep cleaning, janitorial, and housekeeping services in Nigeria with Serenity. Trusted cleaners for homes and offices.",
+    title: "Professional Cleaning Services in Nigeria | Serenity",
+    description: "Book top-rated home and office cleaning services in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
     url: "https://www.serenity.ng/services/cleaning",
     siteName: "Serenity",
     images: [
       {
-        url: "https://www.serenity.ng/og-image.jpg",
+        url: "https://www.serenity.ng/og-image-cleaning.jpg", // Assuming a specific OG image for cleaning
         width: 1200,
         height: 630,
-        alt: "Cleaning Services Nigeria",
+        alt: "Professional Cleaning Services in Nigeria",
       },
     ],
     locale: "en_NG",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Professional Cleaning Services in Nigeria | Serenity",
+    description: "Book top-rated home and office cleaning services in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
+    images: ["https://www.serenity.ng/twitter-image-cleaning.jpg"], // Assuming a specific Twitter image for cleaning
+  },
   robots: "index, follow",
   alternates: {
     canonical: "https://www.serenity.ng/services/cleaning",
   },
-}; 
+};
