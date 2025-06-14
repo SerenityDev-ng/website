@@ -1,6 +1,6 @@
 import { Metadata, ResolvingMetadata } from "next";
 import createImageUrlBuilder from "@sanity/image-url"; // Sanity image builder
-import { dataset, projectId } from "../sanity/env"; // Sanity project config
+import { dataset, projectId } from "../../sanity/env"; // Sanity project config
 import { Blog } from "../../types";
 
 // Create a local Sanity image builder instance

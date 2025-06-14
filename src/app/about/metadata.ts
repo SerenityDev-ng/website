@@ -22,8 +22,14 @@ export const metadata: Metadata = {
     locale: "en_NG",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Serenity | Trusted Cleaning, Laundry & Home Services in Nigeria",
+    description: "Learn about Serenity, Nigeria's trusted provider of cleaning, laundry, and home repair services. Discover our mission, values, and commitment to quality home care.",
+    images: ["https://www.serenity.ng/og-image.jpg"], // Using fallback image
+  },
   robots: "index, follow",
   alternates: {
     canonical: "https://www.serenity.ng/about",
   },
-}; 
+};

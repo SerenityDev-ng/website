@@ -22,8 +22,14 @@ export const metadata: Metadata = {
     locale: "en_NG",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gift Cleaning Services | Gifting Laundry & Home Care in Nigeria | Serenity",
+    description: "Gift your loved ones professional cleaning, laundry, and home care services in Nigeria with Serenity. The perfect thoughtful gift for any occasion.",
+    images: ["https://www.serenity.ng/og-image.jpg"], // Using fallback image
+  },
   robots: "index, follow",
   alternates: {
     canonical: "https://www.serenity.ng/gifting",
   },
-}; 
+};
