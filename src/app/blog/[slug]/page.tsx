@@ -31,7 +31,7 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    image: urlFor(post.mainImage.asset._ref).url(),
+    image: urlFor(post.mainImage.asset._ref),
     datePublished: formatISO(new Date(post.publishedAt)),
     dateModified: formatISO(new Date(post._updatedAt || post.publishedAt)),
     author: {
