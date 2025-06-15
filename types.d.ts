@@ -81,4 +81,5 @@ export type Blog = {
   };
   author: Author;
   publishedAt: string;
+  _updatedAt?: string;
 };
