@@ -39,7 +39,7 @@ const HeroSection = (props: Props) => {
       <aside className="relative -mt-8 md:mt-10 lg:mt-0">
         <Image
           src={side}
-          alt="Side"
+          alt="Illustration of household items and cleaning products"
           height={0}
           width={0}
           sizes="100vw"
@@ -47,7 +47,7 @@ const HeroSection = (props: Props) => {
         />
         <Image
           src={curvy}
-          alt="Side"
+          alt="Decorative background curve"
           height={0}
           width={0}
           sizes="100vw"

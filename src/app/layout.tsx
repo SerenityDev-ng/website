@@ -9,6 +9,35 @@ import { serenity_logo } from "@/assets/images";
 import ReactQueryWrapper from "@/hooks/react-query-wrapper";
 import Script from "next/script";
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Serenity",
+  url: "https://www.serenity.ng",
+  logo: "https://www.serenity.ng/logo.svg",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+2348135518126",
+    contactType: "Customer Service",
+    email: "mail@serenity.ng",
+  },
+  sameAs: [
+    "https://www.instagram.com/serenity.ng_official",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Serenity",
+  url: "https://www.serenity.ng",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.serenity.ng/search?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
@@ -54,6 +83,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="max-w-full overflow-x-hidden w-full">
+      <head>
+        <Script
+          id="json-ld-organization"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <Script
+          id="json-ld-website"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className="antialiased">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-T37ZZQB2BN"

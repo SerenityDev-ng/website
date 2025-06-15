@@ -83,7 +83,7 @@ const CleaningPage = (props: Props) => {
           <aside className="relative -mt-5 md:mt-10 lg:mt-0 ">
             <Image
               src={vaccum_cleaning}
-              alt="Side"
+              alt="Person vacuum cleaning a carpet"
               height={0}
               width={0}
               sizes="100vw"
@@ -91,7 +91,7 @@ const CleaningPage = (props: Props) => {
             />
             <Image
               src={laundry_side}
-              alt="Side"
+              alt="Decorative background design element"
               height={0}
               width={0}
               sizes="100vw"
@@ -99,9 +99,9 @@ const CleaningPage = (props: Props) => {
             />
           </aside>
         </main>
-        <h1 className="relative text-2xl font-league-spartan font-medium lg:text-[55px] dark:text-primary text-black text-center py-8 pb-[131px]">
+        <h2 className="relative text-2xl font-league-spartan font-medium lg:text-[55px] dark:text-primary text-black text-center py-8 pb-[131px]">
           Cleaning Service Options
-        </h1>
+        </h2>
 
         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 justify-center max-w-[885px] mx-auto">
           {cleaningServices.map((service, index) => (

@@ -31,9 +31,9 @@ const Services = (props: Props) => {
   ];
   return (
     <main>
-      <h1 className=" font-league-spartan font-medium text-[36px] text-center lg:text-left">
+      <h2 className=" font-league-spartan font-medium text-[36px] text-center lg:text-left">
         Our Services
-      </h1>
+      </h2>
 
       <div className="mt-[70px] flex flex-wrap justify-center md:justify-start gap-4 ">
         {theServices.map((service) => (

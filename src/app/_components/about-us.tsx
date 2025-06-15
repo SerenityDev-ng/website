@@ -10,9 +10,9 @@ type Props = {};
 const AboutUs = (props: Props) => {
   return (
     <main>
-      <h1 className=" font-league-spartan font-medium text-[36px] mb-[50px] text-center lg:text-left">
+      <h2 className=" font-league-spartan font-medium text-[36px] mb-[50px] text-center lg:text-left">
         About Us
-      </h1>
+      </h2>
       <div className="flex flex-col items-center gap-5 lg:justify-between lg:flex-row lg:items-center">
         <Image
           src={team}
@@ -23,13 +23,13 @@ const AboutUs = (props: Props) => {
         />
 
         <aside className="max-w-[525px]">
-          <h1 className=" font-league-spartan font-medium text-[36px] lg:text-[56px]">
+          <h3 className=" font-league-spartan font-medium text-[36px] lg:text-[56px]">
             Your Home&apos;s Best Friend
-          </h1>
+          </h3>
           <p className=" font-inter lg:text-xl text-[#4E4848] mt-[26px] dark:text-muted-foreground">
             At Serenity, we understand that life gets busy, and home maintenance
-            can feel overwhelming. That&apos;s why we offer everything from
-            cleaning to laundry and repair services, making it easy to keep your
+            can feel overwhelming. That&apos;s why we offer a comprehensive range of
+            cleaning, laundry, and repair services across Nigeria, making it easy to keep your
             space clean, functional, and comfortable.
           </p>
 

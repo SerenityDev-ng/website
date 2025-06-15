@@ -7,7 +7,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import { generateBlogMetadata } from "@/lib/singleblogmetadata";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { formatDate } from "date-fns";
+import { formatDate, formatISO } from "date-fns";
+import Script from "next/script";
 
 interface SingleBlogPageProps {
   params: { slug: string };
@@ -24,8 +25,40 @@ export async function generateMetadata(
 const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
   const post = await getPostBySlug(params?.slug);
 
+  // Assuming critical data exists if the page renders
+  // Fallback for _updatedAt is publishedAt
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    image: urlFor(post.mainImage.asset._ref).url(),
+    datePublished: formatISO(new Date(post.publishedAt)),
+    dateModified: formatISO(new Date(post._updatedAt || post.publishedAt)),
+    author: {
+      "@type": "Person",
+      name: post.author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Serenity",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.serenity.ng/logo.svg",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.serenity.ng/blog/${post.slug.current}`,
+    },
+  };
+
   return (
     <article className="my-10 container mx-auto">
+      <Script
+        id="json-ld-article"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Image
         alt={`Featured article ${post?.slug}`}
         src={urlFor(post?.mainImage?.asset?._ref as string)}
