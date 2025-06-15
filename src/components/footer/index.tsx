@@ -106,7 +106,7 @@ const Footer = (props: Props) => {
                 <h1>COMPANY</h1>
                 <div className="space-y-4 pt-6">
                   <div className="flex gap-2 items-center text-lg">
-                    About Us
+                    <Link href="/about">About Us</Link>
                   </div>
                   <div className="flex gap-2 items-center text-lg">
                     Services
@@ -129,7 +129,7 @@ const Footer = (props: Props) => {
                     <Link href="/marketplace">Marketplace</Link>
                   </div> */}
                   <div className="flex gap-2 items-center text-lg">
-                    Gift A Service
+                    <Link href="/gifting">Gift A Service</Link>
                   </div>
                 </div>
               </div>

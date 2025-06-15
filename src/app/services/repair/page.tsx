@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import Script from "next/script";
 import { BsExclamation } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { FiArrowRight } from "react-icons/fi";
@@ -68,8 +69,35 @@ const RepairPage = (props: Props) => {
     },
   ];
 
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Home Repair Services",
+    description:
+      "Reliable home repair services from Serenity in Nigeria. We connect you with certified technicians for electrical, plumbing, carpentry, painting, and masonry repairs.",
+    provider: {
+      "@type": "Organization",
+      name: "Serenity",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.serenity.ng/logo.svg",
+      },
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Nigeria",
+    },
+    serviceType: "HomeRepair",
+    url: "https://www.serenity.ng/services/repair",
+  };
+
   return (
     <div className="py-10 lg:pt-0 ">
+      <Script
+        id="json-ld-service-repair"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <main className="flex flex-col lg:flex-row items-center lg:justify-between">
         <aside className="relative">
           <article className="md:max-w-[500px] lg:max-w-[513px] text-center lg:text-left">

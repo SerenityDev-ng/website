@@ -40,15 +40,15 @@ const websiteSchema = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
+    default: "Serenity | Cleaning, Laundry & Home Repair in Nigeria",
     template: "%s | Serenity",
   },
   description:
-    "Serenity offers professional cleaning services in Nigeria: carpet cleaning, office cleaning, house cleaning, laundry, gutter cleaning, air duct cleaning, and more. Book trusted cleaners near you for residential, commercial, and specialty cleaning needs.",
+    "Serenity offers professional cleaning, laundry, and home repair services in Nigeria. Book trusted experts for your residential and commercial needs.",
   openGraph: {
-    title: "Serenity | Cleaning Services, Laundry Services, Office & Home Cleaning in Nigeria",
+    title: "Serenity | Cleaning, Laundry & Home Repair in Nigeria",
     description:
-      "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
+      "Serenity offers professional cleaning, laundry, and home repair services in Nigeria. Book trusted experts for your residential and commercial needs.",
     url: "https://www.serenity.ng/",
     siteName: "Serenity",
     images: [
@@ -64,9 +64,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Serenity |Home Cleaning in Nigeria",
+    title: "Serenity | Cleaning, Laundry & Home Repair in Nigeria",
     description:
-      "Book professional cleaning, carpet cleaning, office cleaning, and laundry services in Nigeria with Serenity. Trusted cleaners for homes and businesses.",
+      "Serenity offers professional cleaning, laundry, and home repair services in Nigeria. Book trusted experts for your residential and commercial needs.",
     images: [serenity_logo],
   },
   robots: "index, follow",

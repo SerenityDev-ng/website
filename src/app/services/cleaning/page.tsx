@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import CleaningCalculator from "./calculator";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 
 type Props = {};
 
@@ -59,8 +60,35 @@ const CleaningPage = (props: Props) => {
     },
   ];
 
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Home Cleaning Services",
+    description:
+      "Comprehensive home cleaning services by Serenity to keep your space spotless and comfortable. We offer a range of options from general housekeeping to deep cleaning, post-construction, janitorial, pool cleaning, and fumigation services across Nigeria.",
+    provider: {
+      "@type": "Organization",
+      name: "Serenity",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.serenity.ng/logo.svg",
+      },
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Nigeria",
+    },
+    serviceType: "HomeCleaning",
+    url: "https://www.serenity.ng/services/cleaning",
+  };
+
   return (
     <main className="relative">
+      <Script
+        id="json-ld-service-cleaning"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <div className="pt-[123px] lg:pt-0">
         <main className="flex flex-col lg:flex-row items-center lg:justify-between">
           <aside className="relative z-10">

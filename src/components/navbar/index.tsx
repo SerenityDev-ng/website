@@ -285,12 +285,13 @@ const DesktopNavbar = () => {
               <UserRoundIcon className="h-10 w-10 bg-primary p-2 rounded-full text-white" />
             </PopoverTrigger>
             <PopoverContent className="space-y-4">
-              <Link href="/profile">
+              {/* TODO: Enable profile link when /profile page is created */}
+              {/* <Link href="/profile">
                 <Button className="text-lg font-league-spartan capitalize flex items-center text-primary  hover:text-black duration-300 w-full bg-transparent hover:bg-secondary">
                   <UserRoundIcon className="h-6 w-6" />
                   Profile
                 </Button>
-              </Link>
+              </Link> */}
 
               <Button
                 variant={"destructive"}
@@ -403,12 +404,13 @@ const MobileNavbar = () => {
               <UserRoundIcon className="h-10 w-10 bg-primary p-2 rounded-full text-white" />
             </PopoverTrigger>
             <PopoverContent className="space-y-4">
-              <Link href="/profile">
+              {/* TODO: Enable profile link when /profile page is created */}
+              {/* <Link href="/profile">
                 <Button className="text-lg font-league-spartan capitalize flex items-center text-primary  hover:text-black duration-300 w-full bg-transparent hover:bg-secondary">
                   <UserRoundIcon className="h-6 w-6" />
                   Profile
                 </Button>
-              </Link>
+              </Link> */}
 
               <Button
                 variant={"destructive"}

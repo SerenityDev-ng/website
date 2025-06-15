@@ -54,6 +54,14 @@ export const postType = defineType({
       ],
     }),
     defineField({
+      name: "excerpt",
+      title: "Excerpt",
+      type: "text",
+      description: "A short summary of the post, used for previews and meta descriptions.",
+      rows: 3,
+      validation: (Rule: any) => Rule.max(200).warning("Excerpts should ideally be under 200 characters.")
+    }),
+    defineField({
       name: "categories",
       type: "array",
       of: [defineArrayMember({ type: "reference", to: { type: "category" } })],

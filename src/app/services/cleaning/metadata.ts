@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Nigeria | Serenity",
-  description: "Book top-rated home and office cleaning services in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
+  description: "Book top-rated home & office cleaning in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
   keywords: [
     "cleaning services Nigeria", "home cleaning", "office cleaning", "deep cleaning", "housekeeping", "janitorial services", "fumigation Nigeria"
   ],
   openGraph: {
     title: "Professional Cleaning Services in Nigeria | Serenity",
-    description: "Book top-rated home and office cleaning services in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
+    description: "Book top-rated home & office cleaning in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
     url: "https://www.serenity.ng/services/cleaning",
     siteName: "Serenity",
     images: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Professional Cleaning Services in Nigeria | Serenity",
-    description: "Book top-rated home and office cleaning services in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
+    description: "Book top-rated home & office cleaning in Nigeria with Serenity. We offer housekeeping, deep cleaning, post-construction, janitorial, and fumigation services.",
     images: ["https://www.serenity.ng/twitter-image-cleaning.jpg"], // Assuming a specific Twitter image for cleaning
   },
   robots: "index, follow",
