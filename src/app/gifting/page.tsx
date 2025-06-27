@@ -1,50 +1,58 @@
-import { gifting_side } from "@/assets/images";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import SelectService from "./_components/select-sevice";
+import { Metadata } from "next";
+import GiftingPageClient from "./_components/gifting-page-client";
 
+export const metadata: Metadata = {
+  title: "Gift Serenity Services | Cleaning & Laundry in Nigeria",
+  description:
+    "Gift your loved ones professional cleaning, laundry, and home care services in Nigeria with Serenity. The perfect thoughtful gift for any occasion.",
+  keywords: [
+    "gift cleaning services",
+    "gift laundry services",
+    "gift home care",
+    "gift Serenity",
+    "gifting cleaning Nigeria",
+    "gifting laundry Nigeria",
+    "gifting home services",
+    "gift a cleaner",
+    "gift a laundry",
+    "gift a repair",
+    "gift for home",
+    "gift for family Nigeria",
+    "gift for friends Nigeria",
+  ],
+  openGraph: {
+    title: "Gift Serenity Services | Cleaning & Laundry in Nigeria",
+    description:
+      "Gift your loved ones professional cleaning, laundry, and home care services in Nigeria with Serenity. The perfect thoughtful gift for any occasion.",
+    url: "https://www.serenity.ng/gifting",
+    siteName: "Serenity",
+    images: [
+      {
+        url: "https://www.serenity.ng/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Gift Cleaning Services Nigeria",
+      },
+    ],
+    locale: "en_NG",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gift Serenity Services | Cleaning & Laundry in Nigeria",
+    description:
+      "Gift your loved ones professional cleaning, laundry, and home care services in Nigeria with Serenity. The perfect thoughtful gift for any occasion.",
+    images: ["https://www.serenity.ng/og-image.jpg"], // Using fallback image
+  },
+  robots: "index, follow",
+  alternates: {
+    canonical: "https://www.serenity.ng/gifting",
+  },
+};
 type Props = {};
 
 const page = (props: Props) => {
-  return (
-    <main className="pb-[115px]">
-      <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-5 max-w-full overflow-x-hidden">
-        <aside className="mt-6 lg:mt-0">
-          <article className="md:max-w-[500px] lg:max-w-[820px] text-center lg:text-left">
-            <h1 className=" font-inter font-semibold text-4xl md:text-5xl xl:text-[72px]">
-              Spread love with the perfect gift.
-            </h1>
-            <p className="text-lg lg:text-xl xl:text-2xl font-league-spartan mt-7 lg:mt-9 dark:text-muted-foreground max-w-[80%] mx-auto lg:mx-0">
-              Looking for the ultimate thoughtful gift? Help your loved ones
-              relax with a little help from Serenity&apos;s all-in-one cleaning,
-              laundry, and repair services.
-            </p>
-          </article>
-
-          <div className="mt-[35px] w-fit mx-auto lg:mx-0">
-            <Link href={"/services/gifting#select-service"}>
-              <Button className=" button-grad">Gift A Service</Button>
-            </Link>
-          </div>
-        </aside>
-
-        <aside className="relative -mt-8 md:mt-10 lg:mt-0">
-          <Image
-            src={gifting_side}
-            alt="Side"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="w-full h-[618px] max-w-[726px] object-contain relative z-10"
-          />
-        </aside>
-      </div>
-
-      <SelectService />
-    </main>
-  );
+  return <GiftingPageClient />;
 };
 
 export default page;
