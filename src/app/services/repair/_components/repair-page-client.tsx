@@ -64,17 +64,21 @@ const RepairPageClient = (props: Props) => {
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [submitMessage, setSubmitMessage] = useState('');
-  const [uploadProgress, setUploadProgress] = useState<{[key: string]: number}>({});
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [uploadProgress, setUploadProgress] = useState<{
+    [key: string]: number;
+  }>({});
   const [isUploadingImages, setIsUploadingImages] = useState(false);
 
   const uploadImagesToCloudinary = async (files: File[]): Promise<string[]> => {
     if (files.length === 0) return [];
-    
+
     setIsUploadingImages(true);
     const uploadedUrls: string[] = [];
-    
+
     try {
       for (const file of files) {
         // Validate file type
@@ -116,7 +120,7 @@ const RepairPageClient = (props: Props) => {
       if (uploadedUrls.length > 0) {
         toast.success(`${uploadedUrls.length} image(s) uploaded successfully`);
       }
-      
+
       return uploadedUrls;
     } catch (error) {
       console.error("Upload error:", error);
@@ -131,14 +135,14 @@ const RepairPageClient = (props: Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus('idle');
-    setSubmitMessage('');
+    setSubmitStatus("idle");
+    setSubmitMessage("");
 
     try {
       // First, upload images to Cloudinary if any
       let imageUrls: string[] = [];
       if (formData.files.length > 0) {
-        toast.info('Uploading images...');
+        toast.info("Uploading images...");
         imageUrls = await uploadImagesToCloudinary(formData.files);
       }
 
@@ -155,13 +159,13 @@ const RepairPageClient = (props: Props) => {
         postalCode: formData.postalCode,
         description: formData.description,
         selectedService: selectedService,
-        imageUrls: imageUrls
+        imageUrls: imageUrls,
       };
 
-      const response = await fetch('/api/repair-quote', {
-        method: 'POST',
+      const response = await fetch("/api/repair-quote", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(submitData),
       });
@@ -170,35 +174,41 @@ const RepairPageClient = (props: Props) => {
       try {
         result = await response.json();
       } catch (parseError) {
-        console.error('Failed to parse response as JSON:', parseError);
-        throw new Error('Invalid response from server');
+        console.error("Failed to parse response as JSON:", parseError);
+        throw new Error("Invalid response from server");
       }
 
       if (response.ok) {
-        setSubmitStatus('success');
-        setSubmitMessage('Your quote request has been submitted successfully! We\'ll contact you within 24 hours.');
+        setSubmitStatus("success");
+        setSubmitMessage(
+          "Your quote request has been submitted successfully! We'll contact you within 24 hours."
+        );
         // Reset form
         setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          streetAddress: '',
-          streetAddress2: '',
-          city: '',
-          state: '',
-          postalCode: '',
-          description: '',
-          files: []
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          streetAddress: "",
+          streetAddress2: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          description: "",
+          files: [],
         });
       } else {
-        setSubmitStatus('error');
-        setSubmitMessage(result.error || 'Failed to submit quote request. Please try again.');
+        setSubmitStatus("error");
+        setSubmitMessage(
+          result.error || "Failed to submit quote request. Please try again."
+        );
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setSubmitStatus('error');
-      setSubmitMessage('An error occurred while submitting your request. Please try again.');
+      console.error("Error submitting form:", error);
+      setSubmitStatus("error");
+      setSubmitMessage(
+        "An error occurred while submitting your request. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -462,7 +472,7 @@ const RepairPageClient = (props: Props) => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="(000) 000-0000"
+                  placeholder=""
                   className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
                   required
                 />
@@ -583,14 +593,19 @@ const RepairPageClient = (props: Props) => {
                   />
                 </div>
               </div>
-              
+
               {/* Upload Progress */}
               {isUploadingImages && Object.keys(uploadProgress).length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Uploading images...</p>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Uploading images...
+                  </p>
                   {Object.entries(uploadProgress).map(([fileId, progress]) => (
-                    <div key={fileId} className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div 
+                    <div
+                      key={fileId}
+                      className="bg-gray-200 dark:bg-gray-700 rounded-full h-2"
+                    >
+                      <div
                         className="bg-green-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${progress}%` }}
                       ></div>
@@ -598,7 +613,7 @@ const RepairPageClient = (props: Props) => {
                   ))}
                 </div>
               )}
-              
+
               {formData.files.length > 0 && !isUploadingImages && (
                 <div className="mt-3">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
@@ -606,7 +621,10 @@ const RepairPageClient = (props: Props) => {
                   </p>
                   <div className="space-y-1">
                     {formData.files.map((file, index) => (
-                      <p key={index} className="text-xs text-gray-500 flex items-center">
+                      <p
+                        key={index}
+                        className="text-xs text-gray-500 flex items-center"
+                      >
                         <span className="mr-2">🖼️</span>
                         {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                       </p>
@@ -674,31 +692,51 @@ const RepairPageClient = (props: Props) => {
             </div>
 
             {/* Status Messages */}
-            {submitStatus === 'success' && (
+            {submitStatus === "success" && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    <svg
+                      className="h-5 w-5 text-green-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-green-800">{submitMessage}</p>
+                    <p className="text-sm font-medium text-green-800">
+                      {submitMessage}
+                    </p>
                   </div>
                 </div>
               </div>
             )}
-            
-            {submitStatus === 'error' && (
+
+            {submitStatus === "error" && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    <svg
+                      className="h-5 w-5 text-red-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-red-800">{submitMessage}</p>
+                    <p className="text-sm font-medium text-red-800">
+                      {submitMessage}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -713,17 +751,49 @@ const RepairPageClient = (props: Props) => {
               >
                 {isUploadingImages ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Uploading Images...
                   </>
                 ) : isSubmitting ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Submitting...
                   </>
