@@ -345,7 +345,6 @@ const RepairPageClient = (props: Props) => {
                 selectedService?.title === service.title
                   ? "border-primary border-2"
                   : "",
-                i % 2 === 0 ? "hover:rotate-12" : "hover:-rotate-12",
                 "dark:!bg-secondary"
               )}
             >
