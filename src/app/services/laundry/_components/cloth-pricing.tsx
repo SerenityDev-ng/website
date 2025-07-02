@@ -9,114 +9,94 @@ import {
   menLaundryWashedIroned,
   womenWashedIroned,
 } from "@/lib/laundry";
+import { useLaundryService } from "@/hooks/store/laundry";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const ClothPrices = () => {
-  const [services, setServices] = useState(menLaundryWashedIroned);
-  const [womenServices, setWomenServices] = useState(womenWashedIroned);
-  const [childrenServices, setChildrenServices] =
-    useState(childrenWashedIroned);
-  const [extraService, setExtraServices] = useState(extraLaundryWashedOnly);
+  // Use the Zustand store instead of local state
+  const { 
+    menServices, 
+    womenServices, 
+    childrenServices, 
+    extraServices, 
+    total,
+    setMenServices, 
+    setWomenServices, 
+    setChildrenServices, 
+    setExtraServices,
+    updateMenService,
+    updateWomenService,
+    updateChildrenService,
+    updateExtraService
+  } = useLaundryService();
+  
+  // Initialize store with data on component mount
+  useEffect(() => {
+    setMenServices(menLaundryWashedIroned);
+    setWomenServices(womenWashedIroned);
+    setChildrenServices(childrenWashedIroned);
+    setExtraServices(extraLaundryWashedOnly);
+  }, [setMenServices, setWomenServices, setChildrenServices, setExtraServices]);
 
   const incrementQuantity = (id: number) => {
-    const updatedServices = services.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-    setServices(updatedServices);
+    const service = menServices.find(s => s.id === id);
+    if (service) {
+      updateMenService(id, service.quantity + 1);
+    }
   };
 
   const decrementQuantity = (id: number) => {
-    const updatedServices = services.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-    setServices(updatedServices);
+    const service = menServices.find(s => s.id === id);
+    if (service && service.quantity > 0) {
+      updateMenService(id, service.quantity - 1);
+    }
   };
 
   const incrementWomenQuantity = (id: number) => {
-    const updatedServices = womenServices.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-    setWomenServices(updatedServices);
+    const service = womenServices.find(s => s.id === id);
+    if (service) {
+      updateWomenService(id, service.quantity + 1);
+    }
   };
+  
   const decrementWomenQuantity = (id: number) => {
-    const updatedServices = womenServices.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-    setWomenServices(updatedServices);
+    const service = womenServices.find(s => s.id === id);
+    if (service && service.quantity > 0) {
+      updateWomenService(id, service.quantity - 1);
+    }
   };
 
   const incrementChildrenQuantity = (id: number) => {
-    const updatedServices = childrenServices.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-    setChildrenServices(updatedServices);
+    const service = childrenServices.find(s => s.id === id);
+    if (service) {
+      updateChildrenService(id, service.quantity + 1);
+    }
   };
+  
   const decrementChildrenQuantity = (id: number) => {
-    const updatedServices = childrenServices.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-    setChildrenServices(updatedServices);
+    const service = childrenServices.find(s => s.id === id);
+    if (service && service.quantity > 0) {
+      updateChildrenService(id, service.quantity - 1);
+    }
   };
 
   const incrementExtraQuantity = (id: number) => {
-    const updatedServices = extraService.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-    setExtraServices(updatedServices);
+    const service = extraServices.find(s => s.id === id);
+    if (service) {
+      updateExtraService(id, service.quantity + 1);
+    }
   };
+  
   const decrementExtraQuantity = (id: number) => {
-    const updatedServices = extraService.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-    setExtraServices(updatedServices);
+    const service = extraServices.find(s => s.id === id);
+    if (service && service.quantity > 0) {
+      updateExtraService(id, service.quantity - 1);
+    }
   };
 
-  const totalService = (services || []).reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-  const totalWomenService = (womenServices || []).reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-  const totalChildrenService = (childrenServices || []).reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-
-  const totalExtraService = (extraService || []).reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-
-  const total =
-    totalService + totalWomenService + totalChildrenService + totalExtraService;
+  // Total is now calculated by the store
 
   return (
     <div>
@@ -139,7 +119,7 @@ const ClothPrices = () => {
             </div>
 
             <div className="space-y-[35px]">
-              {services?.map((laundry) => (
+              {menServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
@@ -180,7 +160,7 @@ const ClothPrices = () => {
               <h1 className=" font-league-spartan font-medium text-[36px]">
                 Extra Items
               </h1>
-              {extraService?.map((laundry) => (
+              {extraServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
@@ -220,18 +200,6 @@ const ClothPrices = () => {
             <div className="mt-[120px] flex items-center justify-between font-medium font-league-spartan text-[36px] px-4">
               <h1>Total Order</h1>
               <p>&#8358;{total}</p>
-            </div>
-
-            <div className=" pt-20 w-full flex justify-center">
-              <Link
-                href="https://calendly.com/serenityvimo/30min"
-                target="__blank"
-              >
-                <Button className=" button-grad text-white w-full max-w-[350px] gap-4 px-12">
-                  Schedule Pickup
-                  <FaArrowRight />
-                </Button>
-              </Link>
             </div>
           </div>
         </TabsContent>
@@ -285,7 +253,7 @@ const ClothPrices = () => {
               <h1 className=" font-league-spartan font-medium text-[36px]">
                 Extra Items
               </h1>
-              {extraService?.map((laundry) => (
+              {extraServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
@@ -390,7 +358,7 @@ const ClothPrices = () => {
               <h1 className=" font-league-spartan font-medium text-[36px]">
                 Extra Items
               </h1>
-              {extraService?.map((laundry) => (
+              {extraServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}

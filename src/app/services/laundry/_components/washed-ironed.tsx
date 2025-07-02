@@ -8,115 +8,88 @@ import {
   menLaundryWashedIroned,
   womenWashedIroned,
 } from "@/lib/laundry";
+import { useLaundryService } from "@/hooks/store/laundry";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const WashedIroned = () => {
-  const [services, setServices] = useState(menLaundryWashedIroned);
-  const [womenServices, setWomenServices] = useState(womenWashedIroned);
-  const [childrenServices, setChildrenServices] =
-    useState(childrenWashedIroned);
-  const [extraService, setExtraServices] = useState(extraLaundryServices);
+  // Use the Zustand store instead of local state
+  const { 
+    menServices, 
+    womenServices, 
+    childrenServices, 
+    extraServices, 
+    total,
+    setMenServices, 
+    setWomenServices, 
+    setChildrenServices, 
+    setExtraServices,
+    updateMenService,
+    updateWomenService,
+    updateChildrenService,
+    updateExtraService
+  } = useLaundryService();
+  
+  // Initialize store with data on component mount
+  useEffect(() => {
+    setMenServices(menLaundryWashedIroned);
+    setWomenServices(womenWashedIroned);
+    setChildrenServices(childrenWashedIroned);
+    setExtraServices(extraLaundryServices);
+  }, [setMenServices, setWomenServices, setChildrenServices, setExtraServices]);
 
   const incrementQuantity = (id: number, type: string) => {
     if (type === "men") {
-      const updatedServices = services.map((service) => {
-        if (service.id === id) {
-          return { ...service, quantity: service.quantity + 1 };
-        }
-        return service;
-      });
-
-      setServices(updatedServices);
+      const service = menServices.find(s => s.id === id);
+      if (service) {
+        updateMenService(id, service.quantity + 1);
+      }
     } else if (type === "women") {
-      const updatedServices = womenServices.map((service) => {
-        if (service.id === id) {
-          return { ...service, quantity: service.quantity + 1 };
-        }
-        return service;
-      });
-      setWomenServices(updatedServices);
+      const service = womenServices.find(s => s.id === id);
+      if (service) {
+        updateWomenService(id, service.quantity + 1);
+      }
     } else if (type === "children") {
-      const updatedServices = childrenServices.map((service) => {
-        if (service.id === id) {
-          return { ...service, quantity: service.quantity + 1 };
-        }
-        return service;
-      });
-      setChildrenServices(updatedServices);
+      const service = childrenServices.find(s => s.id === id);
+      if (service) {
+        updateChildrenService(id, service.quantity + 1);
+      }
     }
   };
 
   const decrementQuantity = (id: number, type: string) => {
     if (type === "men") {
-      const updatedServices = services.map((service) => {
-        if (service.id === id && service.quantity > 0) {
-          return { ...service, quantity: service.quantity - 1 };
-        }
-        return service;
-      });
-      setServices(updatedServices);
+      const service = menServices.find(s => s.id === id);
+      if (service && service.quantity > 0) {
+        updateMenService(id, service.quantity - 1);
+      }
     } else if (type === "women") {
-      const updatedServices = womenServices.map((service) => {
-        if (service.id === id && service.quantity > 0) {
-          return { ...service, quantity: service.quantity - 1 };
-        }
-        return service;
-      });
-      setWomenServices(updatedServices);
+      const service = womenServices.find(s => s.id === id);
+      if (service && service.quantity > 0) {
+        updateWomenService(id, service.quantity - 1);
+      }
     } else if (type === "children") {
-      const updatedServices = childrenServices.map((service) => {
-        if (service.id === id && service.quantity > 0) {
-          return { ...service, quantity: service.quantity - 1 };
-        }
-        return service;
-      });
-      setChildrenServices(updatedServices);
+      const service = childrenServices.find(s => s.id === id);
+      if (service && service.quantity > 0) {
+        updateChildrenService(id, service.quantity - 1);
+      }
     }
   };
+  
   const incrementExtraQuantity = (id: number) => {
-    const updatedServices = extraService.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-    setExtraServices(updatedServices);
+    const service = extraServices.find(s => s.id === id);
+    if (service) {
+      updateExtraService(id, service.quantity + 1);
+    }
   };
 
   const decrementExtraQuantity = (id: number) => {
-    const updatedServices = extraService.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-    setExtraServices(updatedServices);
+    const service = extraServices.find(s => s.id === id);
+    if (service && service.quantity > 0) {
+      updateExtraService(id, service.quantity - 1);
+    }
   };
-
-  const totalService = services.reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-  const totalWomenService = womenServices.reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-  const totalExtraService = extraService.reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-
-  const totalChildrenService = childrenServices.reduce(
-    (acc, service) => acc + service.price * service.quantity,
-    0
-  );
-
-  const totalMale = totalService + totalExtraService;
-  const totalFemale = totalWomenService + totalExtraService;
-  const totalChildren = totalChildrenService + totalExtraService;
-  const total = totalMale + totalFemale + totalChildren;
   return (
     <div>
       <h1 className=" font-league-spartan font-medium text-[36px]">
@@ -138,7 +111,7 @@ const WashedIroned = () => {
             </div>
 
             <div className="space-y-[35px]">
-              {services?.map((laundry) => (
+              {menServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
@@ -179,7 +152,7 @@ const WashedIroned = () => {
               <h1 className=" font-league-spartan font-medium text-[36px]">
                 Extra Items
               </h1>
-              {extraService?.map((laundry) => (
+              {extraServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
@@ -284,7 +257,7 @@ const WashedIroned = () => {
               <h1 className=" font-league-spartan font-medium text-[36px]">
                 Extra Items
               </h1>
-              {extraService?.map((laundry) => (
+              {extraServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}
@@ -389,7 +362,7 @@ const WashedIroned = () => {
               <h1 className=" font-league-spartan font-medium text-[36px]">
                 Extra Items
               </h1>
-              {extraService?.map((laundry) => (
+              {extraServices?.map((laundry) => (
                 <div
                   className="flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] rounded-[10px] p-4 dark:bg-secondary dark:text-black"
                   key={laundry.id}

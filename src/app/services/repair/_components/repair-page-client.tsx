@@ -338,15 +338,21 @@ const RepairPageClient = (props: Props) => {
         <div className="flex flex-wrap gap-5 mt-20 justify-center lg:justify-start">
           {repairServices.map((service, i) => (
             <div
-              onClick={() => setSelectedService(service)}
+              onClick={() => {
+                setSelectedService(service);
+                const formSection = document.getElementById("quote-form");
+                if (formSection) {
+                  formSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               key={service.id}
               className={cn(
-                "max-w-[391px] cursor-pointer h-[509px] rounded-[10px] border border-[#C0B8B8] overflow-hidden backdrop-blur-md bg-white/40 duration-300 dark:!bg-background",
+                "max-w-[391px] cursor-pointer h-[509px] rounded-[10px] border border-[#C0B8B8] overflow-hidden backdrop-blur-md bg-white/40 duration-300 dark:!bg-gray-800",
                 selectedService?.title === service.title
                   ? "border-primary border-2"
                   : "",
                 i % 2 === 0 ? "hover:rotate-12" : "hover:-rotate-12",
-                "dark:!bg-secondary"
+                "dark:border-gray-700"
               )}
             >
               <Image
@@ -356,10 +362,12 @@ const RepairPageClient = (props: Props) => {
                 width={0}
                 className="w-full h-[262px]"
               />
-              <h1 className=" font-league-spartan font-medium py-3 text-2xl px-2 dark:text-black">
+              <h1 className=" font-league-spartan font-medium py-3 text-2xl px-2 dark:text-gray-100">
                 {service.title}
               </h1>
-              <p className=" text-[#4E4848] px-2">{service.text}</p>
+              <p className=" text-[#4E4848] dark:text-gray-300 px-2">
+                {service.text}
+              </p>
             </div>
           ))}
         </div>
@@ -367,20 +375,14 @@ const RepairPageClient = (props: Props) => {
 
       <aside className="mt-20 relative z-20">
         <div className="px-6">
-          <div className="border border-[#12121980] dark:border-secondary flex gap-3 items-center w-fit mx-auto rounded-full p-2 ">
-            <div className=" bg-secondary p-1 rounded-full">
+          <div className="border border-[#12121980] dark:border-gray-700 flex gap-3 items-center w-fit mx-auto rounded-full p-2 ">
+            <div className=" bg-secondary dark:bg-gray-800 p-1 rounded-full">
               <BsExclamation className="text-primary" size={43} />
             </div>
-            <p>
+            <p className="dark:text-gray-200">
               We will provide your service 24 hours after receiving your order.{" "}
             </p>
           </div>
-        </div>
-
-        <div className="flex justify-between items-center gap-3 text-2xl max-w-[80%] mx-auto font-league-spartan mt-9">
-          <p>Total</p>
-
-          <p>&#8358;{selectedService?.price ?? 0}</p>
         </div>
 
         <div className=" my-24 w-full flex justify-center">
@@ -401,7 +403,7 @@ const RepairPageClient = (props: Props) => {
 
       {/* Quote Request Form Section */}
       <aside className="mt-20 relative z-20" id="quote-form">
-        <div className="max-w-4xl mx-auto bg-white dark:bg-secondary rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
           <h2 className="text-3xl font-league-spartan font-semibold text-center mb-8 text-gray-800 dark:text-white">
             Handyman Quote Request Form
           </h2>
@@ -409,7 +411,7 @@ const RepairPageClient = (props: Props) => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Section */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
                 Name
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -420,10 +422,10 @@ const RepairPageClient = (props: Props) => {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     placeholder=""
-                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                     required
                   />
-                  <span className="text-xs text-gray-500 mt-1 block">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                     First Name
                   </span>
                 </div>
@@ -434,10 +436,10 @@ const RepairPageClient = (props: Props) => {
                     value={formData.lastName}
                     onChange={handleInputChange}
                     placeholder=""
-                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                     required
                   />
-                  <span className="text-xs text-gray-500 mt-1 block">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                     Last Name
                   </span>
                 </div>
@@ -447,7 +449,7 @@ const RepairPageClient = (props: Props) => {
             {/* Email and Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
                   Email
                 </label>
                 <input
@@ -456,15 +458,15 @@ const RepairPageClient = (props: Props) => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder=""
-                  className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                   required
                 />
-                <span className="text-xs text-gray-500 mt-1 block">
+                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                   example@example.com
                 </span>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
                   Phone Number
                 </label>
                 <input
@@ -473,10 +475,10 @@ const RepairPageClient = (props: Props) => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder=""
-                  className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                   required
                 />
-                <span className="text-xs text-gray-500 mt-1 block">
+                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                   Please enter a valid phone number.
                 </span>
               </div>
@@ -484,7 +486,7 @@ const RepairPageClient = (props: Props) => {
 
             {/* Address Section */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
                 Address
               </label>
               <div className="space-y-4">
@@ -495,10 +497,10 @@ const RepairPageClient = (props: Props) => {
                     value={formData.streetAddress}
                     onChange={handleInputChange}
                     placeholder=""
-                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                     required
                   />
-                  <span className="text-xs text-gray-500 mt-1 block">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                     Street Address
                   </span>
                 </div>
@@ -510,9 +512,9 @@ const RepairPageClient = (props: Props) => {
                     value={formData.streetAddress2}
                     onChange={handleInputChange}
                     placeholder=""
-                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                   />
-                  <span className="text-xs text-gray-500 mt-1 block">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                     Street Address Line 2
                   </span>
                 </div>
@@ -525,10 +527,10 @@ const RepairPageClient = (props: Props) => {
                       value={formData.city}
                       onChange={handleInputChange}
                       placeholder=""
-                      className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                       required
                     />
-                    <span className="text-xs text-gray-500 mt-1 block">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                       City
                     </span>
                   </div>
@@ -539,10 +541,10 @@ const RepairPageClient = (props: Props) => {
                       value={formData.state}
                       onChange={handleInputChange}
                       placeholder=""
-                      className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                       required
                     />
-                    <span className="text-xs text-gray-500 mt-1 block">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                       State / Province
                     </span>
                   </div>
@@ -555,10 +557,10 @@ const RepairPageClient = (props: Props) => {
                     value={formData.postalCode}
                     onChange={handleInputChange}
                     placeholder=""
-                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                     required
                   />
-                  <span className="text-xs text-gray-500 mt-1 block">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                     Postal / Zip Code
                   </span>
                 </div>
@@ -567,19 +569,19 @@ const RepairPageClient = (props: Props) => {
 
             {/* Pictures Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
                 Pictures (If Any)
               </label>
               <div
-                className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
+                className="border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg p-8 text-center hover:border-primary dark:hover:border-primary transition-colors cursor-pointer"
                 onClick={() => document.getElementById("file-upload")?.click()}
               >
                 <div className="flex flex-col items-center">
-                  <Upload className="w-12 h-12 text-gray-400 mb-4" />
-                  <p className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  <Upload className="w-12 h-12 text-gray-400 dark:text-gray-200 mb-4" />
+                  <p className="text-lg font-medium text-gray-600 dark:text-gray-200 mb-2">
                     Browse Images
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-300">
                     Drag and drop image files here (JPG, PNG, GIF)
                   </p>
                   <input
@@ -597,7 +599,7 @@ const RepairPageClient = (props: Props) => {
               {/* Upload Progress */}
               {isUploadingImages && Object.keys(uploadProgress).length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-100">
                     Uploading images...
                   </p>
                   {Object.entries(uploadProgress).map(([fileId, progress]) => (
@@ -616,14 +618,14 @@ const RepairPageClient = (props: Props) => {
 
               {formData.files.length > 0 && !isUploadingImages && (
                 <div className="mt-3">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-200 mb-2">
                     Selected images: {formData.files.length}
                   </p>
                   <div className="space-y-1">
                     {formData.files.map((file, index) => (
                       <p
                         key={index}
-                        className="text-xs text-gray-500 flex items-center"
+                        className="text-xs text-gray-500 dark:text-gray-300 flex items-center"
                       >
                         <span className="mr-2">🖼️</span>
                         {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
@@ -636,7 +638,7 @@ const RepairPageClient = (props: Props) => {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
                 Describe Your Request
               </label>
               <textarea
@@ -645,15 +647,15 @@ const RepairPageClient = (props: Props) => {
                 onChange={handleInputChange}
                 rows={6}
                 placeholder="Please describe the repair work needed, including any specific details about the problem..."
-                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-background dark:border-gray-600 dark:text-white resize-vertical"
+                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 resize-vertical"
                 required
               ></textarea>
             </div>
 
             {/* Selected Service Display */}
             {selectedService && (
-              <div className="bg-gray-50 dark:bg-background p-4 rounded-lg">
-                <h3 className="font-medium text-gray-800 dark:text-white mb-2">
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-transparent dark:border-gray-700">
+                <h3 className="font-medium text-gray-800 dark:text-gray-100 mb-2">
                   Selected Service:
                 </h3>
                 <div className="flex items-center gap-4">
@@ -665,10 +667,10 @@ const RepairPageClient = (props: Props) => {
                     className="rounded-lg"
                   />
                   <div>
-                    <p className="font-medium text-gray-800 dark:text-white">
+                    <p className="font-medium text-gray-800 dark:text-gray-100">
                       {selectedService.title}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-200">
                       {selectedService.text}
                     </p>
                     <p className="text-lg font-semibold text-primary">
@@ -680,11 +682,11 @@ const RepairPageClient = (props: Props) => {
             )}
 
             {/* Disclaimer */}
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-              <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
+            <div className="bg-blue-50 dark:bg-blue-900/40 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-800 dark:text-blue-50 font-medium">
                 Following table will be filled by the responsible:
               </p>
-              <p className="text-xs text-blue-600 dark:text-blue-300 mt-2">
+              <p className="text-xs text-blue-600 dark:text-blue-100 mt-2">
                 Our team will review your request and provide a detailed quote
                 within 24 hours. We&apos;ll contact you using the information
                 provided above.
@@ -693,11 +695,11 @@ const RepairPageClient = (props: Props) => {
 
             {/* Status Messages */}
             {submitStatus === "success" && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-5 w-5 text-green-400"
+                      className="h-5 w-5 text-green-400 dark:text-green-200"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -709,7 +711,7 @@ const RepairPageClient = (props: Props) => {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-green-800">
+                    <p className="text-sm font-medium text-green-800 dark:text-green-50">
                       {submitMessage}
                     </p>
                   </div>
@@ -718,11 +720,11 @@ const RepairPageClient = (props: Props) => {
             )}
 
             {submitStatus === "error" && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-5 w-5 text-red-400"
+                      className="h-5 w-5 text-red-400 dark:text-red-200"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -734,7 +736,7 @@ const RepairPageClient = (props: Props) => {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-red-800">
+                    <p className="text-sm font-medium text-red-800 dark:text-red-50">
                       {submitMessage}
                     </p>
                   </div>
