@@ -13,13 +13,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import Script from "next/script";
 import { BsExclamation } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { FiArrowRight } from "react-icons/fi";
+import { useBookRepair } from "@/hooks/useBookRepair";
+import type { BookRepairPayload } from "@/hooks/useBookRepair";
+import { useAuthStore } from "@/hooks/store/user";
+import useDebounce from "@/hooks/debounce";
 
 type Props = {};
 
@@ -45,13 +49,116 @@ const RepairPageClient = (props: Props) => {
     postalCode: "",
     description: "",
     files: [] as File[],
+    openingTime: "09:00",
+    closingTime: "17:00",
   });
+
+  // OpenStreetMap / Nominatim address search state
+  const [addressSearch, setAddressSearch] = useState("");
+  const debouncedAddress = useDebounce(addressSearch, 400);
+  const [addressResults, setAddressResults] = useState<any[]>([]);
+  const [isSearchingAddress, setIsSearchingAddress] = useState(false);
+  const [addressSearchError, setAddressSearchError] = useState<string | null>(null);
+  const [selectedCoords, setSelectedCoords] = useState<{ latitude: string; longitude: string } | null>(null);
+ const [addressConfirmed, setAddressConfirmed] = useState(false);
+  const searchAbortRef = useRef<AbortController | null>(null);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Query OpenStreetMap Nominatim for address suggestions
+  useEffect(() => {
+    // If the user has confirmed a selection, do not trigger additional searches
+    if (addressConfirmed) {
+      setIsSearchingAddress(false);
+      return;
+    }
+     if (!debouncedAddress || debouncedAddress.trim().length < 3) {
+       setAddressResults([]);
+       setAddressSearchError(null);
+       return;
+     }
+
+    // Abort any in-flight request
+    if (searchAbortRef.current) {
+      searchAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    searchAbortRef.current = controller;
+
+    setIsSearchingAddress(true);
+    setAddressSearchError(null);
+
+    const base = "https://nominatim.openstreetmap.org/search";
+    const params = new URLSearchParams({
+      format: "jsonv2",
+      q: debouncedAddress,
+      addressdetails: "1",
+      limit: "5",
+      // Including email is recommended by Nominatim for contact; we add if available
+      ...(formData.email ? { email: formData.email } : {}),
+    });
+
+    fetch(`${base}?${params.toString()}` , {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        // Browser will automatically attach Referer which Nominatim uses for identification
+        "Accept-Language": typeof navigator !== "undefined" ? navigator.language : "en-US",
+      },
+      signal: controller.signal,
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Nominatim search failed (${res.status})`);
+        return res.json();
+      })
+      .then((data) => {
+        setAddressResults(Array.isArray(data) ? data : []);
+      })
+      .catch((err: any) => {
+        if (err?.name === "AbortError") return;
+        console.error("Nominatim search error:", err);
+        setAddressSearchError("Failed to fetch address suggestions.");
+      })
+      .finally(() => setIsSearchingAddress(false));
+
+    return () => {
+      controller.abort();
+    };
+  }, [debouncedAddress, addressConfirmed]);
+
+  const handleSelectAddress = (result: any) => {
+    try {
+      setAddressConfirmed(true);
+      setSelectedCoords({ latitude: String(result?.lat ?? ""), longitude: String(result?.lon ?? "") });
+
+      const addr = (result && result.address) || {};
+      const street = [addr.road, addr.house_number].filter(Boolean).join(" ") || result.display_name || "";
+      const city = addr.city || addr.town || addr.village || addr.county || "";
+      const state = addr.state || "";
+      const postcode = addr.postcode || "";
+
+      setFormData((prev) => ({
+        ...prev,
+        streetAddress: street || prev.streetAddress,
+        city: city || prev.city,
+        state: state || prev.state,
+        postalCode: postcode || prev.postalCode,
+      }));
+
+      // Reflect chosen address in the search box and close the suggestions list
+      const summary = [street, city, state, postcode].filter(Boolean).join(", ");
+      setAddressSearch(summary);
+      setAddressResults([]);
+      toast.success("Address selected from OpenStreetMap");
+    } catch (e) {
+      console.error("Failed to apply selected address:", e);
+      toast.error("Could not apply selected address");
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +179,22 @@ const RepairPageClient = (props: Props) => {
     [key: string]: number;
   }>({});
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+
+  // Retrieve current user to access saved coordinates/address
+  const { user } = useAuthStore();
+
+  // Integrate custom booking hook
+  const { mutate: bookRepair, isPending: isBooking } = useBookRepair({
+    onSuccess: (res) => {
+      toast.success("Repair booking created successfully");
+      // Optionally, use res.data.payment_url to redirect if needed
+      // window.location.href = res.data.payment_url;
+    },
+    onError: (error) => {
+      console.error("Booking error:", error);
+      toast.error("Failed to create repair booking");
+    },
+  });
 
   const uploadImagesToCloudinary = async (files: File[]): Promise<string[]> => {
     if (files.length === 0) return [];
@@ -179,6 +302,26 @@ const RepairPageClient = (props: Props) => {
       }
 
       if (response.ok) {
+        // Build payload for booking API using the custom hook
+        const payload: BookRepairPayload = {
+          repair_service: String(selectedService?.id ?? ""),
+          service_time: {
+            opening_time: formData.openingTime,
+            closing_time: formData.closingTime,
+          },
+          service_address: {
+            state: formData.state,
+            address: `${formData.streetAddress}${formData.streetAddress2 ? ", " + formData.streetAddress2 : ""}, ${formData.city}, ${formData.postalCode}`,
+            longitude: selectedCoords?.longitude ?? user?.profile?.address?.longitude ?? "",
+            latitude: selectedCoords?.latitude ?? user?.profile?.address?.latitude ?? "",
+          },
+          payment_method: "PAYMENT_GATEWAY",
+          description: formData.description,
+        };
+
+        // Trigger booking mutation (does not block existing flow)
+        bookRepair(payload);
+
         setSubmitStatus("success");
         setSubmitMessage(
           "Your quote request has been submitted successfully! We'll contact you within 24 hours."
@@ -196,6 +339,8 @@ const RepairPageClient = (props: Props) => {
           postalCode: "",
           description: "",
           files: [],
+          openingTime: "09:00",
+          closingTime: "17:00",
         });
       } else {
         setSubmitStatus("error");
@@ -490,6 +635,51 @@ const RepairPageClient = (props: Props) => {
                 Address
               </label>
               <div className="space-y-4">
+                {/* OpenStreetMap address search */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="addressSearch"
+                    value={addressSearch}
+                    onChange={(e) => {
+                      setAddressConfirmed(false);
+                      setAddressSearch(e.target.value);
+                    }}
+                    placeholder="Search address (powered by OpenStreetMap)"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                  />
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+                    Search and select your address
+                  </span>
+
+                  {/* Suggestions dropdown */}
+                  {isSearchingAddress && (
+                    <div className="absolute left-0 right-0 z-20 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-3 text-sm text-gray-700 dark:text-gray-200 shadow">
+                      Searching...
+                    </div>
+                  )}
+                  {addressSearchError && (
+                    <div className="absolute left-0 right-0 z-20 mt-2 bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-700 rounded-md p-3 text-xs text-red-700 dark:text-red-200 shadow">
+                      {addressSearchError}
+                    </div>
+                  )}
+                  {addressResults.length > 0 && (
+                    <ul className="absolute left-0 right-0 z-20 mt-2 max-h-60 overflow-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow">
+                      {addressResults.map((item: any, idx: number) => (
+                        <li key={`${item.place_id ?? idx}`} className="border-b last:border-b-0 border-gray-100 dark:border-gray-700">
+                          <button
+                            type="button"
+                            onClick={() => handleSelectAddress(item)}
+                            className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-200"
+                          >
+                            {item.display_name}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
                 <div>
                   <input
                     type="text"
@@ -562,6 +752,46 @@ const RepairPageClient = (props: Props) => {
                   />
                   <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
                     Postal / Zip Code
+                  </span>
+                </div>
+                {user?.profile?.address?.latitude || user?.profile?.address?.longitude ? (
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Using saved coordinates from your profile: lat {user?.profile?.address?.latitude}, long {user?.profile?.address?.longitude}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            {/* Preferred Service Time */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
+                Preferred Service Time
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="time"
+                    name="openingTime"
+                    value={formData.openingTime}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                    required
+                  />
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+                    Opening time
+                  </span>
+                </div>
+                <div>
+                  <input
+                    type="time"
+                    name="closingTime"
+                    value={formData.closingTime}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                    required
+                  />
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+                    Closing time
                   </span>
                 </div>
               </div>

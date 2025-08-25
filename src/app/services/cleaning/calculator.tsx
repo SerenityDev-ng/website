@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import DrawerDialog from "@/app/_components/drawer-dialog";
 import CleaningServiceForm from "@/app/_components/forms/cleaning";
+import { useBookCleaning, useGetHouseTypes, type BookCleaningPayload } from "@/hooks/useBookCleaning";
+import { useAuthStore } from "@/hooks/store/user";
 
 type Props = {
   cleaningType: string;
@@ -79,7 +81,8 @@ const PRICING_DATA = {
 
 const CleaningCalculator = ({ cleaningType }: Props) => {
   const [open, setOpen] = useState(false);
-  const [services, setServices] = useState<Cleaning[]>(cleaning);
+  // removed legacy services state in favor of selecting house type from backend
+  // const [services, setServices] = useState<Cleaning[]>(cleaning);
   const [frequency, setFrequency] = useState("Once A Week");
   const [isOneTime, setIsOneTime] = useState(false);
   const [total, setTotal] = useState(0);
@@ -90,329 +93,221 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
     "detailed"
   );
   const [time, setTime] = useState("8am - 12pm");
+  const [selectedHouseTypeId, setSelectedHouseTypeId] = useState<string>("");
+
+  // Initialize hooks for booking and auth store
+  const { mutateAsync: bookCleaning, isPending: isBooking } = useBookCleaning();
+  const user = useAuthStore((state) => state.user);
+  const { data: houseTypesResp, isLoading: houseTypesLoading } = useGetHouseTypes();
+  const filteredHouseTypes = React.useMemo(
+    () => (houseTypesResp?.data ?? []).filter((ht) => (buildingType === "duplex" ? ht.isDuplex : !ht.isDuplex)),
+    [houseTypesResp, buildingType]
+  );
+  const selectedHouseType = React.useMemo(
+    () => filteredHouseTypes.find((ht) => ht._id === selectedHouseTypeId),
+    [filteredHouseTypes, selectedHouseTypeId]
+  );
+
+  // Helper to safely parse backend price strings like "120,000"
+  const toNum = (v: string | number | undefined) =>
+    typeof v === "number" ? v : Number(String(v ?? "0").replace(/,/g, ""));
+
+  // removed deprecated matchedHouseType based on rooms/toilets
+  // const matchedHouseType = React.useMemo(() => {
+  //   const rooms = services.find((s) => s.title === "Bedrooms")?.quantity || 0;
+  //   const toilets = services.find((s) => s.title === "Toilets")?.quantity || 0;
+  //   const isDuplexFlag = buildingType === "duplex";
+  //   const list = houseTypesResp?.data || [];
+  //   const found = list.find((ht) => {
+  //     const r = parseInt(ht.rooms, 10);
+  //     const t = parseInt(ht.toilets, 10);
+  //     return ht.isDuplex === isDuplexFlag && r === rooms && t === toilets;
+  //   });
+  //   return found;
+  // }, [houseTypesResp, services, buildingType]);
 
   const calculateTotal = () => {
-    const rooms = services.find((s) => s.title === "Bedrooms")?.quantity || 0;
-    const toilets = services.find((s) => s.title === "Toilets")?.quantity || 0;
-    if (rooms === 0) {
-      toast.warning("Please selects the number of Bedrooms", {
-        position: "top-center",
-      });
-
+    if (!selectedHouseType) {
+      toast.warning("Please select a house type", { position: "top-center" });
       return 0;
     }
 
-    if (toilets === 0) {
-      toast.warning("Please selects the number of toilets", {
-        position: "top-center",
-      });
-
-      return 0;
-    }
-    let basePrice = 0;
-
-    // Determine base price based on selected cleaning type
-    if (cleaningHouse === "deep" && buildingType === "flat") {
-      console.log(true);
-      // For deep cleaning, use one-time pricing
-      if (rooms === 1) {
-        basePrice = PRICING_DATA.deep.flat.oneBedroomFlat;
-      }
-      if (rooms === 2) {
-        basePrice = PRICING_DATA.deep.flat.twoBedroomFlat;
-      }
-      if (rooms === 3) {
-        basePrice = PRICING_DATA.deep.flat.threeBedroomFlat;
-      }
-      if (rooms === 4) {
-        basePrice = PRICING_DATA.deep.flat.fourBedroomFlat;
-      }
-      if (rooms === 5) {
-        basePrice = PRICING_DATA.deep.flat.fiveBedroomFlat;
-      }
-      if (rooms > 5) {
-        basePrice = PRICING_DATA.deep.flat.fiveBedroomFlat;
-      }
-    } else if (cleaningHouse === "deep" && buildingType === "duplex") {
-      // For deep cleaning, use one-time pricing
-      if (rooms === 1) {
-        basePrice = PRICING_DATA.deep.duplex.oneBedroomFlat;
-      }
-      if (rooms === 2) {
-        basePrice = PRICING_DATA.deep.duplex.twoBedroomFlat;
-      }
-      if (rooms === 3) {
-        basePrice = PRICING_DATA.deep.duplex.threeBedroomFlat;
-      }
-      if (rooms === 4) {
-        basePrice = PRICING_DATA.deep.duplex.fourBedroomFlat;
-      }
-      if (rooms === 5) {
-        basePrice = PRICING_DATA.deep.duplex.fiveBedroomFlat;
-      }
-      if (rooms > 5) {
-        basePrice = PRICING_DATA.deep.duplex.fiveBedroomFlat;
-      }
-
-      // For detailed cleaning, use the detailed pricing
-    } else if (cleaningHouse === "detailed" && buildingType === "flat") {
-      switch (frequency) {
-        case "Three Times A Week":
-          if (rooms === 1 && toilets === 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.selfcon
-              : PRICING_DATA.detailed.flat.frequent.selfcon * 3;
-          } else if (rooms === 1 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.oneBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.oneBedroomFlat * 3;
-          } else if (rooms === 2 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.twoBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.twoBedroomFlat * 3;
-          } else if (rooms === 3 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.threeBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.threeBedroomFlat * 3;
-          } else if (rooms === 4 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.fourBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.fourBedroomFlat * 3;
-          } else if (rooms === 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.fiveBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.fiveBedroomFlat * 3;
-          } else if (rooms > 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.mansion
-              : PRICING_DATA.detailed.flat.frequent.mansion * 3;
-          }
-          break;
-        case "Twice A Week":
-          if (rooms === 1 && toilets === 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.selfcon
-              : PRICING_DATA.detailed.flat.frequent.selfcon * 2;
-          } else if (rooms === 1 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.oneBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.oneBedroomFlat * 2;
-          } else if (rooms === 2 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.twoBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.twoBedroomFlat * 2;
-          } else if (rooms === 3 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.threeBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.threeBedroomFlat * 2;
-          } else if (rooms === 4 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.fourBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.fourBedroomFlat * 2;
-          } else if (rooms === 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.fiveBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.fiveBedroomFlat * 2;
-          } else if (rooms > 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.mansion
-              : PRICING_DATA.detailed.flat.frequent.mansion * 2;
-          }
-          break;
-        default:
-          if (rooms === 1 && toilets === 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.selfcon
-              : PRICING_DATA.detailed.flat.frequent.selfcon;
-          } else if (rooms === 1 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.oneBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.oneBedroomFlat;
-          } else if (rooms === 2 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.twoBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.twoBedroomFlat;
-          } else if (rooms === 3 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.threeBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.threeBedroomFlat;
-          } else if (rooms === 4 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.fourBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.fourBedroomFlat;
-          } else if (rooms === 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.fiveBedroomFlat
-              : PRICING_DATA.detailed.flat.frequent.fiveBedroomFlat;
-          } else if (rooms > 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.flat.oneTime.mansion
-              : PRICING_DATA.detailed.flat.frequent.mansion;
-          }
-          break;
-      }
-    } else if (cleaningHouse === "detailed" && buildingType === "duplex") {
-      switch (frequency) {
-        case "Three Times A Week":
-          if (rooms === 1 && toilets === 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat * 3;
-          } else if (rooms === 2 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat * 3;
-          } else if (rooms === 3 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat * 3;
-          } else if (rooms === 4 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat * 3;
-          } else if (rooms === 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat * 3;
-          } else if (rooms > 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.mansion
-              : PRICING_DATA.detailed.duplex.frequent.mansion * 3;
-          }
-          break;
-
-        case "Twice A Week":
-          if (rooms === 1 && toilets === 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat * 2;
-          } else if (rooms === 2 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat * 2;
-          } else if (rooms === 3 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat * 2;
-          } else if (rooms === 4 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat * 2;
-          } else if (rooms === 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat * 2;
-          } else if (rooms > 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.mansion
-              : PRICING_DATA.detailed.duplex.frequent.mansion * 2;
-          }
-          break;
-
-        default:
-          if (rooms === 1 && toilets === 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.oneBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.oneBedroomFlat;
-          } else if (rooms === 2 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.twoBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.twoBedroomFlat;
-          } else if (rooms === 3 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.threeBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.threeBedroomFlat;
-          } else if (rooms === 4 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.fourBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.fourBedroomFlat;
-          } else if (rooms === 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.fiveBedroomFlat
-              : PRICING_DATA.detailed.duplex.frequent.fiveBedroomFlat;
-          } else if (rooms > 5 && toilets >= 1) {
-            basePrice = isOneTime
-              ? PRICING_DATA.detailed.duplex.oneTime.mansion
-              : PRICING_DATA.detailed.duplex.frequent.mansion;
-          }
-      }
+    // Deep cleaning uses deepCleaning_price (fallback to onetime_price if missing)
+    if (cleaningHouse === "deep") {
+      const price = toNum(selectedHouseType.deepCleaning_price) || toNum(selectedHouseType.onetime_price);
+      return price;
     }
 
-    return basePrice;
+    // Detailed cleaning: either one-time or monthly subscription
+    if (isOneTime) {
+      return toNum(selectedHouseType.onetime_price);
+    }
+
+    // Monthly subscription: adjust by weekly frequency (1x, 2x, 3x per week)
+    let base = toNum(selectedHouseType.monthly_price);
+    let multiplier = 1;
+    if (frequency === "Twice A Week") multiplier = 2;
+    if (frequency === "Three Times A Week") multiplier = 3;
+    return base * multiplier;
   };
 
-  const updateServicesAndTotal = (updatedServices: typeof services) => {
-    setServices(updatedServices);
-    // const newTotal = calculateTotal();
-    // setTotal(newTotal);
-  };
-
-  const incrementExtraQuantity = (id: number, title: string) => {
-    // Check if bedrooms are selected when trying to increment other services
-    if (
-      title !== "Bedrooms" &&
-      !selectedTitles.includes("Bedrooms") &&
-      !selectedTitles.includes("Toilets")
-    ) {
-      toast.warning(
-        "Please select the number of bedrooms first, then toilets."
-      );
-      return;
+  // Removed legacy quantity-based handlers (updateServicesAndTotal, incrementExtraQuantity, decrementExtraQuantity)
+  // Calculate total using house type-based calculation
+const handleFetch = () => {
+    if (!selectedHouseTypeId) {
+      return toast.warning("Please select a house type", { position: "top-center" });
     }
-
-    const updatedServices = services.map((service) => {
-      if (service.id === id) {
-        return { ...service, quantity: service.quantity + 1 };
-      }
-      return service;
-    });
-
-    // Update selected titles if not already included
-    if (!selectedTitles.includes(title)) {
-      setSelectedTitles([...selectedTitles, title]);
+    if (houseTypesLoading) {
+      return toast.message("Fetching latest pricing... Please try again in a moment.", { position: "top-center" });
     }
-
-    updateServicesAndTotal(updatedServices);
-  };
-
-  const decrementExtraQuantity = (id: number, title: string) => {
-    const updatedServices = services.map((service) => {
-      if (service.id === id && service.quantity > 0) {
-        // If quantity will become 0, remove the title from selectedTitles
-        if (service.quantity === 1) {
-          setSelectedTitles(selectedTitles.filter((t) => t !== title));
-        }
-        return { ...service, quantity: service.quantity - 1 };
-      }
-      return service;
-    });
-
-    updateServicesAndTotal(updatedServices);
-  };
-
-  // Update total when frequency, isOneTime, or services change
-  const handleFetch = () => {
-    const bedroomsService = services.find((s) => s.title === "Bedrooms");
-    const toilets = services.find((s) => s.title === "Toilets")?.quantity || 0;
-    if (bedroomsService && bedroomsService.quantity > 0) {
-      if (!toilets)
-        return toast.warning("Please select the number of toilets", {
-          position: "top-center",
-        });
-      setIsLoading(true);
-      const newTotal = calculateTotal();
-      setTotal(Number(newTotal));
-    }
+    setIsLoading(true);
+    const newTotal = calculateTotal();
+    setTotal(Number(newTotal));
     const timeout = setTimeout(() => {
       setIsLoading(false);
-    }, 2580);
-
+    }, 800);
     return () => clearTimeout(timeout);
   };
 
   useEffect(() => {
     handleFetch();
   }, [time, frequency, isOneTime, cleaningHouse, buildingType]);
+
+  const normalizeFrequency = (f: string) => {
+    switch (f) {
+      case "Three Times A Week":
+        return "three_times_a_week";
+      case "Twice A Week":
+        return "twice_a_week";
+      case "Once A Week":
+        return "weekly";
+      default:
+        return f.toLowerCase();
+    }
+  };
+
+  const parseTimeWindow = (t: string): { opening_time: string; closing_time: string } => {
+    const lower = t.toLowerCase();
+    if (lower.includes("8am")) {
+      return { opening_time: "08:00", closing_time: "12:00" };
+    }
+    if (lower.includes("12pm")) {
+      return { opening_time: "12:00", closing_time: "16:00" };
+    }
+    // Fallback to morning slot
+    return { opening_time: "08:00", closing_time: "12:00" };
+  };
+
+  const handleCleaningFormSubmit = async (form: {
+    email: string;
+    name: string;
+    location: string;
+    house: "flat" | "duplex";
+    serviceType: string;
+    cleaningType: string;
+    cleaningHouse: "detailed" | "deep";
+    price: number;
+    frequency: string;
+    time: string;
+    phone: string;
+    videoUrls: string[];
+    house_type_id?: string;
+  }) => {
+    try {
+      // Basic guard: ensure a house type is selected for housekeeping
+      if (cleaningType === "Housekeeping" && !form.house_type_id && !selectedHouseTypeId) {
+        toast.warning("Please select a house type before booking", { position: "top-center" });
+        return;
+      }
+
+      // Prefer the house_type_id coming from the form dropdown; otherwise, fall back to selected house type
+      let houseTypeId = form.house_type_id || selectedHouseTypeId || "";
+      if (!houseTypeId) {
+        toast.warning("Please select a valid house type before booking.", { position: "top-center" });
+        return;
+      }
+      const cleaning_time = parseTimeWindow(form.time);
+
+      const payload: BookCleaningPayload = {
+        frequency: normalizeFrequency(form.frequency),
+        cleaning_time,
+        house_type_id: houseTypeId,
+        cleaning_address: {
+          state: user?.profile?.state || "",
+          address:
+            user?.profile?.address?.address ||
+            user?.profile?.location_area ||
+            form.location ||
+            "",
+          longitude: user?.profile?.address?.longitude || "",
+          latitude: user?.profile?.address?.latitude || "",
+        },
+        total_amount: total || form.price || 0,
+        payment_method: "PAYMENT_GATEWAY",
+      };
+
+      const res = await bookCleaning(payload);
+      if (res && (res as any).data?.payment_url) {
+        const url = (res as any).data.payment_url as string;
+        toast.success("Redirecting to payment...", { position: "top-center" });
+        setOpen(false);
+        if (typeof window !== "undefined") {
+          window.location.href = url;
+        }
+      } else {
+        toast.success("Cleaning booking created", { position: "top-center" });
+        setOpen(false);
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Failed to create booking";
+      toast.error(message, { position: "top-center" });
+    }
+  };
+
+  // New: directly create booking when clicking the Schedule Cleaning button
+  const handleScheduleClick = async () => {
+    try {
+      // Guard for housekeeping: require a house type selection
+      if (cleaningType === "Housekeeping" && !selectedHouseTypeId) {
+        toast.warning("Please select a house type before booking", { position: "top-center" });
+        return;
+      }
+
+      const cleaning_time = parseTimeWindow(time);
+      const payload: BookCleaningPayload = {
+        frequency: normalizeFrequency(frequency),
+        cleaning_time,
+        house_type_id: selectedHouseTypeId || "",
+        cleaning_address: {
+          state: user?.profile?.state || "",
+          address:
+            user?.profile?.address?.address ||
+            user?.profile?.location_area ||
+            "",
+          longitude: user?.profile?.address?.longitude || "",
+          latitude: user?.profile?.address?.latitude || "",
+        },
+        total_amount: total || 0,
+        payment_method: "PAYMENT_GATEWAY",
+      };
+
+      const res = await bookCleaning(payload);
+      if (res && (res as any).data?.payment_url) {
+        const url = (res as any).data.payment_url as string;
+        toast.success("Redirecting to payment...", { position: "top-center" });
+        setOpen(false);
+        if (typeof window !== "undefined") {
+          window.location.href = url;
+        }
+      } else {
+        toast.success("Cleaning booking created", { position: "top-center" });
+        setOpen(false);
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Failed to create booking";
+      toast.error(message, { position: "top-center" });
+    }
+  };
 
   return (
     <div className="pt-[123px] lg:pt-0 relative z-30">
@@ -478,42 +373,37 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
         {cleaningType === "Housekeeping" ? (
           <section>
-            <div className="space-y-[35px]">
-              {services.map((service) => (
-                <div
-                  className={cn(
-                    "flex gap-2 justify-between items-center px-4 py-2 bg-[#F5F5F5] dark:bg-secondary rounded-[10px] p-4 dark:text-black",
-                    service.quantity > 0 ? "border-2 border-primary" : ""
-                  )}
-                  key={service.id}
-                >
-                  <div className="md:min-w-[200px] md:max-w-[200px] font-league-spartan font-medium text-lg lg:text-2xl ">
-                    {service.title}
-                  </div>
-
-                  <div className="flex gap-4 items-center">
-                    <Button
-                      onClick={() =>
-                        decrementExtraQuantity(service.id, service.title)
-                      }
-                      className="font-semibold text-xl bg-secondary text-black hover:bg-secondary dark:bg-gray-600 dark:text-white"
-                    >
-                      -
-                    </Button>
-                    <p className=" font-medium font-inter">
-                      {service.quantity}
-                    </p>
-                    <Button
-                      onClick={() =>
-                        incrementExtraQuantity(service.id, service.title)
-                      }
-                      className="text-xl font-semibold text-white hover:bg-primary"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredHouseTypes.map((ht) => {
+                const price = (() => {
+                  if (cleaningHouse === "deep") {
+                    return toNum(ht.deepCleaning_price) || toNum(ht.onetime_price);
+                  }
+                  if (isOneTime) return toNum(ht.onetime_price);
+                  let base = toNum(ht.monthly_price);
+                  let multiplier = 1;
+                  if (frequency === "Twice A Week") multiplier = 2;
+                  if (frequency === "Three Times A Week") multiplier = 3;
+                  return base * multiplier;
+                })();
+                const isSelected = selectedHouseTypeId === ht._id;
+                return (
+                  <button
+                    key={ht._id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedHouseTypeId(ht._id);
+                    }}
+                    className={cn(
+                      "w-full text-left p-4 rounded-[10px] border transition-colors bg-[#F5F5F5] dark:bg-secondary text-black",
+                      isSelected ? "bg-primary dark:bg-primary" : "border-[#E5E5E5]"
+                    )}
+                  >
+                    <div className="font-league-spartan font-medium text-lg lg:text-2xl">{ht.house_title || ht.house_type}</div>
+                    <div className="mt-2 text-xl">&#8358;{price}</div>
+                  </button>
+                );
+              })}
             </div>
 
             <aside className="flex items-center justify-between gap-5 mt-5">
@@ -521,9 +411,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                 <Checkbox
                   id="one-time"
                   checked={isOneTime}
-                  onCheckedChange={(checked) =>
-                    setIsOneTime(checked as boolean)
-                  }
+                  onCheckedChange={(checked) => setIsOneTime(checked as boolean)}
                 />
                 <label
                   htmlFor="one-time"
@@ -532,16 +420,13 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                   One-time service (unchecked for monthly subscription)
                 </label>
               </div>
-              <Button
-                className="hover:bg-primary button-grad"
-                onClick={handleFetch}
-              >
+              <Button className="hover:bg-primary button-grad" onClick={handleFetch}>
                 Calculate
               </Button>
             </aside>
 
             <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-2xl md:text-[36px] mt-20">
-              <h1>Total {isOneTime ? "(one-time)" : "(monthly)"}</h1>
+              <h1>Total {isOneTime || cleaningHouse === "deep" ? "(one-time)" : "(monthly)"}</h1>
               {isLoading ? (
                 <p>
                   <Loader2 className="animate-spin dark:text-white" />
@@ -552,9 +437,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
             </div>
 
             <div className="pt-20">
-              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
-                Select Frequency
-              </h1>
+              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">Select Frequency</h1>
 
               {cleaningHouse !== "deep" && (
                 <div className="flex gap-2 justify-start pt-6 max-w-[calc(100vw-30px)] overflow-x-auto">
@@ -562,9 +445,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                     onClick={() => setFrequency("Three Times A Week")}
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                      frequency === "Three Times A Week"
-                        ? "border-primary border-2 bg-secondary"
-                        : ""
+                      frequency === "Three Times A Week" ? "border-primary border-2 bg-secondary" : ""
                     )}
                   >
                     Three Times a Week
@@ -574,9 +455,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                     onClick={() => setFrequency("Twice A Week")}
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                      frequency === "Twice A Week"
-                        ? "border-primary border-2 bg-secondary"
-                        : ""
+                      frequency === "Twice A Week" ? "border-primary border-2 bg-secondary" : ""
                     )}
                   >
                     Twice a Week
@@ -585,9 +464,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                     onClick={() => setFrequency("Once A Week")}
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                      frequency === "Once A Week"
-                        ? "border-primary border-2 bg-secondary"
-                        : ""
+                      frequency === "Once A Week" ? "border-primary border-2 bg-secondary" : ""
                     )}
                   >
                     Once a Week
@@ -597,9 +474,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
             </div>
 
             <div className="pt-20">
-              <h1 className=" text-2xl md:text-[36px] font-league-spartan font-medium">
-                Cleaning Time
-              </h1>
+              <h1 className=" text-2xl md:text-[36px] font-league-spartan font-medium">Cleaning Time</h1>
 
               <div className="flex gap-2 justify-start pt-6">
                 <Button
@@ -612,29 +487,30 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                   8am - 12pm
                 </Button>
                 <Button
-                  onClick={() => setTime("12am - 4pm")}
+                  onClick={() => setTime("12pm - 4pm")}
                   className={cn(
                     "border border-[#4E4848] rounded-[10px] text-sm bg-white text-[#4E4848] hover:bg-white/90",
                     time === "12pm - 4pm" && "border-primary bg-secondary"
                   )}
                 >
-                  12am - 4pm
+                  12pm - 4pm
                 </Button>
               </div>
             </div>
           </section>
         ) : (
-          <section>
-            <p>
-              You can proceed to scheduling, as price will be discussed upon
-              inspection of property. Thank you.
-            </p>
-          </section>
-        )}
+           <section>
+             <p>
+               You can proceed to scheduling, as price will be discussed upon
+               inspection of property. Thank you.
+             </p>
+           </section>
+         )}
 
         <div className="my-20 w-full flex justify-center">
           <Button
-            onClick={() => setOpen(!open)}
+            onClick={handleScheduleClick}
+            disabled={isBooking}
             className=" button-grad text-white w-full max-w-[350px] gap-4 px-12"
           >
             Schedule Cleaning
@@ -651,6 +527,8 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
               cleaningHouse={cleaningHouse}
               time={time}
               setOpen={setOpen}
+              onSubmit={handleCleaningFormSubmit}
+              externalLoading={isBooking}
             />
           </div>
         </DrawerDialog>

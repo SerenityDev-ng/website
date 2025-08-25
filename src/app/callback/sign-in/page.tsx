@@ -24,6 +24,7 @@ import { useAuthStore } from "@/hooks/store/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import api from "@/lib/axios-instance";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -42,7 +43,7 @@ export default function SignInForm() {
     mutationKey: ["signIn"],
     mutationFn: async (data: z.infer<typeof formSchema>) => {
       try {
-        const response = await instance.post("/auth/user_login", data);
+        const response = await api.post("/api/auth/login", data);
         return response.data as UserResponse;
       } catch (error: any) {
         toast.error(error.response.data.message);
@@ -78,10 +79,10 @@ export default function SignInForm() {
       <div className="w-full rounded-lg bg-white p-8">
         <div className="grid gap-8 md:grid-cols-2 ">
           <div className="mt-8 space-y-8">
-            <h1 className=" text-4xl xl:text-[72px] font-semibold">
+            <h1 className=" text-4xl xl:text-[72px] font-semibold dark:text-black">
               Hello there!
             </h1>
-            <p className="pt-5 text-xl xl:text-[55px] text-primary font-league-spartan font-semibold">
+            <p className="pt-5 text-xl xl:text-[55px] text-primary  font-league-spartan font-semibold">
               Sign In to get started
             </p>
             <Image

@@ -9,8 +9,9 @@ import ClothContainer from "./cloth-container";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { FaArrowRight } from "react-icons/fa";
-import axios from "@/lib/axios-instance";
 import { useLaundryService } from "@/hooks/store/laundry";
+import { useBookLaundry, type BookLaundryPayload } from "@/hooks/useBookLaundry";
+import { useAuthStore } from "@/hooks/store/user";
 
 type Props = {};
 
@@ -19,7 +20,9 @@ const LaundryPageClient = (props: Props) => {
     count: 0,
     title: "Washed and Folded",
   });
-
+  
+  const { mutateAsync: bookLaundryAsync, isPending: isBooking } = useBookLaundry();
+ 
   // References to calculator components
   const clothPricesRef = useRef<any>(null);
   const washedIronedRef = useRef<any>(null);
@@ -121,29 +124,66 @@ const LaundryPageClient = (props: Props) => {
       const currentOrderSummary = getOrderSummary();
       setOrderSummary(currentOrderSummary);
 
-      // Send the form data to the API
-      const response = await fetch("/api/laundry-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          selectedService: {
-            title: selectedService.title,
-          },
-          orderSummary: currentOrderSummary,
-        }),
-      });
+      // Build laundry_order from the store
+      const {
+        menServices,
+        womenServices,
+        childrenServices,
+        extraServices,
+      } = useLaundryService.getState();
 
-      const data = await response.json();
+      const laundry_order: BookLaundryPayload["laundry_order"] = [
+        ...menServices,
+        ...womenServices,
+        ...childrenServices,
+        ...extraServices,
+      ]
+        .filter((item) => item.quantity > 0)
+        .map((item) => ({ laundry_id: String(item.id), quantity: item.quantity }));
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to submit order");
+      if (laundry_order.length === 0) {
+        throw new Error("Please select at least one laundry item to proceed.");
       }
 
+      // Derive laundry_time from pickupTime; fallback to sensible defaults
+      const opening = formData.pickupTime || "09:00";
+      const closing = formData.pickupTime || "17:00";
+
+      // Pull user profile for coordinates and state
+      const user = useAuthStore.getState().user;
+      const state = user?.profile?.state || "";
+      const longitude = user?.profile?.address?.longitude || "";
+      const latitude = user?.profile?.address?.latitude || "";
+
+      const payload: BookLaundryPayload = {
+        laundry_order,
+        laundry_time: {
+          opening_time: opening,
+          closing_time: closing,
+        },
+        payment_method: "PAYMENT_GATEWAY",
+        order_type: "pickup",
+        laundry_address: {
+          state,
+          address: formData.address,
+          longitude,
+          latitude,
+        },
+      };
+
+      // Call backend using the booking hook
+// -      const { mutateAsync } = useBookLaundry();
+// -      const res = await mutateAsync(payload);
+     const res = await bookLaundryAsync(payload);
+
       setSubmitStatus("success");
-      toast.success("Your laundry order has been submitted successfully!");
+      toast.success("Your laundry booking has been created successfully!");
+
+      // If a payment URL is provided, redirect the user
+      const payUrl = res?.data?.payment_url;
+      if (payUrl) {
+        window.location.href = payUrl;
+      }
 
       // Reset form
       setFormData({
@@ -157,14 +197,12 @@ const LaundryPageClient = (props: Props) => {
         specialInstructions: "",
       });
       setShowForm(false);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      console.error("Error submitting laundry booking:", error);
       setSubmitStatus("error");
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit your order. Please try again."
-      );
+      const message = error?.response?.data?.message || error?.message ||
+        "Failed to create your booking. Please try again.";
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

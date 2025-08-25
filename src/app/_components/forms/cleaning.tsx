@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useAuthStore } from "@/hooks/store/user";
 import { VideoUpload } from "@/components/global/video-upload";
+import { useGetHouseTypes } from "@/hooks/useBookCleaning";
 
 type CleaningServiceFormProps = {
   frequency: string;
@@ -35,6 +36,22 @@ type CleaningServiceFormProps = {
   cleaningType: string;
   time: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  externalLoading?: boolean;
+  onSubmit?: (payload: {
+    email: string;
+    name: string;
+    location: string;
+    house: "flat" | "duplex";
+    serviceType: string;
+    cleaningType: string;
+    cleaningHouse: "detailed" | "deep";
+    price: number;
+    frequency: string;
+    time: string;
+    phone: string;
+    videoUrls: string[];
+    house_type_id?: string;
+  }) => Promise<void> | void;
 };
 
 export default function CleaningServiceForm({
@@ -45,8 +62,11 @@ export default function CleaningServiceForm({
   cleaningHouse,
   time,
   setOpen,
+  onSubmit,
+  externalLoading,
 }: CleaningServiceFormProps) {
   const user = useAuthStore((store) => store.user);
+  const { data: houseTypesResp, isLoading: houseTypesLoading } = useGetHouseTypes();
   const [loading, setLoading] = useState(false);
   const [videoUrls, setVideoUrls] = useState<string[]>([]);
   const [formData, setFormData] = useState({
@@ -54,6 +74,7 @@ export default function CleaningServiceForm({
     name: user ? `${user?.user?.first_name} ${user?.user?.last_name}` : "",
     location: user ? user?.profile?.address?.address : "",
     house: buildingType,
+    house_type_id: "",
     serviceType: "cleaning",
     cleaningType:
       cleaningType === "Housekeeping" ||
@@ -71,6 +92,10 @@ export default function CleaningServiceForm({
     phone: "",
     videoUrls,
   });
+
+  const filteredHouseTypes = (houseTypesResp?.data ?? []).filter((ht) =>
+    buildingType === "duplex" ? ht.isDuplex : !ht.isDuplex
+  );
 
   const handleUploadComplete = (urls: string[]) => {
     console.log({ urls });
@@ -91,10 +116,36 @@ export default function CleaningServiceForm({
     e.preventDefault();
     if (!formData.phone || !formData.location)
       return toast.warning("Please fill out all fields");
+    if (!formData.house_type_id)
+      return toast.warning("Please select a house type");
     setLoading(true);
 
-    // console.log({ formData });
-    // return;
+    // If parent provided an onSubmit, delegate booking to it and skip email fallback
+    if (onSubmit) {
+      try {
+        await onSubmit({
+          email: formData.email,
+          name: formData.name,
+          location: formData.location,
+          house: formData.house as "flat" | "duplex",
+          serviceType: formData.serviceType,
+          cleaningType: formData.cleaningType,
+          cleaningHouse: formData.cleaningHouse as "detailed" | "deep",
+          price: formData.price,
+          frequency: formData.frequency,
+          time: formData.time,
+          phone: formData.phone,
+          videoUrls,
+          house_type_id: formData.house_type_id,
+        });
+      } catch (error) {
+        console.error("Parent onSubmit error:", error);
+        toast.error("Could not complete booking. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
 
     const emailHtml = await render(<CleaningServiceEmail {...formData} />);
 
@@ -180,15 +231,23 @@ export default function CleaningServiceForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="house">House</Label>
-            <Input
-              id="house"
-              name="house"
-              value={formData.house}
-              onChange={handleInputChange}
-              required
-              disabled
-            />
+            <Label htmlFor="houseType">House Type</Label>
+            <Select
+              onValueChange={handleSelectChange("house_type_id")}
+              value={formData.house_type_id}
+              disabled={houseTypesLoading}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={houseTypesLoading ? "Loading house types..." : "Select house type"} />
+              </SelectTrigger>
+              <SelectContent>
+                {filteredHouseTypes.map((ht) => (
+                  <SelectItem key={ht._id} value={ht._id}>
+                    {ht.house_title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">
@@ -340,9 +399,10 @@ export default function CleaningServiceForm({
           type="submit"
           className="w-full hover:bg-primary"
           onClick={handleSubmit}
+          disabled={loading || !!externalLoading}
         >
           Book Service{" "}
-          {loading && <Loader2 className="animate-spin text-white" />}
+          {(loading || externalLoading) && <Loader2 className="animate-spin text-white" />}
         </Button>
       </CardFooter>
     </Card>
