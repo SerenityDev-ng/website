@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
+import type { LaundryType } from "@/hooks/useBookLaundry";
 
 type Props = {
   image: StaticImageData;
@@ -25,12 +27,47 @@ const LaundryCard = ({
   selectedService,
   index,
 }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Map heading to LaundryType
+  const getFilterType = (heading: string): LaundryType | undefined => {
+    switch (heading) {
+      case "Washed and Folded":
+        return "WASHED_FOLDED";
+      case "Washed and Ironed":
+        return "WASHED_IRONED";
+      case "Iron Only":
+        return "IRONED";
+      default:
+        return undefined;
+    }
+  };
+  
+  const handleCardClick = () => {
+    // Set local state for visual feedback
+    setSelectedService({ count: index, title: heading });
+    
+    // Update URL parameters for filtering
+    const filterType = getFilterType(heading);
+    const params = new URLSearchParams(searchParams.toString());
+    
+    if (filterType) {
+      params.set('filter', filterType);
+    } else {
+      params.delete('filter');
+    }
+    
+    // Navigate to calculator section with filter
+    router.push(`/services/laundry?${params.toString()}#calculator`);
+  };
+  
   return (
-    <Link href={"/services/laundry#calculator"}>
+    <div>
       <main
-        onClick={() => setSelectedService({ count: index, title: heading })}
+        onClick={handleCardClick}
         className={cn(
-          "border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden  backdrop-blur-md bg-white/40 dark:bg-secondary hover:border-primary",
+          "border border-[#C0B8B8] rounded-[10px] max-w-[391px] h-[509px] overflow-hidden  backdrop-blur-md bg-white/40 dark:bg-secondary hover:border-primary cursor-pointer",
           selectedService.title === heading && "border-primary border-2"
         )}
       >
@@ -49,7 +86,7 @@ const LaundryCard = ({
           <p className=" text-[#4E4848] font-inter mt-2">{title}</p>
         </div>
       </main>
-    </Link>
+    </div>
   );
 };
 

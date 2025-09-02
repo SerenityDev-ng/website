@@ -15,6 +15,9 @@ import DrawerDialog from "@/app/_components/drawer-dialog";
 import CleaningServiceForm from "@/app/_components/forms/cleaning";
 import { useBookCleaning, useGetHouseTypes, type BookCleaningPayload } from "@/hooks/useBookCleaning";
 import { useAuthStore } from "@/hooks/store/user";
+import { DatePicker } from "@/components/ui/date-picker";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 type Props = {
   cleaningType: string;
@@ -81,8 +84,6 @@ const PRICING_DATA = {
 
 const CleaningCalculator = ({ cleaningType }: Props) => {
   const [open, setOpen] = useState(false);
-  // removed legacy services state in favor of selecting house type from backend
-  // const [services, setServices] = useState<Cleaning[]>(cleaning);
   const [frequency, setFrequency] = useState("Once A Week");
   const [isOneTime, setIsOneTime] = useState(false);
   const [total, setTotal] = useState(0);
@@ -94,6 +95,8 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
   );
   const [time, setTime] = useState("8am - 12pm");
   const [selectedHouseTypeId, setSelectedHouseTypeId] = useState<string>("");
+  const [appointmentDate, setAppointmentDate] = useState<Date | undefined>(undefined);
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   // Initialize hooks for booking and auth store
   const { mutateAsync: bookCleaning, isPending: isBooking } = useBookCleaning();
@@ -176,13 +179,13 @@ const handleFetch = () => {
   const normalizeFrequency = (f: string) => {
     switch (f) {
       case "Three Times A Week":
-        return "three_times_a_week";
+        return "Three Times A Week";
       case "Twice A Week":
-        return "twice_a_week";
+        return "Twice A Week";
       case "Once A Week":
-        return "weekly";
+        return "once_in_a_week";
       default:
-        return f.toLowerCase();
+        return "Once_A_Week";
     }
   };
 
@@ -226,25 +229,97 @@ const handleFetch = () => {
         toast.warning("Please select a valid house type before booking.", { position: "top-center" });
         return;
       }
-      const cleaning_time = parseTimeWindow(form.time);
 
-      const payload: BookCleaningPayload = {
-        frequency: normalizeFrequency(form.frequency),
-        cleaning_time,
-        house_type_id: houseTypeId,
-        cleaning_address: {
-          state: user?.profile?.state || "",
-          address:
-            user?.profile?.address?.address ||
-            user?.profile?.location_area ||
-            form.location ||
-            "",
-          longitude: user?.profile?.address?.longitude || "",
-          latitude: user?.profile?.address?.latitude || "",
-        },
-        total_amount: total || form.price || 0,
-        payment_method: "PAYMENT_GATEWAY",
-      };
+      // Guard for appointment date selection
+      if (!appointmentDate) {
+        toast.warning(isOneTime ? "Please select an appointment date" : "Please select a start date", { position: "top-center" });
+        return;
+      }
+
+      // Guard for day selection for subscription orders
+      if (!isOneTime && selectedDays.length === 0) {
+        toast.warning("Please select at least one day for your subscription", { position: "top-center" });
+        return;
+      }
+
+      // Validate correct number of days based on frequency
+      if (!isOneTime) {
+        const requiredDays = frequency === "Once A Week" ? 1 : frequency === "Twice A Week" ? 2 : 3;
+        if (selectedDays.length !== requiredDays) {
+          toast.warning(`Please select exactly ${requiredDays} day${requiredDays > 1 ? 's' : ''} for ${frequency.toLowerCase()}`, { position: "top-center" });
+          return;
+        }
+      }
+
+      let payload: any;
+
+      if (isOneTime) {
+        // One-time order payload
+        payload = {
+          house_type_id: houseTypeId,
+          cleaningHouse: form.cleaningHouse,
+          buildingType: form.house,
+          appointment_date: appointmentDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
+          appointment_time: form.time === "8am - 12pm" ? "09:00" : "13:00",
+          cleaning_address: {
+            state: user?.profile?.state || "",
+            address:
+              user?.profile?.address?.address ||
+              user?.profile?.location_area ||
+              form.location ||
+              "",
+            longitude: user?.profile?.address?.longitude || "",
+            latitude: user?.profile?.address?.latitude || "",
+          },
+          payment_method: "PAYMENT_GATEWAY",
+          notes: ""
+        };
+      } else {
+         // Subscription order payload
+         const normalizedFreq = normalizeFrequency(form.frequency);
+         const startTime = form.time === "8am - 12pm" ? "08:00" : "12:00";
+         const endTime = form.time === "8am - 12pm" ? "12:00" : "16:00";
+         
+         // Calculate end date (3 months from start date)
+         const startDate = appointmentDate || new Date();
+         const endDate = new Date(startDate);
+         endDate.setMonth(endDate.getMonth() + 3);
+         
+         // Create weekly schedule for each selected day
+         const weeklySchedule = selectedDays.map(day => ({
+           day: day,
+           time_slots: [
+             {
+               start_time: startTime,
+               end_time: endTime
+             }
+           ]
+         }));
+         
+         payload = {
+           house_type_id: houseTypeId,
+           cleaningHouse: form.cleaningHouse,
+           buildingType: form.house,
+           frequency: normalizedFreq,
+           subscription: {
+             start_date: startDate.toISOString().split('T')[0],
+             end_date: endDate.toISOString().split('T')[0],
+             weekly_schedule: weeklySchedule
+               },
+             
+           
+           cleaning_address: {
+             state: user?.profile?.state || "",
+             address:
+               user?.profile?.address?.address ||
+               user?.profile?.location_area ||
+               form.location ||
+               ""
+           },
+           payment_method: "PAYMENT_GATEWAY",
+           notes: ""
+         };
+      }
 
       const res = await bookCleaning(payload);
       if (res && (res as any).data?.payment_url) {
@@ -273,23 +348,94 @@ const handleFetch = () => {
         return;
       }
 
-      const cleaning_time = parseTimeWindow(time);
-      const payload: BookCleaningPayload = {
-        frequency: normalizeFrequency(frequency),
-        cleaning_time,
-        house_type_id: selectedHouseTypeId || "",
-        cleaning_address: {
-          state: user?.profile?.state || "",
-          address:
-            user?.profile?.address?.address ||
-            user?.profile?.location_area ||
-            "",
-          longitude: user?.profile?.address?.longitude || "",
-          latitude: user?.profile?.address?.latitude || "",
-        },
-        total_amount: total || 0,
-        payment_method: "PAYMENT_GATEWAY",
-      };
+      // Guard for appointment date selection
+      if (!appointmentDate) {
+        toast.warning(isOneTime ? "Please select an appointment date" : "Please select a start date", { position: "top-center" });
+        return;
+      }
+
+      // Guard for day selection for subscription orders
+      if (!isOneTime && selectedDays.length === 0) {
+        toast.warning("Please select at least one day for your subscription", { position: "top-center" });
+        return;
+      }
+
+      // Validate correct number of days based on frequency
+      if (!isOneTime) {
+        const requiredDays = frequency === "Once A Week" ? 1 : frequency === "Twice A Week" ? 2 : 3;
+        if (selectedDays.length !== requiredDays) {
+          toast.warning(`Please select exactly ${requiredDays} day${requiredDays > 1 ? 's' : ''} for ${frequency.toLowerCase()}`, { position: "top-center" });
+          return;
+        }
+      }
+
+      let payload: any;
+
+      if (isOneTime) {
+        // One-time order payload
+        payload = {
+          house_type_id: selectedHouseTypeId || "",
+          cleaningHouse: cleaningHouse,
+          buildingType: buildingType,
+          appointment_date: appointmentDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
+          appointment_time: time === "8am - 12pm" ? "09:00" : "13:00",
+          cleaning_address: {
+            state: user?.profile?.state || "",
+            address:
+              user?.profile?.address?.address ||
+              user?.profile?.location_area ||
+              "",
+            longitude: user?.profile?.address?.longitude || "",
+            latitude: user?.profile?.address?.latitude || "",
+          },
+          payment_method: "PAYMENT_GATEWAY",
+          notes: ""
+        };
+      } else {
+        // Subscription order payload
+        const normalizedFreq = normalizeFrequency(frequency);
+        const startTime = time === "8am - 12pm" ? "08:00" : "12:00";
+        const endTime = time === "8am - 12pm" ? "12:00" : "16:00";
+        
+        // Calculate end date (3 months from start date)
+        const startDate = appointmentDate || new Date();
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 3);
+        
+        // Create weekly schedule for each selected day
+        const weeklySchedule = selectedDays.map(day => ({
+          day: day,
+          time_slots: [
+            {
+              start_time: startTime,
+              end_time: endTime
+            }
+          ]
+        }));
+        
+        payload = {
+          house_type_id: selectedHouseTypeId || "",
+          cleaningHouse: cleaningHouse,
+          buildingType: buildingType,
+          frequency: normalizedFreq,
+          subscription: {
+            start_date: startDate.toISOString().split('T')[0],
+            end_date: endDate.toISOString().split('T')[0],
+            weekly_schedule: weeklySchedule
+          },
+          cleaning_address: {
+            state: user?.profile?.state || "",
+            address:
+              user?.profile?.address?.address ||
+              user?.profile?.location_area ||
+              "",
+            longitude: user?.profile?.address?.longitude || "",
+            latitude: user?.profile?.address?.latitude || "",
+          },
+          payment_method: "PAYMENT_GATEWAY",
+          notes: ""
+        };
+      }
 
       const res = await bookCleaning(payload);
       if (res && (res as any).data?.payment_url) {
@@ -497,6 +643,101 @@ const handleFetch = () => {
                 </Button>
               </div>
             </div>
+
+            {/* Appointment Date Selection - For all booking types */}
+            <div className="pt-20">
+              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">{isOneTime ? "Appointment Date" : "Start Date"}</h1>
+              <div className="pt-6 max-w-[300px]">
+                <DatePicker
+                  date={appointmentDate}
+                  onDateChange={setAppointmentDate}
+                  placeholder={isOneTime ? "Select appointment date" : "Select start date"}
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            {/* Day Selection - Only for subscription orders */}
+            {!isOneTime && (
+              <div className="pt-20">
+                <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">Select Days</h1>
+                <div className="pt-6 space-y-4">
+                  {frequency === "Once A Week" && (
+                    <div>
+                      <Label className="text-lg font-medium">Choose day of the week:</Label>
+                      <Select value={selectedDays[0] || ""} onValueChange={(value) => setSelectedDays([value])}>
+                        <SelectTrigger className="w-full max-w-[300px] mt-2">
+                          <SelectValue placeholder="Select a day" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Monday">Monday</SelectItem>
+                          <SelectItem value="Tuesday">Tuesday</SelectItem>
+                          <SelectItem value="Wednesday">Wednesday</SelectItem>
+                          <SelectItem value="Thursday">Thursday</SelectItem>
+                          <SelectItem value="Friday">Friday</SelectItem>
+                          <SelectItem value="Saturday">Saturday</SelectItem>
+                          <SelectItem value="Sunday">Sunday</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                  
+                  {frequency === "Twice A Week" && (
+                    <div className="space-y-3">
+                      <Label className="text-lg font-medium">Choose 2 days of the week:</Label>
+                      <div className="grid grid-cols-2 gap-3 max-w-[400px]">
+                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                          <div key={day} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={day}
+                              checked={selectedDays.includes(day)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  if (selectedDays.length < 2) {
+                                    setSelectedDays([...selectedDays, day]);
+                                  }
+                                } else {
+                                  setSelectedDays(selectedDays.filter(d => d !== day));
+                                }
+                              }}
+                              disabled={!selectedDays.includes(day) && selectedDays.length >= 2}
+                            />
+                            <Label htmlFor={day} className="text-sm font-normal">{day}</Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {frequency === "Three Times A Week" && (
+                    <div className="space-y-3">
+                      <Label className="text-lg font-medium">Choose 3 days of the week:</Label>
+                      <div className="grid grid-cols-2 gap-3 max-w-[400px]">
+                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                          <div key={day} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`three-${day}`}
+                              checked={selectedDays.includes(day)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  if (selectedDays.length < 3) {
+                                    setSelectedDays([...selectedDays, day]);
+                                  }
+                                } else {
+                                  setSelectedDays(selectedDays.filter(d => d !== day));
+                                }
+                              }}
+                              disabled={!selectedDays.includes(day) && selectedDays.length >= 3}
+                            />
+                            <Label htmlFor={`three-${day}`} className="text-sm font-normal">{day}</Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </section>
         ) : (
            <section>

@@ -10,6 +10,8 @@ import {
   womenWashedIroned,
 } from "@/lib/laundry";
 import { useLaundryService } from "@/hooks/store/laundry";
+import { useGetLaundryServices } from "@/hooks/useBookLaundry";
+import { getServicesForType } from "@/lib/laundry-mapper";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -32,13 +34,28 @@ const ClothPrices = () => {
     updateExtraService
   } = useLaundryService();
   
+  // Fetch backend data for WASHED_FOLDED services
+  const { data: laundryServicesData, isLoading } = useGetLaundryServices({
+    laundry_type: 'WASHED_FOLDED'
+  });
+  
   // Initialize store with data on component mount
   useEffect(() => {
-    setMenServices(menLaundryWashedIroned);
-    setWomenServices(womenWashedIroned);
-    setChildrenServices(childrenWashedIroned);
-    setExtraServices(extraLaundryWashedOnly);
-  }, [setMenServices, setWomenServices, setChildrenServices, setExtraServices]);
+    if (laundryServicesData?.data && laundryServicesData.data.length > 0) {
+      // Use backend data if available
+      const mappedServices = getServicesForType(laundryServicesData.data, 'WASHED_FOLDED');
+      setMenServices(mappedServices.men.length > 0 ? mappedServices.men : menLaundryWashedIroned);
+      setWomenServices(mappedServices.women.length > 0 ? mappedServices.women : womenWashedIroned);
+      setChildrenServices(mappedServices.children.length > 0 ? mappedServices.children : childrenWashedIroned);
+      setExtraServices(mappedServices.extra.length > 0 ? mappedServices.extra : extraLaundryWashedOnly);
+    } else {
+      // Fallback to hardcoded data
+      setMenServices(menLaundryWashedIroned);
+      setWomenServices(womenWashedIroned);
+      setChildrenServices(childrenWashedIroned);
+      setExtraServices(extraLaundryWashedOnly);
+    }
+  }, [laundryServicesData, setMenServices, setWomenServices, setChildrenServices, setExtraServices]);
 
   const incrementQuantity = (id: number) => {
     const service = menServices.find(s => s.id === id);

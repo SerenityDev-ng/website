@@ -43,7 +43,7 @@ export default function SignInForm() {
     mutationKey: ["signIn"],
     mutationFn: async (data: z.infer<typeof formSchema>) => {
       try {
-        const response = await api.post("/api/auth/login", data);
+        const response = await api.post("/api/auth/user_login", data);
         return response.data as UserResponse;
       } catch (error: any) {
         toast.error(error.response.data.message);

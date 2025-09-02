@@ -76,7 +76,7 @@ export type ApiError = {
 };
 
 async function bookCleaning(payload: BookCleaningPayload): Promise<BookCleaningResponse> {
-  const res = await api.post("/api/cleaning_bookings", payload);
+  const res = await api.post("/api/cleaning_bookings/create-order", payload);
   return res.data as BookCleaningResponse;
 }
 

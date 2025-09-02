@@ -10,7 +10,7 @@ export interface BookRepairPayload {
   service_time: {
     opening_time: string;
     closing_time: string;
-  };
+  }[];
   service_address: {
     state: string;
     address: string;

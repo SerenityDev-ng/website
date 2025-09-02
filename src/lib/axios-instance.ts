@@ -5,7 +5,7 @@ import axios from "axios";
 // Create axios instance
 const api = axios.create({
   baseURL: "https://backend-c2f9.onrender.com",
-  timeout: 20000,
+  // timeout: 20000,
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import api from "@/lib/axios-instance";
 import type { AxiosError } from "axios";
 
@@ -63,6 +63,48 @@ export function useBookLaundry(
   return useMutation<BookLaundryResponse, AxiosError<ApiError>, BookLaundryPayload>({
     mutationKey: ["book-laundry"],
     mutationFn: bookLaundry,
+    ...options,
+  });
+}
+
+// Types for fetching laundry services
+export type LaundryType = "WASHED_FOLDED" | "IRONED" | "WASHED_IRONED";
+
+export interface LaundryService {
+  _id: string;
+  user?: string;
+  laundry_type: string;
+  wear: string;
+  price: string;
+  customer_type: string;
+}
+
+export interface GetLaundryServicesResponse {
+  data: LaundryService[];
+}
+
+export interface GetLaundryServicesParams {
+  laundry_type?: LaundryType;
+}
+
+async function getLaundryServices(params?: GetLaundryServicesParams): Promise<GetLaundryServicesResponse> {
+  const searchParams = new URLSearchParams();
+  if (params?.laundry_type) {
+    searchParams.append('laundry_type', params.laundry_type);
+  }
+  
+  const url = `/api/laundry${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+  const res = await api.get(url);
+  return res.data as GetLaundryServicesResponse;
+}
+
+export function useGetLaundryServices(
+  params?: GetLaundryServicesParams,
+  options?: UseQueryOptions<GetLaundryServicesResponse, AxiosError<ApiError>>
+) {
+  return useQuery<GetLaundryServicesResponse, AxiosError<ApiError>>({
+    queryKey: ["laundry-services", params],
+    queryFn: () => getLaundryServices(params),
     ...options,
   });
 }
