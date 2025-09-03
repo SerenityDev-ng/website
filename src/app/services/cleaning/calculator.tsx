@@ -147,7 +147,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
     }
 
     // Monthly subscription: adjust by weekly frequency (1x, 2x, 3x per week)
-    let base = toNum(selectedHouseType.monthly_price);
+    const base = toNum(selectedHouseType.monthly_price);
     let multiplier = 1;
     if (frequency === "Twice A Week") multiplier = 2;
     if (frequency === "Three Times A Week") multiplier = 3;
@@ -526,7 +526,7 @@ const handleFetch = () => {
                     return toNum(ht.deepCleaning_price) || toNum(ht.onetime_price);
                   }
                   if (isOneTime) return toNum(ht.onetime_price);
-                  let base = toNum(ht.monthly_price);
+                  const base = toNum(ht.monthly_price);
                   let multiplier = 1;
                   if (frequency === "Twice A Week") multiplier = 2;
                   if (frequency === "Three Times A Week") multiplier = 3;
