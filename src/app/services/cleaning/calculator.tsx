@@ -13,10 +13,20 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import DrawerDialog from "@/app/_components/drawer-dialog";
 import CleaningServiceForm from "@/app/_components/forms/cleaning";
-import { useBookCleaning, useGetHouseTypes, type BookCleaningPayload } from "@/hooks/useBookCleaning";
+import {
+  useBookCleaning,
+  useGetHouseTypes,
+  type BookCleaningPayload,
+} from "@/hooks/useBookCleaning";
 import { useAuthStore } from "@/hooks/store/user";
 import { DatePicker } from "@/components/ui/date-picker";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
 type Props = {
@@ -95,15 +105,21 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
   );
   const [time, setTime] = useState("8am - 12pm");
   const [selectedHouseTypeId, setSelectedHouseTypeId] = useState<string>("");
-  const [appointmentDate, setAppointmentDate] = useState<Date | undefined>(undefined);
+  const [appointmentDate, setAppointmentDate] = useState<Date | undefined>(
+    undefined
+  );
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   // Initialize hooks for booking and auth store
   const { mutateAsync: bookCleaning, isPending: isBooking } = useBookCleaning();
   const user = useAuthStore((state) => state.user);
-  const { data: houseTypesResp, isLoading: houseTypesLoading } = useGetHouseTypes();
+  const { data: houseTypesResp, isLoading: houseTypesLoading } =
+    useGetHouseTypes();
   const filteredHouseTypes = React.useMemo(
-    () => (houseTypesResp?.data ?? []).filter((ht) => (buildingType === "duplex" ? ht.isDuplex : !ht.isDuplex)),
+    () =>
+      (houseTypesResp?.data ?? []).filter((ht) =>
+        buildingType === "duplex" ? ht.isDuplex : !ht.isDuplex
+      ),
     [houseTypesResp, buildingType]
   );
   const selectedHouseType = React.useMemo(
@@ -137,7 +153,9 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
     // Deep cleaning uses deepCleaning_price (fallback to onetime_price if missing)
     if (cleaningHouse === "deep") {
-      const price = toNum(selectedHouseType.deepCleaning_price) || toNum(selectedHouseType.onetime_price);
+      const price =
+        toNum(selectedHouseType.deepCleaning_price) ||
+        toNum(selectedHouseType.onetime_price);
       return price;
     }
 
@@ -156,12 +174,17 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
   // Removed legacy quantity-based handlers (updateServicesAndTotal, incrementExtraQuantity, decrementExtraQuantity)
   // Calculate total using house type-based calculation
-const handleFetch = () => {
+  const handleFetch = () => {
     if (!selectedHouseTypeId) {
-      return toast.warning("Please select a house type", { position: "top-center" });
+      return toast.warning("Please select a house type", {
+        position: "top-center",
+      });
     }
     if (houseTypesLoading) {
-      return toast.message("Fetching latest pricing... Please try again in a moment.", { position: "top-center" });
+      return toast.message(
+        "Fetching latest pricing... Please try again in a moment.",
+        { position: "top-center" }
+      );
     }
     setIsLoading(true);
     const newTotal = calculateTotal();
@@ -183,13 +206,15 @@ const handleFetch = () => {
       case "Twice A Week":
         return "Twice A Week";
       case "Once A Week":
-        return "once_in_a_week";
+        return "Once A Week";
       default:
         return "Once_A_Week";
     }
   };
 
-  const parseTimeWindow = (t: string): { opening_time: string; closing_time: string } => {
+  const parseTimeWindow = (
+    t: string
+  ): { opening_time: string; closing_time: string } => {
     const lower = t.toLowerCase();
     if (lower.includes("8am")) {
       return { opening_time: "08:00", closing_time: "12:00" };
@@ -218,35 +243,58 @@ const handleFetch = () => {
   }) => {
     try {
       // Basic guard: ensure a house type is selected for housekeeping
-      if (cleaningType === "Housekeeping" && !form.house_type_id && !selectedHouseTypeId) {
-        toast.warning("Please select a house type before booking", { position: "top-center" });
+      if (
+        cleaningType === "Housekeeping" &&
+        !form.house_type_id &&
+        !selectedHouseTypeId
+      ) {
+        toast.warning("Please select a house type before booking", {
+          position: "top-center",
+        });
         return;
       }
 
       // Prefer the house_type_id coming from the form dropdown; otherwise, fall back to selected house type
       let houseTypeId = form.house_type_id || selectedHouseTypeId || "";
       if (!houseTypeId) {
-        toast.warning("Please select a valid house type before booking.", { position: "top-center" });
+        toast.warning("Please select a valid house type before booking.", {
+          position: "top-center",
+        });
         return;
       }
 
       // Guard for appointment date selection
       if (!appointmentDate) {
-        toast.warning(isOneTime ? "Please select an appointment date" : "Please select a start date", { position: "top-center" });
+        toast.warning(
+          isOneTime
+            ? "Please select an appointment date"
+            : "Please select a start date",
+          { position: "top-center" }
+        );
         return;
       }
 
       // Guard for day selection for subscription orders
       if (!isOneTime && selectedDays.length === 0) {
-        toast.warning("Please select at least one day for your subscription", { position: "top-center" });
+        toast.warning("Please select at least one day for your subscription", {
+          position: "top-center",
+        });
         return;
       }
 
       // Validate correct number of days based on frequency
       if (!isOneTime) {
-        const requiredDays = frequency === "Once A Week" ? 1 : frequency === "Twice A Week" ? 2 : 3;
+        const requiredDays =
+          frequency === "Once A Week"
+            ? 1
+            : frequency === "Twice A Week"
+              ? 2
+              : 3;
         if (selectedDays.length !== requiredDays) {
-          toast.warning(`Please select exactly ${requiredDays} day${requiredDays > 1 ? 's' : ''} for ${frequency.toLowerCase()}`, { position: "top-center" });
+          toast.warning(
+            `Please select exactly ${requiredDays} day${requiredDays > 1 ? "s" : ""} for ${frequency.toLowerCase()}`,
+            { position: "top-center" }
+          );
           return;
         }
       }
@@ -259,7 +307,7 @@ const handleFetch = () => {
           house_type_id: houseTypeId,
           cleaningHouse: form.cleaningHouse,
           buildingType: form.house,
-          appointment_date: appointmentDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
+          appointment_date: appointmentDate?.toISOString().split("T")[0],
           appointment_time: form.time === "8am - 12pm" ? "09:00" : "13:00",
           cleaning_address: {
             state: user?.profile?.state || "",
@@ -272,53 +320,52 @@ const handleFetch = () => {
             latitude: user?.profile?.address?.latitude || "",
           },
           payment_method: "PAYMENT_GATEWAY",
-          notes: ""
+          notes: "",
         };
       } else {
-         // Subscription order payload
-         const normalizedFreq = normalizeFrequency(form.frequency);
-         const startTime = form.time === "8am - 12pm" ? "08:00" : "12:00";
-         const endTime = form.time === "8am - 12pm" ? "12:00" : "16:00";
-         
-         // Calculate end date (3 months from start date)
-         const startDate = appointmentDate || new Date();
-         const endDate = new Date(startDate);
-         endDate.setMonth(endDate.getMonth() + 3);
-         
-         // Create weekly schedule for each selected day
-         const weeklySchedule = selectedDays.map(day => ({
-           day: day,
-           time_slots: [
-             {
-               start_time: startTime,
-               end_time: endTime
-             }
-           ]
-         }));
-         
-         payload = {
-           house_type_id: houseTypeId,
-           cleaningHouse: form.cleaningHouse,
-           buildingType: form.house,
-           frequency: normalizedFreq,
-           subscription: {
-             start_date: startDate.toISOString().split('T')[0],
-             end_date: endDate.toISOString().split('T')[0],
-             weekly_schedule: weeklySchedule
-               },
-             
-           
-           cleaning_address: {
-             state: user?.profile?.state || "",
-             address:
-               user?.profile?.address?.address ||
-               user?.profile?.location_area ||
-               form.location ||
-               ""
-           },
-           payment_method: "PAYMENT_GATEWAY",
-           notes: ""
-         };
+        // Subscription order payload
+        const normalizedFreq = normalizeFrequency(form.frequency);
+        const startTime = form.time === "8am - 12pm" ? "08:00" : "12:00";
+        const endTime = form.time === "8am - 12pm" ? "12:00" : "16:00";
+
+        // Calculate end date (3 months from start date)
+        const startDate = appointmentDate || new Date();
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 3);
+
+        // Create weekly schedule for each selected day
+        const weeklySchedule = selectedDays.map((day) => ({
+          day: day,
+          time_slots: [
+            {
+              start_time: startTime,
+              end_time: endTime,
+            },
+          ],
+        }));
+
+        payload = {
+          house_type_id: houseTypeId,
+          cleaningHouse: form.cleaningHouse,
+          buildingType: form.house,
+          frequency: normalizedFreq,
+          subscription: {
+            start_date: startDate.toISOString().split("T")[0],
+            end_date: endDate.toISOString().split("T")[0],
+            weekly_schedule: weeklySchedule,
+          },
+
+          cleaning_address: {
+            state: user?.profile?.state || "",
+            address:
+              user?.profile?.address?.address ||
+              user?.profile?.location_area ||
+              form.location ||
+              "",
+          },
+          payment_method: "PAYMENT_GATEWAY",
+          notes: "",
+        };
       }
 
       const res = await bookCleaning(payload);
@@ -334,7 +381,8 @@ const handleFetch = () => {
         setOpen(false);
       }
     } catch (error: any) {
-      const message = error?.response?.data?.message || "Failed to create booking";
+      const message =
+        error?.response?.data?.message || "Failed to create booking";
       toast.error(message, { position: "top-center" });
     }
   };
@@ -344,27 +392,44 @@ const handleFetch = () => {
     try {
       // Guard for housekeeping: require a house type selection
       if (cleaningType === "Housekeeping" && !selectedHouseTypeId) {
-        toast.warning("Please select a house type before booking", { position: "top-center" });
+        toast.warning("Please select a house type before booking", {
+          position: "top-center",
+        });
         return;
       }
 
       // Guard for appointment date selection
       if (!appointmentDate) {
-        toast.warning(isOneTime ? "Please select an appointment date" : "Please select a start date", { position: "top-center" });
+        toast.warning(
+          isOneTime
+            ? "Please select an appointment date"
+            : "Please select a start date",
+          { position: "top-center" }
+        );
         return;
       }
 
       // Guard for day selection for subscription orders
       if (!isOneTime && selectedDays.length === 0) {
-        toast.warning("Please select at least one day for your subscription", { position: "top-center" });
+        toast.warning("Please select at least one day for your subscription", {
+          position: "top-center",
+        });
         return;
       }
 
       // Validate correct number of days based on frequency
       if (!isOneTime) {
-        const requiredDays = frequency === "Once A Week" ? 1 : frequency === "Twice A Week" ? 2 : 3;
+        const requiredDays =
+          frequency === "Once A Week"
+            ? 1
+            : frequency === "Twice A Week"
+              ? 2
+              : 3;
         if (selectedDays.length !== requiredDays) {
-          toast.warning(`Please select exactly ${requiredDays} day${requiredDays > 1 ? 's' : ''} for ${frequency.toLowerCase()}`, { position: "top-center" });
+          toast.warning(
+            `Please select exactly ${requiredDays} day${requiredDays > 1 ? "s" : ""} for ${frequency.toLowerCase()}`,
+            { position: "top-center" }
+          );
           return;
         }
       }
@@ -377,7 +442,9 @@ const handleFetch = () => {
           house_type_id: selectedHouseTypeId || "",
           cleaningHouse: cleaningHouse,
           buildingType: buildingType,
-          appointment_date: appointmentDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
+          appointment_date:
+            appointmentDate?.toISOString().split("T")[0] ||
+            new Date().toISOString().split("T")[0],
           appointment_time: time === "8am - 12pm" ? "09:00" : "13:00",
           cleaning_address: {
             state: user?.profile?.state || "",
@@ -389,39 +456,39 @@ const handleFetch = () => {
             latitude: user?.profile?.address?.latitude || "",
           },
           payment_method: "PAYMENT_GATEWAY",
-          notes: ""
+          notes: "",
         };
       } else {
         // Subscription order payload
         const normalizedFreq = normalizeFrequency(frequency);
         const startTime = time === "8am - 12pm" ? "08:00" : "12:00";
         const endTime = time === "8am - 12pm" ? "12:00" : "16:00";
-        
+
         // Calculate end date (3 months from start date)
         const startDate = appointmentDate || new Date();
         const endDate = new Date(startDate);
         endDate.setMonth(endDate.getMonth() + 3);
-        
+
         // Create weekly schedule for each selected day
-        const weeklySchedule = selectedDays.map(day => ({
+        const weeklySchedule = selectedDays.map((day) => ({
           day: day,
           time_slots: [
             {
               start_time: startTime,
-              end_time: endTime
-            }
-          ]
+              end_time: endTime,
+            },
+          ],
         }));
-        
+
         payload = {
           house_type_id: selectedHouseTypeId || "",
           cleaningHouse: cleaningHouse,
           buildingType: buildingType,
           frequency: normalizedFreq,
           subscription: {
-            start_date: startDate.toISOString().split('T')[0],
-            end_date: endDate.toISOString().split('T')[0],
-            weekly_schedule: weeklySchedule
+            start_date: startDate.toISOString().split("T")[0],
+            end_date: endDate.toISOString().split("T")[0],
+            weekly_schedule: weeklySchedule,
           },
           cleaning_address: {
             state: user?.profile?.state || "",
@@ -433,7 +500,7 @@ const handleFetch = () => {
             latitude: user?.profile?.address?.latitude || "",
           },
           payment_method: "PAYMENT_GATEWAY",
-          notes: ""
+          notes: "",
         };
       }
 
@@ -450,7 +517,8 @@ const handleFetch = () => {
         setOpen(false);
       }
     } catch (error: any) {
-      const message = error?.response?.data?.message || "Failed to create booking";
+      const message =
+        error?.response?.data?.message || "Failed to create booking";
       toast.error(message, { position: "top-center" });
     }
   };
@@ -523,7 +591,9 @@ const handleFetch = () => {
               {filteredHouseTypes.map((ht) => {
                 const price = (() => {
                   if (cleaningHouse === "deep") {
-                    return toNum(ht.deepCleaning_price) || toNum(ht.onetime_price);
+                    return (
+                      toNum(ht.deepCleaning_price) || toNum(ht.onetime_price)
+                    );
                   }
                   if (isOneTime) return toNum(ht.onetime_price);
                   const base = toNum(ht.monthly_price);
@@ -542,10 +612,14 @@ const handleFetch = () => {
                     }}
                     className={cn(
                       "w-full text-left p-4 rounded-[10px] border transition-colors bg-[#F5F5F5] dark:bg-secondary text-black",
-                      isSelected ? "bg-primary dark:bg-primary" : "border-[#E5E5E5]"
+                      isSelected
+                        ? "bg-primary dark:bg-primary"
+                        : "border-[#E5E5E5]"
                     )}
                   >
-                    <div className="font-league-spartan font-medium text-lg lg:text-2xl">{ht.house_title || ht.house_type}</div>
+                    <div className="font-league-spartan font-medium text-lg lg:text-2xl">
+                      {ht.house_title || ht.house_type}
+                    </div>
                     <div className="mt-2 text-xl">&#8358;{price}</div>
                   </button>
                 );
@@ -557,7 +631,9 @@ const handleFetch = () => {
                 <Checkbox
                   id="one-time"
                   checked={isOneTime}
-                  onCheckedChange={(checked) => setIsOneTime(checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setIsOneTime(checked as boolean)
+                  }
                 />
                 <label
                   htmlFor="one-time"
@@ -566,13 +642,21 @@ const handleFetch = () => {
                   One-time service (unchecked for monthly subscription)
                 </label>
               </div>
-              <Button className="hover:bg-primary button-grad" onClick={handleFetch}>
+              <Button
+                className="hover:bg-primary button-grad"
+                onClick={handleFetch}
+              >
                 Calculate
               </Button>
             </aside>
 
             <div className="flex justify-between gap-3 items-center font-league-spartan font-medium text-2xl md:text-[36px] mt-20">
-              <h1>Total {isOneTime || cleaningHouse === "deep" ? "(one-time)" : "(monthly)"}</h1>
+              <h1>
+                Total{" "}
+                {isOneTime || cleaningHouse === "deep"
+                  ? "(one-time)"
+                  : "(monthly)"}
+              </h1>
               {isLoading ? (
                 <p>
                   <Loader2 className="animate-spin dark:text-white" />
@@ -583,7 +667,9 @@ const handleFetch = () => {
             </div>
 
             <div className="pt-20">
-              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">Select Frequency</h1>
+              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
+                Select Frequency
+              </h1>
 
               {cleaningHouse !== "deep" && (
                 <div className="flex gap-2 justify-start pt-6 max-w-[calc(100vw-30px)] overflow-x-auto">
@@ -591,7 +677,9 @@ const handleFetch = () => {
                     onClick={() => setFrequency("Three Times A Week")}
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                      frequency === "Three Times A Week" ? "border-primary border-2 bg-secondary" : ""
+                      frequency === "Three Times A Week"
+                        ? "border-primary border-2 bg-secondary"
+                        : ""
                     )}
                   >
                     Three Times a Week
@@ -601,7 +689,9 @@ const handleFetch = () => {
                     onClick={() => setFrequency("Twice A Week")}
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                      frequency === "Twice A Week" ? "border-primary border-2 bg-secondary" : ""
+                      frequency === "Twice A Week"
+                        ? "border-primary border-2 bg-secondary"
+                        : ""
                     )}
                   >
                     Twice a Week
@@ -610,7 +700,9 @@ const handleFetch = () => {
                     onClick={() => setFrequency("Once A Week")}
                     className={cn(
                       "border border-[#4E4848] rounded-[10px] text-sm md:text-xl bg-white text-[#4E4848] hover:bg-white/80",
-                      frequency === "Once A Week" ? "border-primary border-2 bg-secondary" : ""
+                      frequency === "Once A Week"
+                        ? "border-primary border-2 bg-secondary"
+                        : ""
                     )}
                   >
                     Once a Week
@@ -620,7 +712,9 @@ const handleFetch = () => {
             </div>
 
             <div className="pt-20">
-              <h1 className=" text-2xl md:text-[36px] font-league-spartan font-medium">Cleaning Time</h1>
+              <h1 className=" text-2xl md:text-[36px] font-league-spartan font-medium">
+                Cleaning Time
+              </h1>
 
               <div className="flex gap-2 justify-start pt-6">
                 <Button
@@ -646,12 +740,16 @@ const handleFetch = () => {
 
             {/* Appointment Date Selection - For all booking types */}
             <div className="pt-20">
-              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">{isOneTime ? "Appointment Date" : "Start Date"}</h1>
+              <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
+                {isOneTime ? "Appointment Date" : "Start Date"}
+              </h1>
               <div className="pt-6 max-w-[300px]">
                 <DatePicker
                   date={appointmentDate}
                   onDateChange={setAppointmentDate}
-                  placeholder={isOneTime ? "Select appointment date" : "Select start date"}
+                  placeholder={
+                    isOneTime ? "Select appointment date" : "Select start date"
+                  }
                   className="w-full"
                 />
               </div>
@@ -660,12 +758,19 @@ const handleFetch = () => {
             {/* Day Selection - Only for subscription orders */}
             {!isOneTime && (
               <div className="pt-20">
-                <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">Select Days</h1>
+                <h1 className="text-2xl md:text-[36px] font-league-spartan font-medium">
+                  Select Days
+                </h1>
                 <div className="pt-6 space-y-4">
                   {frequency === "Once A Week" && (
                     <div>
-                      <Label className="text-lg font-medium">Choose day of the week:</Label>
-                      <Select value={selectedDays[0] || ""} onValueChange={(value) => setSelectedDays([value])}>
+                      <Label className="text-lg font-medium">
+                        Choose day of the week:
+                      </Label>
+                      <Select
+                        value={selectedDays[0] || ""}
+                        onValueChange={(value) => setSelectedDays([value])}
+                      >
                         <SelectTrigger className="w-full max-w-[300px] mt-2">
                           <SelectValue placeholder="Select a day" />
                         </SelectTrigger>
@@ -681,13 +786,26 @@ const handleFetch = () => {
                       </Select>
                     </div>
                   )}
-                  
+
                   {frequency === "Twice A Week" && (
                     <div className="space-y-3">
-                      <Label className="text-lg font-medium">Choose 2 days of the week:</Label>
+                      <Label className="text-lg font-medium">
+                        Choose 2 days of the week:
+                      </Label>
                       <div className="grid grid-cols-2 gap-3 max-w-[400px]">
-                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-                          <div key={day} className="flex items-center space-x-2">
+                        {[
+                          "Monday",
+                          "Tuesday",
+                          "Wednesday",
+                          "Thursday",
+                          "Friday",
+                          "Saturday",
+                          "Sunday",
+                        ].map((day) => (
+                          <div
+                            key={day}
+                            className="flex items-center space-x-2"
+                          >
                             <Checkbox
                               id={day}
                               checked={selectedDays.includes(day)}
@@ -697,24 +815,47 @@ const handleFetch = () => {
                                     setSelectedDays([...selectedDays, day]);
                                   }
                                 } else {
-                                  setSelectedDays(selectedDays.filter(d => d !== day));
+                                  setSelectedDays(
+                                    selectedDays.filter((d) => d !== day)
+                                  );
                                 }
                               }}
-                              disabled={!selectedDays.includes(day) && selectedDays.length >= 2}
+                              disabled={
+                                !selectedDays.includes(day) &&
+                                selectedDays.length >= 2
+                              }
                             />
-                            <Label htmlFor={day} className="text-sm font-normal">{day}</Label>
+                            <Label
+                              htmlFor={day}
+                              className="text-sm font-normal"
+                            >
+                              {day}
+                            </Label>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
-                  
+
                   {frequency === "Three Times A Week" && (
                     <div className="space-y-3">
-                      <Label className="text-lg font-medium">Choose 3 days of the week:</Label>
+                      <Label className="text-lg font-medium">
+                        Choose 3 days of the week:
+                      </Label>
                       <div className="grid grid-cols-2 gap-3 max-w-[400px]">
-                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-                          <div key={day} className="flex items-center space-x-2">
+                        {[
+                          "Monday",
+                          "Tuesday",
+                          "Wednesday",
+                          "Thursday",
+                          "Friday",
+                          "Saturday",
+                          "Sunday",
+                        ].map((day) => (
+                          <div
+                            key={day}
+                            className="flex items-center space-x-2"
+                          >
                             <Checkbox
                               id={`three-${day}`}
                               checked={selectedDays.includes(day)}
@@ -724,12 +865,22 @@ const handleFetch = () => {
                                     setSelectedDays([...selectedDays, day]);
                                   }
                                 } else {
-                                  setSelectedDays(selectedDays.filter(d => d !== day));
+                                  setSelectedDays(
+                                    selectedDays.filter((d) => d !== day)
+                                  );
                                 }
                               }}
-                              disabled={!selectedDays.includes(day) && selectedDays.length >= 3}
+                              disabled={
+                                !selectedDays.includes(day) &&
+                                selectedDays.length >= 3
+                              }
                             />
-                            <Label htmlFor={`three-${day}`} className="text-sm font-normal">{day}</Label>
+                            <Label
+                              htmlFor={`three-${day}`}
+                              className="text-sm font-normal"
+                            >
+                              {day}
+                            </Label>
                           </div>
                         ))}
                       </div>
@@ -740,13 +891,13 @@ const handleFetch = () => {
             )}
           </section>
         ) : (
-           <section>
-             <p>
-               You can proceed to scheduling, as price will be discussed upon
-               inspection of property. Thank you.
-             </p>
-           </section>
-         )}
+          <section>
+            <p>
+              You can proceed to scheduling, as price will be discussed upon
+              inspection of property. Thank you.
+            </p>
+          </section>
+        )}
 
         <div className="my-20 w-full flex justify-center">
           <Button
