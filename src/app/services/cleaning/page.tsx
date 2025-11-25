@@ -1,5 +1,68 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import CleaningPageClient from "./_components/cleaning-page-client";
+
+const cleaningServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Professional Cleaning Services",
+  "description": "Comprehensive cleaning services in Abuja including home cleaning, office cleaning, deep cleaning, housekeeping, post-construction cleaning, janitorial services, and fumigation.",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Serenity",
+    "url": "https://www.serenity.ng",
+    "telephone": "+2348135518126",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Abuja",
+      "addressRegion": "FCT",
+      "addressCountry": "NG"
+    }
+  },
+  "serviceType": "Cleaning Service",
+  "areaServed": {
+    "@type": "City",
+    "name": "Abuja"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Cleaning Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Home Cleaning",
+          "description": "Professional residential cleaning services for homes and apartments"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Office Cleaning",
+          "description": "Commercial cleaning services for offices and workspaces"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Deep Cleaning",
+          "description": "Intensive deep cleaning for move-ins, post-renovation, and seasonal refreshes"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Carpet Cleaning",
+          "description": "Professional carpet and rug cleaning with eco-friendly solutions"
+        }
+      }
+    ]
+  }
+};
 
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Nigeria | Serenity",
@@ -46,7 +109,16 @@ export const metadata: Metadata = {
 type Props = {};
 
 const CleaningPage = (props: Props) => {
-  return <CleaningPageClient />;
+  return (
+    <>
+      <Script
+        id="cleaning-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(cleaningServiceSchema) }}
+      />
+      <CleaningPageClient />
+    </>
+  );
 };
 
 export default CleaningPage;
