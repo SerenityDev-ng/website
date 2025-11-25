@@ -255,7 +255,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
       }
 
       // Prefer the house_type_id coming from the form dropdown; otherwise, fall back to selected house type
-      let houseTypeId = form.house_type_id || selectedHouseTypeId || "";
+      const houseTypeId = form.house_type_id || selectedHouseTypeId || "";
       if (!houseTypeId) {
         toast.warning("Please select a valid house type before booking.", {
           position: "top-center",
