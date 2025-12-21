@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Cleaning, cleaning } from "@/lib/laundry";
@@ -109,6 +109,11 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
     undefined
   );
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [bedrooms, setBedrooms] = useState<number>(1);
+  const [toilets, setToilets] = useState<number>(1);
+  const [livingRooms, setLivingRooms] = useState<number>(1);
+  const [kitchen, setKitchen] = useState<number>(1); // Dummy field
+  const [balcony, setBalcony] = useState<number>(0); // Dummy field
 
   // Initialize hooks for booking and auth store
   const { mutateAsync: bookCleaning, isPending: isBooking } = useBookCleaning();
@@ -126,6 +131,62 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
     () => filteredHouseTypes.find((ht) => ht._id === selectedHouseTypeId),
     [filteredHouseTypes, selectedHouseTypeId]
   );
+
+  // Function to find the best matching house type based on room counts
+  const findBestMatch = React.useMemo(() => {
+    if (!filteredHouseTypes.length) return null;
+
+    // Calculate a score for each house type based on how close it matches
+    const scored = filteredHouseTypes.map((ht) => {
+      const htRooms = parseInt(ht.rooms || "0", 10);
+      const htToilets = parseInt(ht.toilets || "0", 10);
+      const htLivingRooms = parseInt(ht.living_rooms || "0", 10);
+
+      // Calculate difference (lower is better)
+      const roomDiff = Math.abs(htRooms - bedrooms);
+      const toiletDiff = Math.abs(htToilets - toilets);
+      const livingRoomDiff = Math.abs(htLivingRooms - livingRooms);
+
+      // Weighted score (rooms are most important, then toilets, then living rooms)
+      const score = roomDiff * 3 + toiletDiff * 2 + livingRoomDiff * 1;
+
+      return { houseType: ht, score, roomDiff, toiletDiff, livingRoomDiff };
+    });
+
+    // Sort by score (lowest first) and return the best match
+    scored.sort((a, b) => a.score - b.score);
+    return scored[0]?.houseType || null;
+  }, [filteredHouseTypes, bedrooms, toilets, livingRooms]);
+
+  // Auto-select the best match when room counts or building type changes
+  useEffect(() => {
+    if (findBestMatch) {
+      setSelectedHouseTypeId(findBestMatch._id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [findBestMatch?._id, buildingType]);
+
+  // Helper function to get day name from date
+  const getDayName = (date: Date): string => {
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    return days[date.getDay()];
+  };
+
+  // Auto-extract day from selected date when frequency is "Once A Week"
+  useEffect(() => {
+    if (!isOneTime && frequency === "Once A Week" && appointmentDate) {
+      const dayName = getDayName(appointmentDate);
+      setSelectedDays([dayName]);
+    }
+  }, [appointmentDate, frequency, isOneTime]);
 
   // Helper to safely parse backend price strings like "120,000"
   const toNum = (v: string | number | undefined) =>
@@ -145,7 +206,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
   //   return found;
   // }, [houseTypesResp, services, buildingType]);
 
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     if (!selectedHouseType) {
       toast.warning("Please select a house type", { position: "top-center" });
       return 0;
@@ -170,16 +231,16 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
     if (frequency === "Twice A Week") multiplier = 2;
     if (frequency === "Three Times A Week") multiplier = 3;
     return base * multiplier;
-  };
+  }, [selectedHouseType, cleaningHouse, isOneTime, frequency]);
 
   // Removed legacy quantity-based handlers (updateServicesAndTotal, incrementExtraQuantity, decrementExtraQuantity)
   // Calculate total using house type-based calculation
-  const handleFetch = () => {
-    if (!selectedHouseTypeId) {
-      return toast.warning("Please select a house type", {
-        position: "top-center",
-      });
-    }
+  const handleFetch = useCallback(() => {
+    // if (!selectedHouseTypeId) {
+    //   return toast.warning("Please select a house type", {
+    //     position: "top-center",
+    //   });
+    // }
     if (houseTypesLoading) {
       return toast.message(
         "Fetching latest pricing... Please try again in a moment.",
@@ -193,11 +254,11 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
       setIsLoading(false);
     }, 800);
     return () => clearTimeout(timeout);
-  };
+  }, [houseTypesLoading, calculateTotal]);
 
   useEffect(() => {
     handleFetch();
-  }, [time, frequency, isOneTime, cleaningHouse, buildingType]);
+  }, [handleFetch, time, buildingType]);
 
   const normalizeFrequency = (f: string) => {
     switch (f) {
@@ -255,7 +316,7 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
       }
 
       // Prefer the house_type_id coming from the form dropdown; otherwise, fall back to selected house type
-      let houseTypeId = form.house_type_id || selectedHouseTypeId || "";
+      const houseTypeId = form.house_type_id || selectedHouseTypeId || "";
       if (!houseTypeId) {
         toast.warning("Please select a valid house type before booking.", {
           position: "top-center",
@@ -587,44 +648,197 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
 
         {cleaningType === "Housekeeping" ? (
           <section>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredHouseTypes.map((ht) => {
-                const price = (() => {
-                  if (cleaningHouse === "deep") {
-                    return (
-                      toNum(ht.deepCleaning_price) || toNum(ht.onetime_price)
-                    );
-                  }
-                  if (isOneTime) return toNum(ht.onetime_price);
-                  const base = toNum(ht.monthly_price);
-                  let multiplier = 1;
-                  if (frequency === "Twice A Week") multiplier = 2;
-                  if (frequency === "Three Times A Week") multiplier = 3;
-                  return base * multiplier;
-                })();
-                const isSelected = selectedHouseTypeId === ht._id;
-                return (
-                  <button
-                    key={ht._id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedHouseTypeId(ht._id);
-                    }}
-                    className={cn(
-                      "w-full text-left p-4 rounded-[10px] border transition-colors bg-[#F5F5F5] dark:bg-secondary text-black",
-                      isSelected
-                        ? "bg-primary dark:bg-primary"
-                        : "border-[#E5E5E5]"
-                    )}
-                  >
-                    <div className="font-league-spartan font-medium text-lg lg:text-2xl">
-                      {ht.house_title || ht.house_type}
-                    </div>
-                    <div className="mt-2 text-xl">&#8358;{price}</div>
-                  </button>
-                );
-              })}
+            {/* Room Selection Section - Table/Column Format */}
+            <div className="mb-10">
+              <h2 className="text-xl md:text-2xl font-league-spartan font-medium mb-6">
+                Select Number of Rooms
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-b border-[#E5E5E5]">
+                      <th className="text-left py-4 px-4 font-league-spartan font-medium text-base md:text-lg">
+                        Room Type
+                      </th>
+                      <th className="text-center py-4 px-4 font-league-spartan font-medium text-base md:text-lg">
+                        Quantity
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* Bedrooms */}
+                    <tr className="border-b border-[#E5E5E5]">
+                      <td className="py-4 px-4">
+                        <Label className="text-base font-medium">
+                          Bedrooms
+                        </Label>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() =>
+                              setBedrooms(Math.max(1, bedrooms - 1))
+                            }
+                            className="h-10 w-10 rounded-full"
+                          >
+                            -
+                          </Button>
+                          <span className="text-xl font-medium min-w-[40px] text-center">
+                            {bedrooms}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setBedrooms(bedrooms + 1)}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Toilets */}
+                    <tr className="border-b border-[#E5E5E5]">
+                      <td className="py-4 px-4">
+                        <Label className="text-base font-medium">Toilets</Label>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setToilets(Math.max(1, toilets - 1))}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            -
+                          </Button>
+                          <span className="text-xl font-medium min-w-[40px] text-center">
+                            {toilets}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setToilets(toilets + 1)}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Living Rooms */}
+                    <tr className="border-b border-[#E5E5E5]">
+                      <td className="py-4 px-4">
+                        <Label className="text-base font-medium">
+                          Living Rooms
+                        </Label>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() =>
+                              setLivingRooms(Math.max(1, livingRooms - 1))
+                            }
+                            className="h-10 w-10 rounded-full"
+                          >
+                            -
+                          </Button>
+                          <span className="text-xl font-medium min-w-[40px] text-center">
+                            {livingRooms}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setLivingRooms(livingRooms + 1)}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Kitchen - Dummy */}
+                    <tr className="border-b border-[#E5E5E5]">
+                      <td className="py-4 px-4">
+                        <Label className="text-base font-medium">Kitchen</Label>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setKitchen(Math.max(1, kitchen - 1))}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            -
+                          </Button>
+                          <span className="text-xl font-medium min-w-[40px] text-center">
+                            {kitchen}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setKitchen(kitchen + 1)}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Balcony - Dummy */}
+                    <tr className="border-b border-[#E5E5E5]">
+                      <td className="py-4 px-4">
+                        <Label className="text-base font-medium">Balcony</Label>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setBalcony(Math.max(0, balcony - 1))}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            -
+                          </Button>
+                          <span className="text-xl font-medium min-w-[40px] text-center">
+                            {balcony}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setBalcony(balcony + 1)}
+                            className="h-10 w-10 rounded-full"
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
+
+            {/* House Type Selection - Hidden, matching happens automatically in background */}
 
             <aside className="flex items-center justify-between gap-5 mt-5">
               <div className="flex items-center space-x-2">
@@ -765,25 +979,19 @@ const CleaningCalculator = ({ cleaningType }: Props) => {
                   {frequency === "Once A Week" && (
                     <div>
                       <Label className="text-lg font-medium">
-                        Choose day of the week:
+                        Selected day:
                       </Label>
-                      <Select
-                        value={selectedDays[0] || ""}
-                        onValueChange={(value) => setSelectedDays([value])}
-                      >
-                        <SelectTrigger className="w-full max-w-[300px] mt-2">
-                          <SelectValue placeholder="Select a day" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Monday">Monday</SelectItem>
-                          <SelectItem value="Tuesday">Tuesday</SelectItem>
-                          <SelectItem value="Wednesday">Wednesday</SelectItem>
-                          <SelectItem value="Thursday">Thursday</SelectItem>
-                          <SelectItem value="Friday">Friday</SelectItem>
-                          <SelectItem value="Saturday">Saturday</SelectItem>
-                          <SelectItem value="Sunday">Sunday</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      {appointmentDate ? (
+                        <div className="mt-2 p-3 bg-[#F5F5F5] dark:bg-secondary text-black rounded-lg border border-[#E5E5E5] max-w-[300px]">
+                          <span className="text-base font-medium">
+                            {getDayName(appointmentDate)}
+                          </span>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Please select a start date to determine the day
+                        </p>
+                      )}
                     </div>
                   )}
 
