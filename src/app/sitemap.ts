@@ -1,10 +1,24 @@
 import { MetadataRoute } from 'next';
+import { client } from '@/sanity/lib/client';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date().toISOString();
   const changeFrequency = 'weekly';
 
-  return [
+  const posts = await client.fetch(`
+    *[_type == "post"] {
+      "slug": slug.current,
+      publishedAt
+    }
+  `);
+
+  const blogRoutes = posts.map((post: any) => ({
+    url: `https://www.serenity.ng/blog/${post.slug}`,
+    lastModified: post.publishedAt || lastModified,
+    changeFrequency: 'weekly',
+  }));
+
+  const routes = [
     {
       url: 'https://www.serenity.ng/',
       lastModified,
@@ -56,4 +70,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency,
     },
   ];
+
+  return [...routes, ...blogRoutes];
 }

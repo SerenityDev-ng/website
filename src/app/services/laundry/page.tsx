@@ -1,5 +1,30 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import LaundryPageClient from "./_components/laundry-page-client";
+
+const laundryServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Laundry and Dry Cleaning Services",
+  "description": "Professional laundry and dry cleaning services in Abuja including wash & fold, ironing, and special garment care with convenient pickup and delivery.",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Serenity",
+    "url": "https://www.serenity.ng",
+    "telephone": "+2348135518126",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Abuja",
+      "addressRegion": "FCT",
+      "addressCountry": "NG"
+    }
+  },
+  "serviceType": "Laundry Service",
+  "areaServed": {
+    "@type": "City",
+    "name": "Abuja"
+  }
+};
 
 export const metadata: Metadata = {
   title: "Laundry and Dry Cleaning Services in Nigeria | Serenity",
@@ -45,7 +70,16 @@ export const metadata: Metadata = {
 type Props = {};
 
 const LaundryPage = (props: Props) => {
-  return <LaundryPageClient />;
+  return (
+    <>
+      <Script
+        id="laundry-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(laundryServiceSchema) }}
+      />
+      <LaundryPageClient />
+    </>
+  );
 };
 
 export default LaundryPage;

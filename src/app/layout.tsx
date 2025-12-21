@@ -11,18 +11,55 @@ import Script from "next/script";
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "LocalBusiness"],
   name: "Serenity",
   url: "https://www.serenity.ng",
   logo: "https://www.serenity.ng/logo.svg",
+  description: "Professional cleaning, laundry, and home repair services in Abuja, Nigeria. Trusted local experts for residential and commercial needs.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Abuja",
+    addressLocality: "Abuja",
+    addressRegion: "FCT",
+    postalCode: "900001",
+    addressCountry: "NG"
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "9.0765",
+    longitude: "7.3986"
+  },
+  areaServed: {
+    "@type": "City",
+    name: "Abuja",
+    "@id": "https://en.wikipedia.org/wiki/Abuja"
+  },
+  priceRange: "$$",
+  telephone: "+2348135518126",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+2348135518126",
     contactType: "Customer Service",
     email: "mail@serenity.ng",
+    availableLanguage: ["English"]
   },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "08:00",
+      closes: "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "09:00",
+      closes: "17:00"
+    }
+  ],
   sameAs: [
     "https://www.instagram.com/serenity.ng_official",
+    "https://wa.me/2348135518126",
   ],
 };
 
