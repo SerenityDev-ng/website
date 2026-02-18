@@ -72,5 +72,45 @@ export const blockContentType = defineType({
         },
       ],
     }),
+    defineArrayMember({
+      type: "object",
+      name: "faq",
+      title: "FAQ Section",
+      fields: [
+        {
+          name: "question",
+          type: "string",
+          title: "Question",
+        },
+        {
+          name: "answer",
+          type: "text",
+          title: "Answer",
+        },
+      ],
+    }),
+    defineArrayMember({
+      type: "object",
+      name: "pricingTable",
+      title: "Pricing Table",
+      fields: [
+        {
+          name: "rows",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                { name: "homeType", type: "string" },
+                { name: "location", type: "string" },
+                { name: "price", type: "string" },
+                { name: "teamSize", type: "string" },
+                { name: "duration", type: "string" },
+              ],
+            },
+          ],
+        },
+      ],
+    }),
   ],
 });
