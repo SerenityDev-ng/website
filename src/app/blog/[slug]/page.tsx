@@ -31,7 +31,7 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    image: urlFor(post.mainImage.asset._ref),
+    image: (post?.mainImage as any)?.localPath || (post?.mainImage?.asset?._ref ? urlFor(post.mainImage.asset._ref) : ""),
     datePublished: formatISO(new Date(post.publishedAt)),
     dateModified: formatISO(new Date(post._updatedAt || post.publishedAt)),
     author: {
@@ -60,10 +60,10 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <Image
-        alt={`Featured article ${post?.slug}`}
-        src={urlFor(post?.mainImage?.asset?._ref as string)}
-        width={0}
-        height={0}
+        alt={`Featured article ${post?.slug.current}`}
+        src={(post?.mainImage as any)?.localPath || (post?.mainImage?.asset?._ref ? urlFor(post.mainImage.asset._ref) : "https://via.placeholder.com/1200x600?text=Sanity+Not+Connected")}
+        width={1200}
+        height={600}
         sizes="100vw"
         objectFit="cover"
         className="w-full max-h-60 object-cover rounded-t-xl mx-auto"
@@ -75,11 +75,10 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
         <div className="flex items-center justify-center mt-8 text-muted-foreground">
           <div className="flex items-center gap-2 px-3">
             <Image
-              alt={`Featured article ${post?.slug}`}
-              src={urlFor(post?.author?.image?.asset?._ref as string)}
-              width={0}
-              height={0}
-              sizes="100vw"
+              alt={`Author ${post?.author?.name}`}
+              src={(post?.author?.image as any)?.localPath || (post?.author?.image?.asset?._ref ? urlFor(post.author.image.asset._ref) : "https://via.placeholder.com/40x40?text=A")}
+              width={40}
+              height={40}
               objectFit="cover"
               className="w-10 h-10 object-cover rounded-full"
             />
