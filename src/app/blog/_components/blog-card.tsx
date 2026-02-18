@@ -15,8 +15,13 @@ const BlogCard = ({ item }: Props) => {
     <article className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="relative aspect-video">
         <Image
-          src={urlFor(item?.mainImage?.asset?._ref as string)}
-          alt={`Featured article ${item?.slug}`}
+          src={
+            (item?.mainImage as any)?.localPath ||
+            (item?.mainImage?.asset?._ref
+              ? urlFor(item.mainImage.asset._ref)
+              : "https://via.placeholder.com/800x450?text=Blog+Post")
+          }
+          alt={`Featured article ${item?.title || item?.slug.current}`}
           layout="fill"
           objectFit="cover"
         />
