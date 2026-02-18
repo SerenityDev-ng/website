@@ -4,9 +4,10 @@
         "current": "home-cleaning-services-gwarinpa-estate-abuja"
     },
     "publishedAt": "2026-02-18T10:00:00Z",
-    "excerpt": "Looking for the best home cleaning in Gwarinpa? From Gwarinpa 1st Avenue to the extensions, Serenity.ng offers premium, reliable cleaning tailored for Abuja homes.",
+    "excerpt": "Discover tailored cleaning solutions for Gwarinpa's unique housing landscape. From Phase 1 mansions to Karsana developments, we've got you covered.",
     "mainImage": {
-        "localPath": "/blog/gwarinpa/main.jpg"
+        "localPath": "/blog/gwarinpa/main.jpg",
+        "alt": "Gwarinpa Estate Cleaning"
     },
     "author": {
         "name": "Serenity.ng Team",
@@ -20,41 +21,142 @@
             "children": [
                 {
                     "_type": "span",
-                    "text": "Are you living in Gwarinpa and struggling to keep your home in top shape? You're not alone. Abuja's largest estate is beautiful, but the dust and busy city life can quickly take a toll on your living space."
+                    "text": "Gwarinpa Estate isn't just another Abuja neighborhood—it's a vibrant city within a city. As Nigeria's largest single housing estate, it spans three distinct phases, each with its own character and characteristically unique cleaning needs. Whether you're living in a sprawling mansion on 1st Avenue or a modern townhouse in Phase 3, you know that keeping a home 'Gwarinpa-clean' requires more than just a standard sweep."
                 }
             ],
             "style": "normal"
         },
         {
-            "_type": "image",
-            "localPath": "/blog/gwarinpa/interior.jpg",
-            "alt": "Beautifully cleaned Gwarinpa interior"
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "At Serenity.ng, we’ve spent years understanding the pulse of this community. We know about the Harmattan dust that settles on Phase 3 balconies and the specialized care needed for the marble floors in Phase 1. That’s why we don’t just offer cleaning; we offer a Gwarinpa-specific service."
+                }
+            ],
+            "style": "normal"
         },
         {
-            "_type": "object",
-            "name": "faq",
-            "question": "Is Gwarinpa safe for your cleaners?",
-            "answer": "Yes! Gwarinpa is one of our primary service areas. Our teams are vetted and familiar with all avenues and gated communities in the estate."
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Tailored Solutions for Every Corner of Gwarinpa"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Phase 1 (1st-4th Avenue): The Majesty of the VIP Zone"
+                }
+            ],
+            "style": "h3"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "The grand detached homes and mansions of 1st Avenue are masterpieces of architecture. However, with 6+ bedrooms and high-reaching chandeliers, maintenance can be overwhelming. We deploy specialized 4-person teams equipped with industrial scrubbers and extension poles to ensure every corner—from the gatehouse to the kitchen ceiling—is spotless."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Phase 2 & 3: Modern Living in Terraces and Townhouses"
+                }
+            ],
+            "style": "h3"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Popular with young families and professionals, these areas feature beautiful terraced duplexes that demand efficient, thorough cleaning. Our 2-person teams focus on detail, using high-quality glass cleaners and HEPA vacuums to keep your modern finishes shining."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Gwarinpa-Specific Pricing Guide"
+                }
+            ],
+            "style": "h2"
         },
         {
             "_type": "object",
             "name": "pricingTable",
             "rows": [
                 {
-                    "homeType": "2-Bedroom Flat",
-                    "location": "Gwarinpa Estate",
-                    "price": "₦25,000 - ₦35,000",
-                    "teamSize": "2-3 Members",
-                    "duration": "4-6 Hours"
+                    "homeType": "1-bed Apartment",
+                    "location": "Village/News Engineering",
+                    "price": "₦15,000 – ₦20,000",
+                    "teamSize": "1 person",
+                    "duration": "2-3 hours"
                 },
                 {
-                    "homeType": "3-Bedroom Flat",
-                    "location": "Gwarinpa Estate",
-                    "price": "₦35,000 - ₦50,000",
-                    "teamSize": "3-4 Members",
-                    "duration": "6-8 Hours"
+                    "homeType": "2-3 bed Flat",
+                    "location": "Phase 2/3",
+                    "price": "₦25,000 – ₦40,000",
+                    "teamSize": "2 people",
+                    "duration": "3-4 hours"
+                },
+                {
+                    "homeType": "4-5 bed Duplex",
+                    "location": "Phase 2/3",
+                    "price": "₦50,000 – ₦70,000",
+                    "teamSize": "3 people",
+                    "duration": "4-5 hours"
+                },
+                {
+                    "homeType": "6+ bed Mansion",
+                    "location": "1st Avenue VIP Zone",
+                    "price": "₦80,000 – ₦150,000",
+                    "teamSize": "4 people",
+                    "duration": "6-8 hours"
                 }
             ]
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Frequently Asked Questions (Gwarinpa Edition)"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Do your cleaners have clearance for Gwarinpa Estate gates?",
+            "answer": "Yes. All staff carry verified IDs registered with Gwarinpa security. For Phase 1 (VIP zone), we can provide additional documentation if your gate requires it."
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Can you handle the large size of 1st Avenue mansions?",
+            "answer": "Absolutely. We deploy 4-person teams with industrial equipment for mansions 500sqm+. We've cleaned homes up to 8 bedrooms in the VIP zone."
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "What about new homes in Karsana with construction dust?",
+            "answer": "Post-construction cleaning is our specialty for Karsana. We use industrial extractors and chemical treatments to remove cement dust from every surface."
         }
     ]
 }

@@ -4,9 +4,10 @@
         "current": "post-construction-cleaning-abuja-essential-move-in-guide"
     },
     "publishedAt": "2026-02-18T11:00:00Z",
-    "excerpt": "Don't move into dust and debris! Discover why professional post-construction cleaning is essential for your family's health and your new home's longevity.",
+    "excerpt": "Don't move into dust and debris! Discover why professional post-construction cleaning is essential for your family's health and your home's longevity.",
     "mainImage": {
-        "localPath": "/blog/post-construction/before-after.jpg"
+        "localPath": "/blog/post-construction/main.jpg",
+        "alt": "Post-Construction Cleaning"
     },
     "author": {
         "name": "Serenity.ng Team",
@@ -20,26 +21,116 @@
             "children": [
                 {
                     "_type": "span",
-                    "text": "Construction dust isn't like regular house dust. It's a toxic cocktail of fine silica, paint fumes, and chemical solvents. Standard mopping won't remove these hazards."
+                    "text": "Congratulations on your new home! Whether it's in Karsana, Gwarinpa, or Lokogoma, those fresh walls and gleaming fixtures are a dream come true. However, before you unpack your first box, there's an invisible threat you need to know about."
                 }
             ],
             "style": "normal"
         },
         {
-            "_type": "image",
-            "localPath": "/blog/post-construction/dust-cleanup.jpg",
-            "alt": "Standard cleaning doesn't remove construction dust"
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "CRITICAL HEALTH WARNING: Why 'Just Sweeping' Isn't Enough"
+                }
+            ],
+            "style": "h2"
         },
         {
-            "_type": "image",
-            "localPath": "/blog/post-construction/equipment.jpg",
-            "alt": "Industrial cleaning equipment for construction sites"
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Construction dust isn't like regular house dust. It's a toxic cocktail of fine silica (from tile and concrete cutting), paint fumes, chemical solvents, and sharp debris like glass shards or hidden nails. Standard mopping won't remove these—it often just spreads them around."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "object",
+            "name": "pricingTable",
+            "rows": [
+                {
+                    "homeType": "2-bedroom Apartment",
+                    "location": "Abuja Urban",
+                    "price": "₦60,000 – ₦120,000",
+                    "teamSize": "4 Trained Technicians",
+                    "duration": "1-2 days"
+                },
+                {
+                    "homeType": "3-bedroom Flat",
+                    "location": "Abuja Urban",
+                    "price": "₦80,000 – ₦150,000",
+                    "teamSize": "4 Trained Technicians",
+                    "duration": "2-3 days"
+                },
+                {
+                    "homeType": "4-bedroom Duplex",
+                    "location": "Abuja Urban",
+                    "price": "₦120,000 – ₦220,000",
+                    "teamSize": "6 Trained Technicians",
+                    "duration": "3-4 days"
+                },
+                {
+                    "homeType": "5+ bedroom Mansion",
+                    "location": "Abuja Urban",
+                    "price": "₦180,000 – ₦350,000+",
+                    "teamSize": "8 Trained Technicians",
+                    "duration": "4-7 days"
+                }
+            ]
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "The Serenity.ng Three-Phase Transformation"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Phase 1: The Rough Clean (Debris Removal). We start by clearing the heavy stuff—wood scraps, drywall pieces, packaging, and the thickest layers of grout and cement chunks left behind by builders."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Phase 2: The Deep Restoration. We use acidic cleaners to remove cement haze from tiles, extract dust from AC vents, and restore the clarity of your windows using HEPA vacuums and industrial floor scrubbers."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Phase 3: The Final Detail (Move-In Ready). We polish every bathroom fixture, detail the inside of cabinets and appliances, and perform a final air quality check."
+                }
+            ],
+            "style": "normal"
         },
         {
             "_type": "object",
             "name": "faq",
             "question": "Can't I just do this myself with a broom and mop?",
-            "answer": "Absolutely not. Household vacuums blow fine silica dust back into the air. You need HEPA-filtered industrial equipment to safely remove construction debris."
+            "answer": "We strongly advise against it. Household vacuums often blow fine silica dust back into the air, and removing cement haze requires specialized chemicals that can damage your tiles if used incorrectly."
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "My builder said they already cleaned. Is this different?",
+            "answer": "Yes. Builder cleaning is 'broom clean.' They rarely remove cement haze, detail fixtures, or extract dust from AC units. Most homeowners find their 'cleaned' homes still feel gritty until we arrive."
         }
     ]
 }
