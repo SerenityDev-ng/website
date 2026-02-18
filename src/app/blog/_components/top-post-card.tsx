@@ -12,13 +12,17 @@ const TopPostCard = ({ item }: Props) => {
   return (
     <div className="flex items-center gap-4">
       <Image
-        alt={`Featured article ${item?.slug}`}
-        src={urlFor(item?.mainImage?.asset?._ref as string)}
-        width={0}
-        height={0}
-        sizes="100vw"
-        objectFit="contain"
-        className="w-20 max-h-20 rounded-lg"
+        alt={`Featured article ${item?.title || item?.slug.current}`}
+        src={
+          (item?.mainImage as any)?.localPath ||
+          (item?.mainImage?.asset?._ref
+            ? urlFor(item.mainImage.asset._ref)
+            : "https://via.placeholder.com/80x80?text=Post")
+        }
+        width={80}
+        height={80}
+        objectFit="cover"
+        className="w-20 h-20 rounded-lg object-cover"
       />
 
       <article className="space-y-3 text-sm">
