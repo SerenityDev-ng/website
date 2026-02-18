@@ -1,0 +1,60 @@
+{
+    "title": "Expert Home Cleaning Services in Gwarinpa Estate, Abuja | Serenity.ng",
+    "slug": {
+        "current": "home-cleaning-services-gwarinpa-estate-abuja"
+    },
+    "publishedAt": "2026-02-18T10:00:00Z",
+    "excerpt": "Looking for the best home cleaning in Gwarinpa? From Gwarinpa 1st Avenue to the extensions, Serenity.ng offers premium, reliable cleaning tailored for Abuja homes.",
+    "mainImage": {
+        "localPath": "/blog/gwarinpa/main.jpg"
+    },
+    "author": {
+        "name": "Serenity.ng Team",
+        "image": {
+            "localPath": "/blog/author.jpg"
+        }
+    },
+    "body": [
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Are you living in Gwarinpa and struggling to keep your home in top shape? You're not alone. Abuja's largest estate is beautiful, but the dust and busy city life can quickly take a toll on your living space."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "image",
+            "localPath": "/blog/gwarinpa/interior.jpg",
+            "alt": "Beautifully cleaned Gwarinpa interior"
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Is Gwarinpa safe for your cleaners?",
+            "answer": "Yes! Gwarinpa is one of our primary service areas. Our teams are vetted and familiar with all avenues and gated communities in the estate."
+        },
+        {
+            "_type": "object",
+            "name": "pricingTable",
+            "rows": [
+                {
+                    "homeType": "2-Bedroom Flat",
+                    "location": "Gwarinpa Estate",
+                    "price": "₦25,000 - ₦35,000",
+                    "teamSize": "2-3 Members",
+                    "duration": "4-6 Hours"
+                },
+                {
+                    "homeType": "3-Bedroom Flat",
+                    "location": "Gwarinpa Estate",
+                    "price": "₦35,000 - ₦50,000",
+                    "teamSize": "3-4 Members",
+                    "duration": "6-8 Hours"
+                }
+            ]
+        }
+    ]
+}
