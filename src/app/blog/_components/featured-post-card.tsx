@@ -14,10 +14,15 @@ const FeaturedPostCard = ({ item }: Props) => {
   return (
     <main>
       <Image
-        alt={`Featured article ${item?.slug}`}
-        src={urlFor(item?.mainImage?.asset?._ref as string)}
-        width={0}
-        height={0}
+        alt={`Featured article ${item?.title || item?.slug?.current}`}
+        src={
+          (item?.mainImage as any)?.localPath ||
+          (item?.mainImage?.asset?._ref
+            ? urlFor(item.mainImage.asset._ref)
+            : "https://via.placeholder.com/1200x600?text=Featured+Post")
+        }
+        width={1200}
+        height={600}
         sizes="100vw"
         objectFit="cover"
         className="w-full max-h-60 object-cover rounded-t-xl"
