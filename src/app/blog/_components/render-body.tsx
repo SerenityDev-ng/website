@@ -23,15 +23,25 @@ import {
 
 // lazy-loaded image component
 const ImageComponent = ({ value, isInline }: any) => {
-  const { width, height } = getImageDimensions(value);
+  const localPath = value?.localPath;
+  const src = localPath || (value ? urlFor(value) : null);
+
+  // If we don't have a source, return null
+  if (!src) return null;
+
+  // For local images, we don't have dimensions easily, so we use a default aspect ratio or fill
+  const dimensions = !localPath ? getImageDimensions(value) : { width: 800, height: 450 };
+  const { width, height } = dimensions;
+
   return (
-    <div className="my-10 overflow-hidden rounded-[15px]">
+    <div className="my-10 overflow-hidden rounded-[15px] relative">
       <Image
-        src={urlFor(value)}
+        src={src}
         width={width}
         height={height}
         alt={value.alt || "blog image"}
         loading="lazy"
+        className="w-full h-auto"
         style={{
           display: isInline ? "inline-block" : "block",
           aspectRatio: width / height,
