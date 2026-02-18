@@ -32,7 +32,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "@/hooks/store/user";
 import { useRouter } from "next/navigation";
 import search from "nominatim-browser";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import axios from "axios";
 import useDebounce from "@/hooks/debounce";
 import Link from "next/link";
@@ -106,28 +106,33 @@ export default function SignInForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  // Moved outside to avoid dependency issues with useCallback
-  const debouncedSearch = useCallback(
-    debounce((query: string) => {
-      if (query.length < 3) return;
+  // useMemo for debounced function to avoid re-creating on every render
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((query: string) => {
+        if (query.length < 3) return;
 
-      setIsSearching(true);
-      axios.get(
-        `https://nominatim.openstreetmap.org/search?q=${query}&format=jsonv2&countrycodes=ng`,
-        {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-          },
-        }
-      ).then(results => {
-        setSearchResults(results.data as LocationResult[]);
-      }).catch(error => {
-        console.error("Location search error:", error);
-      }).finally(() => {
-        setIsSearching(false);
-      });
-    }, 1000),
+        setIsSearching(true);
+        axios
+          .get(
+            `https://nominatim.openstreetmap.org/search?q=${query}&format=jsonv2&countrycodes=ng`,
+            {
+              headers: {
+                "User-Agent":
+                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+              },
+            }
+          )
+          .then((results) => {
+            setSearchResults(results.data as LocationResult[]);
+          })
+          .catch((error) => {
+            console.error("Location search error:", error);
+          })
+          .finally(() => {
+            setIsSearching(false);
+          });
+      }, 1000),
     []
   );
 
