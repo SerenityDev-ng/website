@@ -1,0 +1,124 @@
+{
+    "title": "Airbnb & Short-Term Rental Cleaning in Abuja: The Host's Guide to 5-Star Reviews",
+    "slug": {
+        "current": "airbnb-short-term-rental-cleaning-abuja-hosts-guide"
+    },
+    "publishedAt": "2026-02-18T12:00:00Z",
+    "excerpt": "Professional Airbnb cleaning in Abuja. Fast turnover service, hotel-quality standards & restocking. Keep your 5-star rating and protect your revenue.",
+    "mainImage": {
+        "localPath": "/blog/airbnb/team.jpg"
+    },
+    "author": {
+        "name": "Serenity.ng Team",
+        "image": {
+            "localPath": "/blog/author.jpg"
+        }
+    },
+    "body": [
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Professional turnover cleaning is the difference between 5-star reviews and costly cancellations. In Abuja's competitive short-term rental market, cleanliness is your #1 ranking factor."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Travelers rank cleanliness as the #1 factor when booking vacation rentals. One missed hair in the bathroom or dusty surface can drop your 5-star rating to 3 stars—costing you thousands in lost bookings. Professional turnover cleaning isn't an expense; it's revenue protection."
+                }
+            ],
+            "style": "blockquote"
+        },
+        {
+            "_type": "image",
+            "localPath": "/blog/airbnb/bed-details.jpg",
+            "alt": "Hotel-quality bed making for Airbnb turnover"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Why Abuja's Short-Term Rental Market Demands Professional Cleaning"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Abuja's short-term rental market is exploding. From Maitama's luxury apartments serving diplomats and business travelers to Wuse 2's central locations for weekend tourists and Gwarinpa's affordable options for extended stays, hosts are competing for the same guests."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "image",
+            "localPath": "/blog/airbnb/duplex-exterior.jpg",
+            "alt": "Abuja luxury duplex exterior - a prime candidate for short-term rentals"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Investment Guide: Airbnb Cleaning Pricing in Abuja"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "object",
+            "name": "pricingTable",
+            "rows": [
+                {
+                    "homeType": "Studio/1-bed apartment",
+                    "location": "Central Abuja",
+                    "price": "₦25,000 – ₦45,000",
+                    "teamSize": "2 Members",
+                    "duration": "2-3 Hours"
+                },
+                {
+                    "homeType": "2-Bedroom Flat",
+                    "location": "Central Abuja",
+                    "price": "₦40,000 – ₦70,000",
+                    "teamSize": "2-3 Members",
+                    "duration": "3-4 Hours"
+                },
+                {
+                    "homeType": "3-Bedroom House",
+                    "location": "Central Abuja",
+                    "price": "₦60,000 – ₦100,000",
+                    "teamSize": "3-4 Members",
+                    "duration": "4-6 Hours"
+                }
+            ]
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Can you handle same-day turnovers?",
+            "answer": "Yes, with advance notice. Same-day service adds 50% to base rate but we prioritize existing clients."
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Do you provide linens or do I need to supply them?",
+            "answer": "We can do both. Option 1: You provide linens, we change them (₦5,000 extra). Option 2: Full linen service—we wash, dry, fold, and return fresh linens (₦15,000-₦30,000 depending on bed count)."
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "How do you handle keys?",
+            "answer": "Three options: (1) You provide spare keys kept in lockbox, (2) We meet you for handoff, (3) Key exchange service (+₦10,000)."
+        }
+    ]
+}
