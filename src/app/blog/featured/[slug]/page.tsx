@@ -8,6 +8,7 @@ import RenderBodyContent from "../../_components/render-body";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { formatDate } from "date-fns";
+import { notFound } from "next/navigation";
 
 interface SingleBlogPageProps {
   params: { slug: string };
@@ -18,11 +19,16 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const post = await getFeaturedPostBySlug(params.slug);
+  if (!post) return { title: "Post Not Found" };
   return generateBlogMetadata({ params, post }, parent);
 }
 
 const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
   const post = await getFeaturedPostBySlug(params?.slug);
+
+  if (!post) {
+    notFound();
+  }
 
   return (
     <article className="my-10 container mx-auto">

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import React from "react";
 import Script from "next/script";
 import LaundryPageClient from "./_components/laundry-page-client";
 
@@ -77,7 +78,9 @@ const LaundryPage = (props: Props) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(laundryServiceSchema) }}
       />
-      <LaundryPageClient />
+      <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading services...</div>}>
+        <LaundryPageClient />
+      </React.Suspense>
     </>
   );
 };

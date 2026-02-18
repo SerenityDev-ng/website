@@ -106,30 +106,28 @@ export default function SignInForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLocationSearch = async (query: string) => {
-    if (query.length < 3) return;
+  // Moved outside to avoid dependency issues with useCallback
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      if (query.length < 3) return;
 
-    setIsSearching(true);
-    try {
-      const results = await axios.get(
-        `https://nominatim.openstreetmap.org/search?q=${form.getValues("location_area")}&format=jsonv2&countrycodes=ng`,
+      setIsSearching(true);
+      axios.get(
+        `https://nominatim.openstreetmap.org/search?q=${query}&format=jsonv2&countrycodes=ng`,
         {
           headers: {
             "User-Agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
           },
         }
-      );
-      setSearchResults(results.data as LocationResult[]);
-    } catch (error) {
-      console.error("Location search error:", error);
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
-  const debouncedSearch = useCallback(
-    debounce((query: string) => handleLocationSearch(query), 1000),
+      ).then(results => {
+        setSearchResults(results.data as LocationResult[]);
+      }).catch(error => {
+        console.error("Location search error:", error);
+      }).finally(() => {
+        setIsSearching(false);
+      });
+    }, 1000),
     []
   );
 

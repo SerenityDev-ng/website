@@ -62,7 +62,7 @@ const RepairPageClient = (props: Props) => {
   const [isSearchingAddress, setIsSearchingAddress] = useState(false);
   const [addressSearchError, setAddressSearchError] = useState<string | null>(null);
   const [selectedCoords, setSelectedCoords] = useState<{ latitude: string; longitude: string } | null>(null);
- const [addressConfirmed, setAddressConfirmed] = useState(false);
+  const [addressConfirmed, setAddressConfirmed] = useState(false);
   const searchAbortRef = useRef<AbortController | null>(null);
 
   const handleInputChange = (
@@ -79,11 +79,11 @@ const RepairPageClient = (props: Props) => {
       setIsSearchingAddress(false);
       return;
     }
-     if (!debouncedAddress || debouncedAddress.trim().length < 3) {
-       setAddressResults([]);
-       setAddressSearchError(null);
-       return;
-     }
+    if (!debouncedAddress || debouncedAddress.trim().length < 3) {
+      setAddressResults([]);
+      setAddressSearchError(null);
+      return;
+    }
 
     // Abort any in-flight request
     if (searchAbortRef.current) {
@@ -105,7 +105,7 @@ const RepairPageClient = (props: Props) => {
       ...(formData.email ? { email: formData.email } : {}),
     });
 
-    fetch(`${base}?${params.toString()}` , {
+    fetch(`${base}?${params.toString()}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -131,7 +131,7 @@ const RepairPageClient = (props: Props) => {
     return () => {
       controller.abort();
     };
-  }, [debouncedAddress, addressConfirmed]);
+  }, [debouncedAddress, addressConfirmed, formData.email]);
 
   const handleSelectAddress = (result: any) => {
     try {
@@ -292,11 +292,11 @@ const RepairPageClient = (props: Props) => {
           closing_time: formData.closingTime,
         }],
         service_address: {
-           state: formData.state,
-           address: user?.profile?.address?.address ?? "",
-           longitude: user?.profile?.address?.longitude ?? "",
-           latitude: user?.profile?.address?.latitude ?? "",
-         },
+          state: formData.state,
+          address: user?.profile?.address?.address ?? "",
+          longitude: user?.profile?.address?.longitude ?? "",
+          latitude: user?.profile?.address?.latitude ?? "",
+        },
         payment_method: "PAYMENT_GATEWAY",
         description: formData.description,
       };
@@ -310,7 +310,7 @@ const RepairPageClient = (props: Props) => {
       setSubmitMessage(
         "Your repair service has been booked successfully!"
       );
-      
+
       // Reset form
       setFormData({
         firstName: "",
@@ -351,61 +351,61 @@ const RepairPageClient = (props: Props) => {
   // Process repair services data from API
   const processedServices = React.useMemo(() => {
     let repairs: Service[] = [];
-    
-      // Fallback to static services if API data is not available
-      
-      repairs =  [
-        {
-          id: 1,
-          image: book_electrician,
-          title: "Book Electrician",
-          text: "Power problems? Book an electrician and get back to bright and beautiful.",
-          price: 4000,
-        },
-        {
-          id: 2,
-          image: book_plumber,
-          title: "Book Plumber",
-          text: "Leaky faucet? Book a plumber today and let us handle the drips!",
-          price: 7000,
-        },
-        {
-          id: 3,
-          image: book_carpenter,
-          title: "Book Carpenter",
-          text: "From repairs to renovations, we've got the tools",
-          price: 6000,
-        },
-        {
-          id: 4,
-          image: book_painter,
-          title: "Book Painter",
-          text: "Let's add some color to your world! Schedule a painter for expert finishing",
-          price: 9000,
-        },
-        {
-          id: 5,
-          image: book_mason,
-          title: "Book Mason",
-          text: "Solid work starts with a skilled mason! Book yours today!",
-          price: 12000,
-        },
+
+    // Fallback to static services if API data is not available
+
+    repairs = [
+      {
+        id: 1,
+        image: book_electrician,
+        title: "Book Electrician",
+        text: "Power problems? Book an electrician and get back to bright and beautiful.",
+        price: 4000,
+      },
+      {
+        id: 2,
+        image: book_plumber,
+        title: "Book Plumber",
+        text: "Leaky faucet? Book a plumber today and let us handle the drips!",
+        price: 7000,
+      },
+      {
+        id: 3,
+        image: book_carpenter,
+        title: "Book Carpenter",
+        text: "From repairs to renovations, we've got the tools",
+        price: 6000,
+      },
+      {
+        id: 4,
+        image: book_painter,
+        title: "Book Painter",
+        text: "Let's add some color to your world! Schedule a painter for expert finishing",
+        price: 9000,
+      },
+      {
+        id: 5,
+        image: book_mason,
+        title: "Book Mason",
+        text: "Solid work starts with a skilled mason! Book yours today!",
+        price: 12000,
+      },
     ];
     if (!repairServicesData?.data) {
       return [];
     }
 
     // Map API data to component format
-      return repairServicesData.data.map((service, index) => {
-        const mappedService = mapRepairServiceToItem(service);
-        return {
-          id: mappedService.id, // Use numeric ID for consistency with Service interface
-          image: getServiceImage(service.category),
-          title: mappedService.name,
-          text: mappedService.description || repairs[index]?.text,
-          price: mappedService.price,
-        };
-      });
+    return repairServicesData.data.map((service, index) => {
+      const mappedService = mapRepairServiceToItem(service);
+      return {
+        id: mappedService.id, // Use numeric ID for consistency with Service interface
+        image: getServiceImage(service.category),
+        title: mappedService.name,
+        text: mappedService.description || repairs[index]?.text,
+        price: mappedService.price,
+      };
+    });
   }, [repairServicesData]);
 
   const repairServices = processedServices;
@@ -510,14 +510,14 @@ const RepairPageClient = (props: Props) => {
               onClick={() => {
                 setSelectedService(service);
                 const repairItem = {
-                    id: service.id.toString(),
-                    name: service.title,
-                    description: service.text,
-                    price: service.price,
-                    category: "repair",
-                    selected: false
-                  };
-                  toggleService(repairItem);
+                  id: service.id.toString(),
+                  name: service.title,
+                  description: service.text,
+                  price: service.price,
+                  category: "repair",
+                  selected: false
+                };
+                toggleService(repairItem);
                 const formSection = document.getElementById("quote-form");
                 if (formSection) {
                   formSection.scrollIntoView({ behavior: "smooth" });
@@ -596,7 +596,7 @@ const RepairPageClient = (props: Props) => {
               <h3 className="font-medium text-gray-800 dark:text-gray-100 mb-3">
                 Selected Service{getSelectedServicesCount() > 1 ? 's' : ''}:
               </h3>
-              
+
               {/* Primary selected service */}
               {selectedService && (
                 <div className="flex items-center gap-4 mb-3">
@@ -620,7 +620,7 @@ const RepairPageClient = (props: Props) => {
                   </div>
                 </div>
               )}
-              
+
               {/* Additional selected services from store */}
               {getSelectedServicesCount() > 0 && (
                 <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
@@ -679,76 +679,76 @@ const RepairPageClient = (props: Props) => {
               </div>
 
               {/* Description */}
-               <div>
-                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
-                   Describe Your Request
-                 </label>
-                 <textarea
-                   name="description"
-                   value={formData.description}
-                   onChange={handleInputChange}
-                   rows={4}
-                   placeholder="Please describe the repair work needed, including any specific details about the problem..."
-                   className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 resize-vertical"
-                   required
-                 ></textarea>
-               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
+                  Describe Your Request
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows={4}
+                  placeholder="Please describe the repair work needed, including any specific details about the problem..."
+                  className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 resize-vertical"
+                  required
+                ></textarea>
+              </div>
 
-               {/* State */}
-               <div>
-                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
-                   State
-                 </label>
-                 <select
-                   name="state"
-                   value={formData.state}
-                   onChange={handleInputChange}
-                   className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
-                   required
-                 >
-                   <option value="">Select your state</option>
-                   <option value="Abuja">Abuja</option>
-                   <option value="Abia">Abia</option>
-                   <option value="Adamawa">Adamawa</option>
-                   <option value="Akwa Ibom">Akwa Ibom</option>
-                   <option value="Anambra">Anambra</option>
-                   <option value="Bauchi">Bauchi</option>
-                   <option value="Bayelsa">Bayelsa</option>
-                   <option value="Benue">Benue</option>
-                   <option value="Borno">Borno</option>
-                   <option value="Cross River">Cross River</option>
-                   <option value="Delta">Delta</option>
-                   <option value="Ebonyi">Ebonyi</option>
-                   <option value="Edo">Edo</option>
-                   <option value="Ekiti">Ekiti</option>
-                   <option value="Enugu">Enugu</option>
-                   <option value="Gombe">Gombe</option>
-                   <option value="Imo">Imo</option>
-                   <option value="Jigawa">Jigawa</option>
-                   <option value="Kaduna">Kaduna</option>
-                   <option value="Kano">Kano</option>
-                   <option value="Katsina">Katsina</option>
-                   <option value="Kebbi">Kebbi</option>
-                   <option value="Kogi">Kogi</option>
-                   <option value="Kwara">Kwara</option>
-                   <option value="Lagos">Lagos</option>
-                   <option value="Nasarawa">Nasarawa</option>
-                   <option value="Niger">Niger</option>
-                   <option value="Ogun">Ogun</option>
-                   <option value="Ondo">Ondo</option>
-                   <option value="Osun">Osun</option>
-                   <option value="Oyo">Oyo</option>
-                   <option value="Plateau">Plateau</option>
-                   <option value="Rivers">Rivers</option>
-                   <option value="Sokoto">Sokoto</option>
-                   <option value="Taraba">Taraba</option>
-                   <option value="Yobe">Yobe</option>
-                   <option value="Zamfara">Zamfara</option>
-                 </select>
-                 <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
-                   This will be used for service location
-                 </span>
-               </div>
+              {/* State */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-3">
+                  State
+                </label>
+                <select
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                  required
+                >
+                  <option value="">Select your state</option>
+                  <option value="Abuja">Abuja</option>
+                  <option value="Abia">Abia</option>
+                  <option value="Adamawa">Adamawa</option>
+                  <option value="Akwa Ibom">Akwa Ibom</option>
+                  <option value="Anambra">Anambra</option>
+                  <option value="Bauchi">Bauchi</option>
+                  <option value="Bayelsa">Bayelsa</option>
+                  <option value="Benue">Benue</option>
+                  <option value="Borno">Borno</option>
+                  <option value="Cross River">Cross River</option>
+                  <option value="Delta">Delta</option>
+                  <option value="Ebonyi">Ebonyi</option>
+                  <option value="Edo">Edo</option>
+                  <option value="Ekiti">Ekiti</option>
+                  <option value="Enugu">Enugu</option>
+                  <option value="Gombe">Gombe</option>
+                  <option value="Imo">Imo</option>
+                  <option value="Jigawa">Jigawa</option>
+                  <option value="Kaduna">Kaduna</option>
+                  <option value="Kano">Kano</option>
+                  <option value="Katsina">Katsina</option>
+                  <option value="Kebbi">Kebbi</option>
+                  <option value="Kogi">Kogi</option>
+                  <option value="Kwara">Kwara</option>
+                  <option value="Lagos">Lagos</option>
+                  <option value="Nasarawa">Nasarawa</option>
+                  <option value="Niger">Niger</option>
+                  <option value="Ogun">Ogun</option>
+                  <option value="Ondo">Ondo</option>
+                  <option value="Osun">Osun</option>
+                  <option value="Oyo">Oyo</option>
+                  <option value="Plateau">Plateau</option>
+                  <option value="Rivers">Rivers</option>
+                  <option value="Sokoto">Sokoto</option>
+                  <option value="Taraba">Taraba</option>
+                  <option value="Yobe">Yobe</option>
+                  <option value="Zamfara">Zamfara</option>
+                </select>
+                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+                  This will be used for service location
+                </span>
+              </div>
 
               {/* Status Messages */}
               {submitStatus === "success" && (
@@ -794,10 +794,10 @@ const RepairPageClient = (props: Props) => {
               {/* Proceed to Quote Button */}
               <div className="flex justify-center pt-4">
                 <Button
-                   onClick={handleProceedToQuote}
-                   disabled={isSubmitting || !formData.openingTime || !formData.closingTime || !formData.description || !formData.state}
-                   className="px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                 >
+                  onClick={handleProceedToQuote}
+                  disabled={isSubmitting || !formData.openingTime || !formData.closingTime || !formData.description || !formData.state}
+                  className="px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
                   {isSubmitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

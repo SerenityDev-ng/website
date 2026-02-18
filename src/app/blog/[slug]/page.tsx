@@ -10,6 +10,8 @@ import { urlFor } from "@/sanity/lib/image";
 import { formatDate, formatISO } from "date-fns";
 import Script from "next/script";
 
+import { notFound } from "next/navigation";
+
 interface SingleBlogPageProps {
   params: { slug: string };
 }
@@ -19,11 +21,16 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
+  if (!post) return { title: "Post Not Found" };
   return generateBlogMetadata({ params, post }, parent);
 }
 
 const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
   const post = await getPostBySlug(params?.slug);
+
+  if (!post) {
+    notFound();
+  }
 
   // Assuming critical data exists if the page renders
   // Fallback for _updatedAt is publishedAt
