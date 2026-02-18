@@ -1,0 +1,67 @@
+{
+    "_id": "ppUGg4uPFIzmjioafUAcnA",
+    "_type": "post",
+    "title": "Airbnb & Short-Term Rental Cleaning in Abuja: The Host's Guide to 5-Star Reviews",
+    "slug": {
+        "_type": "slug",
+        "current": "airbnb-and-short-term-rental-cleaning-abuja-host-guide"
+    },
+    "author": {
+        "_type": "reference",
+        "_ref": "lLO5AoTuRu3lnPoweGwmEt"
+    },
+    "categories": [
+        {
+            "_type": "reference",
+            "_ref": "RlDLS91R5EBaigIt4RBnsW"
+        }
+    ],
+    "publishedAt": "2026-02-18T12:00:00Z",
+    "excerpt": "Professional Airbnb cleaning in Abuja. Fast turnover service, hotel-quality standards & restocking. Keep your 5-star rating. Book your reliable cleaning team today!",
+    "mainImage": {
+        "_type": "image",
+        "localPath": "/blog/airbnb/duplex-exterior.jpg",
+        "alt": "Airbnb Cleaning Abuja"
+    },
+    "body": [
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Professional turnover cleaning is the difference between 5-star reviews and costly cancellations. In Abuja's competitive short-term rental market, cleanliness is your #1 ranking factor."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "HOST ALERT: Cleanliness = Revenue"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "object",
+            "name": "pricingTable",
+            "rows": [
+                {
+                    "homeType": "Studio/1-bed apartment",
+                    "location": "Abuja Central",
+                    "price": "₦25,000 – ₦45,000",
+                    "teamSize": "1-2 Members",
+                    "duration": "2-3 hours"
+                }
+            ]
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Can you handle same-day turnovers?",
+            "answer": "Yes, with advance notice. Same-day service is prioritized for our existing clients."
+        }
+    ]
+}

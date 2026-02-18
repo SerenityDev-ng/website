@@ -1,0 +1,84 @@
+{
+    "_id": "lLO5AoTuRu3lnPoweHC5qu",
+    "_type": "post",
+    "title": "Post-Construction Cleaning in Abuja: Why Moving Into a New Home Without It is a Risk",
+    "slug": {
+        "_type": "slug",
+        "current": "post-construction-cleaning-abuja-essential-move-in-guide"
+    },
+    "author": {
+        "_type": "reference",
+        "_ref": "lLO5AoTuRu3lnPoweGwmEt"
+    },
+    "categories": [
+        {
+            "_type": "reference",
+            "_ref": "RlDLS91R5EBaigIt4RBnsW"
+        }
+    ],
+    "publishedAt": "2026-02-18T11:00:00Z",
+    "excerpt": "Don't move into dust and debris! Discover why professional post-construction cleaning is essential for your family's health and your home's longevity.",
+    "mainImage": {
+        "_type": "image",
+        "localPath": "/blog/post-construction/before-after.jpg",
+        "alt": "Post-Construction Cleaning"
+    },
+    "body": [
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Congratulations on your new home! Whether it's in Karsana, Gwarinpa, or Lokogoma, those fresh walls and gleaming fixtures are a dream come true. However, before you unpack your first box, there's an invisible threat you need to know about."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "CRITICAL HEALTH WARNING: Why 'Just Sweeping' Isn't Enough"
+                }
+            ],
+            "style": "h2"
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Construction dust isn't like regular house dust. It's a toxic cocktail of fine silica (from tile and concrete cutting), paint fumes, chemical solvents, and sharp debris like glass shards or hidden nails."
+                }
+            ],
+            "style": "normal"
+        },
+        {
+            "_type": "object",
+            "name": "pricingTable",
+            "rows": [
+                {
+                    "homeType": "2-bedroom",
+                    "location": "Abuja Urban",
+                    "price": "₦60,000 – ₦120,000",
+                    "teamSize": "4 Trained Technicians",
+                    "duration": "1-2 days"
+                },
+                {
+                    "homeType": "3-bedroom",
+                    "location": "Abuja Urban",
+                    "price": "₦80,000 – ₦150,000",
+                    "teamSize": "4 Trained Technicians",
+                    "duration": "2-3 days"
+                }
+            ]
+        },
+        {
+            "_type": "object",
+            "name": "faq",
+            "question": "Can't I just do this myself with a broom and mop?",
+            "answer": "We strongly advise against it. Household vacuums often blow fine silica dust back into the air, and removing cement haze requires specialized chemicals that can damage your tiles if used incorrectly."
+        }
+    ]
+}

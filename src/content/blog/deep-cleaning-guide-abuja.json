@@ -18,6 +18,10 @@
     ],
     "publishedAt": "2026-02-18T14:00:00Z",
     "excerpt": "Confused about deep cleaning vs regular cleaning? Discover the key differences, when to schedule each, and health benefits tailored for Abuja homes.",
+    "mainImage": {
+        "localPath": "/blog/gwarinpa/interior.jpg",
+        "alt": "Deep Cleaning vs Regular Cleaning Comparison"
+    },
     "body": [
         {
             "_type": "block",
