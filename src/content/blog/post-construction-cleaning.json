@@ -15,6 +15,20 @@
             "localPath": "/blog/author.jpg"
         }
     },
+    "categories": [
+        {
+            "title": "Cleaning",
+            "slug": {
+                "current": "cleaning"
+            }
+        },
+        {
+            "title": "Maintenance",
+            "slug": {
+                "current": "maintenance"
+            }
+        }
+    ],
     "body": [
         {
             "_type": "block",
@@ -45,6 +59,11 @@
                 }
             ],
             "style": "normal"
+        },
+        {
+            "_type": "image",
+            "localPath": "/blog/post-construction/before-after.jpg",
+            "alt": "Post-Construction Before/After"
         },
         {
             "_type": "object",

@@ -15,6 +15,14 @@
             "localPath": "/blog/author.jpg"
         }
     },
+    "categories": [
+        {
+            "title": "Cleaning",
+            "slug": {
+                "current": "cleaning"
+            }
+        }
+    ],
     "body": [
         {
             "_type": "block",
@@ -65,6 +73,11 @@
                 }
             ],
             "style": "normal"
+        },
+        {
+            "_type": "image",
+            "localPath": "/blog/gwarinpa/main.jpg",
+            "alt": "Gwarinpa Estate Cleaning Team"
         },
         {
             "_type": "block",

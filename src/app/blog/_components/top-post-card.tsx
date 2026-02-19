@@ -10,28 +10,32 @@ type Props = {
 
 const TopPostCard = ({ item }: Props) => {
   return (
-    <div className="flex items-center gap-4">
-      <Image
-        alt={`Featured article ${item?.title || item?.slug.current}`}
-        src={
-          (item?.mainImage as any)?.localPath ||
-          (item?.mainImage?.asset?._ref
-            ? urlFor(item.mainImage.asset._ref)
-            : "https://via.placeholder.com/80x80?text=Post")
-        }
-        width={80}
-        height={80}
-        objectFit="cover"
-        className="w-20 h-20 rounded-lg object-cover"
-      />
+    <div className="group flex items-center gap-5 p-2 rounded-xl border border-transparent hover:border-zinc-100 dark:hover:border-zinc-800 hover:bg-white dark:hover:bg-zinc-900/50 transition-all duration-300">
+      <div className="relative w-20 h-20 shrink-0 overflow-hidden rounded-lg">
+        <Image
+          alt={`Top article ${item?.title || item?.slug.current}`}
+          src={
+            (item?.mainImage as any)?.localPath ||
+            (item?.mainImage?.asset?._ref
+              ? urlFor(item.mainImage.asset._ref)
+              : "https://via.placeholder.com/80x80?text=Post")
+          }
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+      </div>
 
-      <article className="space-y-3 text-sm">
-        <h1>{item?.title}</h1>
-        <p className="text-muted-foreground uppercase font-medium text-xs">
-          {item?.publishedAt
-            ? formatDate(new Date(item?.publishedAt), "MMMM dd, yyyy")
-            : ""}
-        </p>
+      <article className="flex flex-col gap-1 overflow-hidden">
+        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors duration-300 line-clamp-2 leading-snug">
+          {item?.title}
+        </h4>
+        <div className="flex items-center gap-2">
+          <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium uppercase tracking-wider">
+            {item?.publishedAt
+              ? formatDate(new Date(item?.publishedAt), "MMM dd, yyyy")
+              : ""}
+          </p>
+        </div>
       </article>
     </div>
   );

@@ -30,13 +30,40 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
     notFound();
   }
 
+  // Assuming critical data exists if the page renders
+  // Fallback for _updatedAt is publishedAt
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    image: (post?.mainImage as any)?.localPath || (post?.mainImage?.asset?._ref ? urlFor(post.mainImage.asset._ref) : ""),
+    datePublished: formatDate(new Date(post.publishedAt), "yyyy-MM-dd'T'HH:mm:ssxxx"),
+    dateModified: formatDate(new Date(post._updatedAt || post.publishedAt), "yyyy-MM-dd'T'HH:mm:ssxxx"),
+    author: {
+      "@type": "Person",
+      name: post.author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Serenity",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.serenity.ng/logo.svg",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.serenity.ng/blog/${post.slug.current}`,
+    },
+  };
+
   return (
     <article className="my-10 container mx-auto">
       <Image
-        alt={`Featured article ${post?.slug}`}
-        src={urlFor(post?.mainImage?.asset?._ref as string)}
-        width={0}
-        height={0}
+        alt={`Featured article ${post?.slug.current}`}
+        src={(post?.mainImage as any)?.localPath || (post?.mainImage?.asset?._ref ? urlFor(post.mainImage.asset._ref) : "https://via.placeholder.com/1200x600?text=Featured+Post")}
+        width={1200}
+        height={600}
         sizes="100vw"
         objectFit="cover"
         className="w-full max-h-60 object-cover rounded-t-xl"
@@ -48,11 +75,10 @@ const SingleBlogPage = async ({ params }: SingleBlogPageProps) => {
         <div className="flex items-center justify-center mt-8 text-muted-foreground">
           <div className="flex items-center gap-2 px-3">
             <Image
-              alt={`Featured article ${post?.slug}`}
-              src={urlFor(post?.author?.image?.asset?._ref as string)}
-              width={0}
-              height={0}
-              sizes="100vw"
+              alt={`Author ${post?.author?.name}`}
+              src={(post?.author?.image as any)?.localPath || (post?.author?.image?.asset?._ref ? urlFor(post.author.image.asset._ref) : "https://via.placeholder.com/40x40?text=A")}
+              width={40}
+              height={40}
               objectFit="cover"
               className="w-10 h-10 object-cover rounded-full"
             />

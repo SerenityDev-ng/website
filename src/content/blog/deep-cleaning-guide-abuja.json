@@ -12,8 +12,10 @@
     },
     "categories": [
         {
-            "_type": "reference",
-            "_ref": "RlDLS91R5EBaigIt4RBnsW"
+            "title": "Cleaning",
+            "slug": {
+                "current": "cleaning"
+            }
         }
     ],
     "publishedAt": "2026-02-18T14:00:00Z",
@@ -42,6 +44,11 @@
                 }
             ],
             "style": "normal"
+        },
+        {
+            "_type": "image",
+            "localPath": "/blog/gwarinpa/interior.jpg",
+            "alt": "Abuja Home Interior"
         },
         {
             "_type": "block",

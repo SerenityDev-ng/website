@@ -109,7 +109,11 @@ export const getFeaturedPostBySlug = async (slug: string) => {
     tags: ["post", "author", "category"],
   });
 
-  return data;
+  if (data) return data;
+
+  // Fallback to local
+  const allLocal = getLocalPostsSync();
+  return allLocal.find((p) => p.slug.current === slug) || null;
 };
 
 export const getPostByCategory = async (
@@ -125,20 +129,31 @@ export const getPostByCategory = async (
     tags: ["post", "author", "category"],
   });
 
-  if (data) {
-    return {
-      posts: data.posts,
-      currentPage: page,
-      totalPages: Math.ceil(data.total / pageSize),
-      total: data.total,
-    };
-  }
+  const allLocal = getLocalPostsSync();
+  const filteredLocal = allLocal.filter((post) =>
+    post.categories?.some((cat) => cat.slug?.current === slug)
+  );
+
+  const sanityPosts = data?.posts || [];
+
+  // Merge and deduplicate
+  const combinedPosts = [...filteredLocal, ...sanityPosts].reduce((acc, current) => {
+    const x = acc.find((item) => item.slug.current === current.slug.current);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, [] as Blog[]);
+
+  // Sort by publishedAt descending
+  combinedPosts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
   return {
-    posts: [],
+    posts: combinedPosts.slice(start, end),
     currentPage: page,
-    totalPages: 0,
-    total: 0,
+    totalPages: Math.ceil(combinedPosts.length / pageSize),
+    total: combinedPosts.length,
   };
 };
 
@@ -148,7 +163,20 @@ export const getCategories = async () => {
     qParams: {},
     tags: ["category"],
   });
-  return data || [];
+
+  const sanityCategories = data || [];
+
+  // Define only the strictly allowed categories
+  const allowed = [
+    { title: "Cleaning", slug: { current: "cleaning" } },
+    { title: "Laundry", slug: { current: "laundry" } },
+    { title: "Maintenance", slug: { current: "maintenance" } },
+  ];
+
+  return allowed.map(req => {
+    const fromSanity = sanityCategories.find(cat => cat.slug.current === req.slug.current);
+    return fromSanity || ({ _id: req.slug.current, ...req } as any);
+  });
 };
 
 export const getFeaturedPost = async () => {
